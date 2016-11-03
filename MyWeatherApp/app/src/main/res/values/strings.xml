@@ -1,0 +1,65 @@
+<resources>
+    <string name="app_name">MyWeatherApp</string>
+
+    <!-- Credits screen -->
+    <string name="credits_author_label">By</string>
+    <string name="credits_author_name" translatable="false">Pedro Fialho e Tiago Gouveia</string>
+    <string name="credits_author_linked_in" translatable="false">https://pt.linkedin.com/in/palbp</string>
+    <string name="credits_author_photo_description">Photo of the author</string>
+    <string name="credits_data_source_url" translatable="false">http://openweathermap.org</string>
+    <string name="credits_data_source_description">Powered by OpenWeatherMap</string>
+    <string name="api_base_url" translatable="false">http://api.openweathermap.org/data/2.5/weather?q=</string>
+    <string name="city_choosen" translatable="false">Lisbon,</string>
+    <string name="country_choosen" translatable="false">pt</string>
+    <string name="api_key_name" translatable="false">appid</string>
+    <string name="api_key_value" translatable="false">998e2460e9dbe69907b819c7f0e1b77c</string>
+    <string name="api_base_url_forecast" translatable="false">http://api.openweathermap.org/data/2.5/forecast/daily?q=</string>
+    <string name="api_count" translatable="false">cnt=16</string>
+    <string name="weather_details_tools_title">Some Weather</string>
+    <string name="action_about_us">About us</string>
+    <string name="action_go_back">Back</string>
+    <string name="humidity_detail">Humidity:</string>
+    <string name="pressure_detail">Air Pressure:</string>
+    <string name="wind_degrees_detail">Wind Degrees:</string>
+    <string name="wind_speed_detail">Wind Speed:</string>
+    <string name="clouds_detail">Cloudiness:</string>
+    <string name="day_detail">Day:</string>
+    <string name="rain_detail">Rain volume for the last 3 hours:</string>
+    <string name="snow_detail">Snow volume for the last 3 hours:</string>
+    <string name="text_choice_weather">Choose the weather forecast you want</string>
+    <string name="forecast_button">15 Days</string>
+    <string name="daily_choice">Today</string>
+    <string name="time">Time:</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+
+
+
+    <!-- Example settings for Data & Sync -->
+    <string name="pref_header_data_sync">Data &amp; sync</string>
+
+    <string name="pref_title_sync_frequency">Sync frequency</string>
+
+    <string name="pref_title_system_sync_settings">System sync settings</string>
+
+    <!-- Example settings for Notifications -->
+    <string name="pref_header_notifications">Notifications</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="description_settings">Description</string>
+    <string name="general_description">General Definitions</string>
+    <string name="notification_description">Notifications Settings</string>
+    <string name="sync_description" translatable="false"><![CDATA[Sync & Data Definitions]]></string>
+    <string name="country_general_settings">Choose a country(Pt or UK)</string>
+    <string name="city_general">City(Default : Lisbon)</string>
+    <string name="leaving_option">Do you want to leave?</string>
+    <string name="choice_yes">Yes</string>
+    <string name="choice_no">No</string>
+    <string name="temp_max">Temp Max: </string>
+    <string name="temp_min">Temp Min: </string>
+    <string name="city_Detail">City :</string>
+</resources>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.pedrofialho.myweatherapp">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:name=".WeatherApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/weather_logo2"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".presentation.FirstActivity"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".presentation.CreditsActivity" />
+        <activity android:name=".presentation.ForecastActivity" />
+        <activity android:name=".presentation.WeatherDetailsActivity" />
+        <activity android:name=".presentation.DetailForecastActivity" />
+        <activity android:name=".presentation.ChoiceActivity" />
+        <activity
+            android:name=".presentation.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".presentation.ChoiceActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.pedrofialho.myweatherapp.presentation.ChoiceActivity" />
+        </activity>
+        <activity android:name=".presentation.GeneralSettingsActivity" />
+        <activity android:name=".presentation.NotificationsSettingsActivity" />
+        <activity android:name=".presentation.SyncDataSettingsActivity"></activity>
+    </application>
+
+</manifest>

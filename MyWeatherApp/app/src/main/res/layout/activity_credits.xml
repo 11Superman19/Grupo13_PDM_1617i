@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_credits"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:targetApi="lollipop"
+    tools:context="com.example.pedrofialho.myweatherapp.presentation.CreditsActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:navigationIcon="@drawable/ic_keyboard_backspace_black_24dp"
+        android:background="@android:color/holo_orange_light"
+        android:title="@string/app_name"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        tools:title="@string/app_name"/>
+
+    <ImageView
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        app:srcCompat="@drawable/weatherapi"
+        android:id="@+id/tweahLogo"
+        android:contentDescription="@string/credits_data_source_description"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="28dp" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/tiago_image"
+        android:id="@+id/authorPhoto"
+        android:contentDescription="@string/credits_author_photo_description"
+        android:layout_marginLeft="32dp"
+        android:layout_below="@+id/authorName"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="20dp" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/pedro_image"
+        android:id="@+id/autorPhoto2"
+        android:contentDescription="@string/credits_author_photo_description"
+        android:layout_marginLeft="32dp"
+        android:layout_alignTop="@+id/authorPhoto"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:text="@string/credits_author_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/by"
+        android:textAppearance="@android:style/TextAppearance.Material.Large"
+        android:layout_above="@+id/authorPhoto"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/authorName"
+        android:textAppearance="@android:style/TextAppearance.Material.Large"
+        android:text="@string/credits_author_name"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="16dp"
+        android:layout_below="@+id/toolbar"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:text="@string/credits_data_source_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tweahLogo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"
+        android:id="@+id/textView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+
+</RelativeLayout>

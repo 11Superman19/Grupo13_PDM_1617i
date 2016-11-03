@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MyWeatherApp</string>
+    <string name="credits_author_label">Por</string>
+    <string name="credits_data_source_description">Distribuído Por</string>
+    <string name="credits_author_photo_description">Fotografia do autor</string>
+    <string name="action_about_us">Sobre nós</string>
+    <string name="action_go_back">Trás</string>
+    <string name="wind_speed_detail">Velocidade do Vento: </string>
+    <string name="pressure_detail">Pressão Atmosfera: </string>
+    <string name="humidity_detail">Humidade: </string>
+    <string name="wind_degrees_detail">Graus do Vento: </string>
+    <string name="clouds_detail">Nebulosidade: </string>
+    <string name="day_detail">Dia: </string>
+    <string name="rain_detail">Volume de chuva nas 3 horas anteriores: </string>
+    <string name="snow_detail">Volume de neve nas 3 horas anteriores: </string>
+    <string name="weather_details_tools_title">Texto</string>
+    <string name="text_choice_weather">Escolha a previsão de tempo que pretende</string>
+    <string name="daily_choice">Hoje</string>
+    <string name="forecast_button">15 Dias</string>
+    <string name="time">Hora:</string>
+    <string name="title_activity_settings">Definições</string>
+    <string name="action_settings">Definições</string>
+    <string name="pref_header_data_sync">Data &amp;Sincronização</string>
+    <string name="pref_header_general">Geral</string>
+    <string name="pref_header_notifications">Notificações</string>
+    <string name="pref_title_sync_frequency">Frequência de Atualização</string>
+    <string name="pref_title_system_sync_settings">Definições de Sistema de Sincronismo</string>
+    <string name="description_settings">Descrição</string>
+    <string name="city_general">Cidade(Definição : Lisboa)</string>
+    <string name="country_general_settings">Escolha uma cidade(Pt ou UK)</string>
+    <string name="general_description">Definições</string>
+    <string name="notification_description">Definições de Notificações</string>
+    <string name="choice_no">Não</string>
+    <string name="choice_yes">Sim</string>
+    <string name="leaving_option">Deseja Sair?</string>
+</resources>

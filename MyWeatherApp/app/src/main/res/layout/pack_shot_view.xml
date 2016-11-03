@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".presentation.WeatherDetailsActivity">
+
+    <com.android.volley.toolbox.NetworkImageView
+        android:id="@+id/packShotImage"
+        android:layout_height="266dp"
+        android:layout_width="226dp"
+        tools:background="@drawable/pack_shot_empty" />
+
+    <TextView
+        android:id="@+id/weatherTitle"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textAlignment="center"
+        tools:text="@string/weather_details_tools_movie_title"
+        android:textStyle="normal|bold"
+        android:ellipsize="end"
+        android:minLines="1"
+        android:maxLines="2"
+        android:layout_marginTop="85dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/packShotImage" />
+
+</RelativeLayout>
