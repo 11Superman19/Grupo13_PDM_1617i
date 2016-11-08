@@ -83,6 +83,7 @@ class ChoiceActivity : AppCompatActivity() {
             animation_forecast!!.pause()
             (findViewById(R.id.progressBar2) as ProgressBar).visibility = ProgressBar.VISIBLE
         }
+        Toast.makeText(this,"Fialho gay",Toast.LENGTH_LONG).show()
     }
 
     override fun onBackPressed() {
