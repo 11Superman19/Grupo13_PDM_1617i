@@ -70,7 +70,6 @@ class ChoiceActivity : AppCompatActivity() {
             setSupportActionBar(findViewById(it) as Toolbar)
         }
 
-
         (findViewById(R.id.daily) as Button).setOnClickListener {
             navigateToDetails()
             animation_daily!!.pause()
@@ -84,6 +83,7 @@ class ChoiceActivity : AppCompatActivity() {
             (findViewById(R.id.progressBar2) as ProgressBar).visibility = ProgressBar.VISIBLE
         }
         Toast.makeText(this,"Fialho gay",Toast.LENGTH_LONG).show()
+        Toast.makeText(this,"Tiago gay",Toast.LENGTH_LONG).show()
     }
 
     override fun onBackPressed() {
