@@ -34,8 +34,6 @@
                 android:value="com.example.pedrofialho.myweatherapp.presentation.ChoiceActivity" />
         </activity>
         <activity android:name=".presentation.GeneralSettingsActivity" />
-        <activity android:name=".presentation.NotificationsSettingsActivity" />
-        <activity android:name=".presentation.SyncDataSettingsActivity"></activity>
     </application>
 
 </manifest>
