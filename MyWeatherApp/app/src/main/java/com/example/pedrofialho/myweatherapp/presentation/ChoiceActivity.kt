@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.animation.AccelerateDecelerateInterpolator
@@ -71,17 +70,39 @@ class ChoiceActivity : AppCompatActivity() {
         }
 
         (findViewById(R.id.daily) as Button).setOnClickListener {
-            navigateToDetails()
+            fetchCityWeatherInfo()
             animation_daily!!.pause()
             animation_forecast!!.pause()
             (findViewById(R.id.progressBar2) as ProgressBar).visibility = ProgressBar.VISIBLE
         }
         (findViewById(R.id.forecast) as Button).setOnClickListener {
-            navigateToForecast()
+            fetchWeatherForecastInfo()
             animation_daily!!.pause()
             animation_forecast!!.pause()
             (findViewById(R.id.progressBar2) as ProgressBar).visibility = ProgressBar.VISIBLE
         }
+    }
+
+    private fun fetchWeatherForecastInfo() {
+
+        (application as WeatherApplication).requestQueue.add(GetRequest<WeatherForecast>(
+                buildConfigUrlForecast(),WeatherForecast::class.java,
+                {weather -> startActivity(ForecastActivity.createIntent(this,weather))},
+                {handleFatalError()}))
+    }
+
+    private fun fetchCityWeatherInfo() {
+
+        (application as WeatherApplication).requestQueue.add(GetRequest<WeatherDetails>(
+                buildConfigUrlDetails(),WeatherDetails::class.java,
+                {weather -> startActivity(WeatherDetailsActivity.createIntent(this,weather)) },
+                {handleFatalError()})
+        )
+    }
+
+    private fun handleFatalError() {
+            Toast.makeText(this, "Data Not Available", Toast.LENGTH_LONG).show()
+            Handler(mainLooper).postDelayed( { finish() }, 3000)
     }
 
     override fun onBackPressed() {
@@ -98,50 +119,10 @@ class ChoiceActivity : AppCompatActivity() {
         super.onResume()
     }
 
-    private fun navigateToForecast() {
-        (application as WeatherApplication).requestQueue.add(
-                GetRequest(buildConfigUrlForecast(), WeatherForecast::class.java,
-                        {
-                            Log.v("Pedro","Success")
-                            (application as WeatherApplication).weatherForecast = it
-                            val intent = Intent(this, ForecastActivity::class.java)
-                            intent.putExtra("DTO_forecast", (application as WeatherApplication).weatherForecast)
-                            (findViewById(R.id.progressBar2) as ProgressBar).visibility = ProgressBar.INVISIBLE
-                            startActivity(intent)
-                            overridePendingTransition( R.anim.slide_in_up, R.anim.stay)
-                        },
-                        {
-                            Toast.makeText(this, "Data not available", Toast.LENGTH_LONG).show()
-                            Handler(mainLooper).postDelayed({ finish() }, 3000)
-                        }
-                )
-        )
-    }
-
     private fun buildConfigUrlDetails(): String {
         val baseUrl = resources.getString(R.string.api_base_url)
         val api_key = "${resources.getString(R.string.api_key_name)}=${resources.getString(R.string.api_key_value)}"
         return "$baseUrl$city&$api_key"
-    }
-
-    private fun navigateToDetails() {
-        (application as WeatherApplication).requestQueue.add(
-                GetRequest(buildConfigUrlDetails(), WeatherDetails::class.java,
-                        {
-                            Log.v("Pedro","Success")
-                            (application as WeatherApplication).weatherDetails = it
-                            val intent = Intent(this,WeatherDetailsActivity::class.java)
-                            intent.putExtra("DTO", (application as WeatherApplication).weatherDetails)
-                            (findViewById(R.id.progressBar2) as ProgressBar).visibility = ProgressBar.GONE
-                            startActivity(intent)
-                            overridePendingTransition( R.anim.slide_in_up, R.anim.stay)
-                        },
-                        {
-                            Toast.makeText(this, "Data not available", Toast.LENGTH_LONG).show()
-                            Handler(mainLooper).postDelayed({ finish() }, 3000)
-                        }
-                )
-        )
     }
 
     private fun buildConfigUrlForecast(): String {

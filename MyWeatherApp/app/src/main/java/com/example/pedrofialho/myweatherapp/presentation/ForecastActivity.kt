@@ -1,6 +1,7 @@
 package com.example.pedrofialho.myweatherapp.presentation
 
 import android.app.ListActivity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -16,13 +17,20 @@ class ForecastActivity : ListActivity(){
 
     lateinit var weather_forecast : WeatherForecast
 
+    companion object{
+        val EXTRA_FORECAST = "weather_forecast_extra"
+
+        fun createIntent(origin: Context, weatherForecast: WeatherForecast) =
+                Intent(origin, ForecastActivity::class.java).putExtra(EXTRA_FORECAST, weatherForecast)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(layout.activity_weather)
 
         val it = intent
-        weather_forecast = it.getParcelableExtra("DTO_forecast")
+        weather_forecast = it.getParcelableExtra(EXTRA_FORECAST)
 
 
        listView.adapter = ArrayAdapter<WeatherForecast.List_Weather>(

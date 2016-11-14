@@ -1,5 +1,6 @@
 package com.example.pedrofialho.myweatherapp.presentation
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -28,9 +29,16 @@ class WeatherDetailsActivity : AppCompatActivity() {
      */
     val actionBarMenuResId: Int? = R.menu.action_bar_activity
 
-    lateinit var mToolbar : Toolbar
+    lateinit var mToolbar: Toolbar
 
-    lateinit var weather_details : WeatherDetails
+    lateinit var weather_details: WeatherDetails
+
+    companion object {
+        val EXTRA_DETAILS = "weather_details_extra"
+
+    fun createIntent(origin: Context, weatherDetail: WeatherDetails) =
+            Intent(origin, WeatherDetailsActivity::class.java).putExtra(EXTRA_DETAILS, weatherDetail)
+}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +54,7 @@ class WeatherDetailsActivity : AppCompatActivity() {
 
 
         val it = intent
-        weather_details = it.getParcelableExtra("DTO")
+        weather_details = it.getParcelableExtra(EXTRA_DETAILS)
 
         (application as WeatherApplication).let {
             (findViewById(R.id.packShot) as PackShotView).setWeatherInfo(weather_details, it.imageLoader, buildConfigUrl())
