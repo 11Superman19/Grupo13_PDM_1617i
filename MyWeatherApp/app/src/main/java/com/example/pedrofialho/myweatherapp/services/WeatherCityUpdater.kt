@@ -1,20 +1,41 @@
 package com.example.pedrofialho.myweatherapp.services
 
-import android.app.IntentService
+import android.app.Service
 import android.content.Intent
-import android.support.annotation.WorkerThread
-import com.android.volley.toolbox.RequestFuture
+import android.os.IBinder
+import android.util.Log
 import com.example.pedrofialho.myweatherapp.R
 import com.example.pedrofialho.myweatherapp.WeatherApplication
 import com.example.pedrofialho.myweatherapp.comms.GetRequest
 import com.example.pedrofialho.myweatherapp.model.WeatherForecast
 
 
-class WeatherCityUpdater() : IntentService("WeatherCityUpdater"){
+class WeatherCityUpdater : Service() {
+    override fun onBind(intent: Intent?): IBinder? = null
+
     var city : String = "Lisbon"
 
     val PREFS_NAME = "MyPrefsFile"
 
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        (application as WeatherApplication).requestQueue.add(
+                GetRequest<WeatherForecast>(
+                        buildConfigUrlForecast(),
+                        WeatherForecast::class.java,
+                        {
+                            Log.v("DEMO","Sucess")
+                            //TODO : use list data
+                            stopSelf()
+                        },
+                        {
+                            Log.v("DEMO","Error")
+                            //TODO : Handle error
+                            stopSelf()
+                        }
+                )
+        )
+        return Service.START_FLAG_REDELIVERY
+    }
     override fun onCreate() {
         super.onCreate()
         // Restore preferences
@@ -26,33 +47,11 @@ class WeatherCityUpdater() : IntentService("WeatherCityUpdater"){
         editor.apply()
     }
 
-    private fun fetchWeatherForecastSync() : WeatherForecast{
-
-        val future : RequestFuture<WeatherForecast> = RequestFuture.newFuture()
-        (application as WeatherApplication).requestQueue.add(GetRequest<WeatherForecast>(
-            buildConfigUrlForecast(),WeatherForecast::class.java,
-                {response -> future.onResponse(response)},
-                {error -> future.onErrorResponse(error)}
-        ))
-        return future.get()
-    }
-
     private fun buildConfigUrlForecast(): String {
         val baseUrl = resources.getString(R.string.api_base_url_forecast)
         val api_count = resources.getString(R.string.api_count)
         val api_key = "${resources.getString(R.string.api_key_name)}=${resources.getString(R.string.api_key_value)}"
         return "$baseUrl$city&$api_count&$api_key"
-    }
-
-    @WorkerThread
-    override fun onHandleIntent(intent: Intent?) {
-
-        try {
-           val list = fetchWeatherForecastSync()
-            // TODO : Use list data
-        }catch (error : Exception){
-            // TODO : Handle error
-        }
     }
 
 }
