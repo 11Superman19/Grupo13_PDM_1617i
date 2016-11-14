@@ -34,6 +34,12 @@
                 android:value="com.example.pedrofialho.myweatherapp.presentation.ChoiceActivity" />
         </activity>
         <activity android:name=".presentation.GeneralSettingsActivity" />
+
+        <service
+            android:name=".services.WeatherForecastUpdater"
+            android:enabled="true"
+            android:exported="true">
+        </service>
     </application>
 
 </manifest>

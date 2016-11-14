@@ -17,7 +17,6 @@ import com.example.pedrofialho.myweatherapp.R
 import com.example.pedrofialho.myweatherapp.WeatherApplication
 import com.example.pedrofialho.myweatherapp.comms.GetRequest
 import com.example.pedrofialho.myweatherapp.model.WeatherDetails
-import com.example.pedrofialho.myweatherapp.model.WeatherForecast
 
 class ChoiceActivity : AppCompatActivity() {
     /**
@@ -84,11 +83,7 @@ class ChoiceActivity : AppCompatActivity() {
     }
 
     private fun fetchWeatherForecastInfo() {
-
-        (application as WeatherApplication).requestQueue.add(GetRequest<WeatherForecast>(
-                buildConfigUrlForecast(),WeatherForecast::class.java,
-                {weather -> startActivity(ForecastActivity.createIntent(this,weather))},
-                {handleFatalError()}))
+        startActivity(ForecastActivity.createIntent(this, (application as WeatherApplication).weatherForecast!!))
     }
 
     private fun fetchCityWeatherInfo() {

@@ -7,7 +7,6 @@ import android.content.Intent
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.ImageLoader
 import com.android.volley.toolbox.Volley
-import com.example.pedrofialho.myweatherapp.model.WeatherDetails
 import com.example.pedrofialho.myweatherapp.model.WeatherForecast
 import com.example.pedrofialho.myweatherapp.services.NullImageCache
 import com.example.pedrofialho.myweatherapp.services.WeatherForecastUpdater
@@ -18,9 +17,6 @@ class WeatherApplication : Application(){
      * @property weatherDetails The configuration information provided by the remote API,
      * or null if we could not reach it
      */
-    var weatherDetails: WeatherDetails? = null
-
-
     var weatherForecast: WeatherForecast? = null
 
     /**

@@ -18,26 +18,6 @@ class WeatherForecastUpdater : Service() {
     val PREFS_NAME = "MyPrefsFile"
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        (application as WeatherApplication).requestQueue.add(
-                GetRequest<WeatherForecast>(
-                        buildConfigUrlForecast(),
-                        WeatherForecast::class.java,
-                        {
-                            Log.v("DEMO","Sucess")
-                            //TODO : use list data
-                            stopSelf()
-                        },
-                        {
-                            Log.v("DEMO","Error")
-                            //TODO : Handle error
-                            stopSelf()
-                        }
-                )
-        )
-        return Service.START_FLAG_REDELIVERY
-    }
-    override fun onCreate() {
-        super.onCreate()
         // Restore preferences
         val settings = getSharedPreferences(PREFS_NAME, 0)
         val silent = settings.getString("city", city)
@@ -45,8 +25,26 @@ class WeatherForecastUpdater : Service() {
         val editor = settings.edit()
         editor.clear()
         editor.apply()
-    }
+        (application as WeatherApplication).requestQueue.add(
+                GetRequest<WeatherForecast>(
+                        buildConfigUrlForecast(),
+                        WeatherForecast::class.java,
+                        {
+                            Log.v("DEMO","Sucess")
+                            (application as WeatherApplication).weatherForecast = it
+                            //TODO : use list data
+                            stopSelf()
+                        },
+                        {
+                            Log.v("DEMO","Error")
 
+                            //TODO : Handle error
+                            stopSelf()
+                        }
+                )
+        )
+        return Service.START_FLAG_REDELIVERY
+    }
     private fun buildConfigUrlForecast(): String {
         val baseUrl = resources.getString(R.string.api_base_url_forecast)
         val api_count = resources.getString(R.string.api_count)
