@@ -10,7 +10,7 @@ import com.example.pedrofialho.myweatherapp.comms.GetRequest
 import com.example.pedrofialho.myweatherapp.model.WeatherForecast
 
 
-class WeatherCityUpdater : Service() {
+class WeatherForecastUpdater : Service() {
     override fun onBind(intent: Intent?): IBinder? = null
 
     var city : String = "Lisbon"

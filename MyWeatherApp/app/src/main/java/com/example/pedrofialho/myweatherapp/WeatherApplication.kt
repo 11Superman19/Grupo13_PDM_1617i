@@ -1,12 +1,16 @@
 package com.example.pedrofialho.myweatherapp
 
+import android.app.AlarmManager
 import android.app.Application
+import android.app.PendingIntent
+import android.content.Intent
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.ImageLoader
 import com.android.volley.toolbox.Volley
 import com.example.pedrofialho.myweatherapp.model.WeatherDetails
 import com.example.pedrofialho.myweatherapp.model.WeatherForecast
 import com.example.pedrofialho.myweatherapp.services.NullImageCache
+import com.example.pedrofialho.myweatherapp.services.WeatherForecastUpdater
 
 
 class WeatherApplication : Application(){
@@ -36,5 +40,19 @@ class WeatherApplication : Application(){
         super.onCreate()
         requestQueue = Volley.newRequestQueue(this)
         imageLoader = ImageLoader(requestQueue, NullImageCache())
+
+        val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+
+        alarmManager.setInexactRepeating(
+                AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                0,
+                AlarmManager.INTERVAL_DAY,
+                PendingIntent.getService(
+                        this,
+                        1,
+                        Intent(this, WeatherForecastUpdater::class.java),
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                )
+        )
     }
-}
+    }
