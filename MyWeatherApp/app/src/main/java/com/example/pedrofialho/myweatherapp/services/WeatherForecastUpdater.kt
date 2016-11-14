@@ -32,14 +32,13 @@ class WeatherForecastUpdater : Service() {
                         {
                             Log.v("DEMO","Sucess")
                             (application as WeatherApplication).weatherForecast = it
-                            //TODO : use list data
-                            stopSelf()
+                            stopSelf(startId)
                         },
                         {
                             Log.v("DEMO","Error")
 
                             //TODO : Handle error
-                            stopSelf()
+                            stopSelf(startId)
                         }
                 )
         )
