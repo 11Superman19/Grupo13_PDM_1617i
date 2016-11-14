@@ -120,13 +120,6 @@ class ChoiceActivity : AppCompatActivity() {
         return "$baseUrl$city&$api_key"
     }
 
-    private fun buildConfigUrlForecast(): String {
-        val baseUrl = resources.getString(R.string.api_base_url_forecast)
-        val api_count = resources.getString(R.string.api_count)
-        val api_key = "${resources.getString(R.string.api_key_name)}=${resources.getString(R.string.api_key_value)}"
-        return "$baseUrl$city&$api_count&$api_key"
-    }
-
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 

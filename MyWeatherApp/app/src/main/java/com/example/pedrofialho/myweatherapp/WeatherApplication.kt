@@ -17,6 +17,7 @@ class WeatherApplication : Application(){
      * @property weatherDetails The configuration information provided by the remote API,
      * or null if we could not reach it
      */
+
     var weatherForecast: WeatherForecast? = null
 
     /**
@@ -37,9 +38,9 @@ class WeatherApplication : Application(){
         requestQueue = Volley.newRequestQueue(this)
         imageLoader = ImageLoader(requestQueue, NullImageCache())
 
-        val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+        val alarmManager_forecast = getSystemService(ALARM_SERVICE) as AlarmManager
 
-        alarmManager.setInexactRepeating(
+        alarmManager_forecast.setInexactRepeating(
                 AlarmManager.ELAPSED_REALTIME_WAKEUP,
                 0,
                 AlarmManager.INTERVAL_DAY,
