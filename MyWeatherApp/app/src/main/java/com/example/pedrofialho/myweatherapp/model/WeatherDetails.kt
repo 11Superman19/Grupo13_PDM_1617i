@@ -23,14 +23,14 @@ import android.os.Parcelable
  * @property snow snow volume for the last 3 hours
  * @property dt Time of data calculation, unix, UTC
  */
-
+//retirar os nulls depois conseguir meter os idx
 data class WeatherDetails(
         val id: Int,
         val name: String,
         val cod: Int,
-        val weather: List<Weather>,
-        val main: Main,
-        val wind: Wind,
+        val weather: List<Weather>?,
+        val main: Main?,
+        val wind: Wind?,
         val clouds: Clouds?,
         val rain: Rain?,
         val snow: Snow?,
