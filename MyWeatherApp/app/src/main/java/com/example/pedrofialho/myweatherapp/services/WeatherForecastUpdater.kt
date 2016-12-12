@@ -11,6 +11,16 @@ import com.example.pedrofialho.myweatherapp.model.WeatherForecast
 
 
 class WeatherForecastUpdater : Service() {
+
+
+    companion object{
+        val WEATHER_LIST_ID_EXTRA_KEY = "listID"
+        val UPCOMING_LIST_ID_EXTRA_VALUE = "forecast/daily?q="
+        val DAILY_ID_EXTRA_VALUE = "weather?q="
+
+        private val BASE_URL = "http://api.openweathermap.org/data/2.5/"
+    }
+
     override fun onBind(intent: Intent?): IBinder? = null
 
     var city : String = "Lisbon"

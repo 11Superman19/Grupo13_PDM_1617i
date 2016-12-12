@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textAlignment="center"
-        tools:text="@string/weather_details_tools_movie_title"
+        tools:text="@string/weather_details_tools_title"
         android:textStyle="normal|bold"
         android:ellipsize="end"
         android:minLines="1"

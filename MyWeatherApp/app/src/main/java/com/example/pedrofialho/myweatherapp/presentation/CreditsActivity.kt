@@ -10,7 +10,7 @@ import android.view.MenuItem
 import android.widget.ImageView
 import com.example.pedrofialho.myweatherapp.R
 
-class CreditsActivity : AppCompatActivity() {
+class   CreditsActivity : AppCompatActivity() {
     /**
      * @property actionBarId the identifier of the toolbar as specified in the activity layout, or
      * null if the activity does not include a toolbar
