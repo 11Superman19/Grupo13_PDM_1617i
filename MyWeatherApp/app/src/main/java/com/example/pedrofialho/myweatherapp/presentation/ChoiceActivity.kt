@@ -15,8 +15,6 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import com.example.pedrofialho.myweatherapp.R
 import com.example.pedrofialho.myweatherapp.WeatherApplication
-import com.example.pedrofialho.myweatherapp.comms.GetRequest
-import com.example.pedrofialho.myweatherapp.model.WeatherDetails
 
 class ChoiceActivity : AppCompatActivity() {
     /**
@@ -83,16 +81,13 @@ class ChoiceActivity : AppCompatActivity() {
     }
 
     private fun fetchWeatherForecastInfo() {
+        //TODO : FETCH WEATHER WITH ASYNC TASK
         startActivity(ForecastActivity.createIntent(this, (application as WeatherApplication).weatherForecast!!))
     }
 
     private fun fetchCityWeatherInfo() {
-
-        (application as WeatherApplication).requestQueue.add(GetRequest<WeatherDetails>(
-                buildConfigUrlDetails(),WeatherDetails::class.java,
-                {weather -> startActivity(WeatherDetailsActivity.createIntent(this,weather)) },
-                {handleFatalError()})
-        )
+        //TODO : FETCH WEATHER WITH ASYNC TASK
+        startActivity(WeatherDetailsActivity.createIntent(this,(application as WeatherApplication).weatherDetails!!))
     }
 
     private fun handleFatalError() {
@@ -112,12 +107,6 @@ class ChoiceActivity : AppCompatActivity() {
         if(animation_forecast!!.isPaused) animation_forecast!!.start()
         if(animation_daily!!.isPaused) animation_daily!!.start()
         super.onResume()
-    }
-
-    private fun buildConfigUrlDetails(): String {
-        val baseUrl = resources.getString(R.string.api_base_url)
-        val api_key = "${resources.getString(R.string.api_key_name)}=${resources.getString(R.string.api_key_value)}"
-        return "$baseUrl$city&$api_key"
     }
 
 

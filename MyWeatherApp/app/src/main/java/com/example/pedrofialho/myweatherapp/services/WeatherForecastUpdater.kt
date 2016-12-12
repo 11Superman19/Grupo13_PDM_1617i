@@ -4,9 +4,11 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
+import com.android.volley.VolleyError
 import com.example.pedrofialho.myweatherapp.R
 import com.example.pedrofialho.myweatherapp.WeatherApplication
 import com.example.pedrofialho.myweatherapp.comms.GetRequest
+import com.example.pedrofialho.myweatherapp.model.WeatherDetails
 import com.example.pedrofialho.myweatherapp.model.WeatherForecast
 
 
@@ -19,6 +21,7 @@ class WeatherForecastUpdater : Service() {
         val DAILY_ID_EXTRA_VALUE = "weather?q="
 
         private val BASE_URL = "http://api.openweathermap.org/data/2.5/"
+        private val LIST_IDS = listOf(UPCOMING_LIST_ID_EXTRA_VALUE, DAILY_ID_EXTRA_VALUE)
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
@@ -35,30 +38,82 @@ class WeatherForecastUpdater : Service() {
         val editor = settings.edit()
         editor.clear()
         editor.apply()
-        (application as WeatherApplication).requestQueue.add(
-                GetRequest<WeatherForecast>(
-                        buildConfigUrlForecast(),
-                        WeatherForecast::class.java,
-                        {
-                            Log.v("DEMO","Sucess")
-                            (application as WeatherApplication).weatherForecast = it
-                            stopSelf(startId)
-                        },
-                        {
-                            Log.v("DEMO","Error")
 
-                            //TODO : Handle error
-                            stopSelf(startId)
-                        }
-                )
-        )
+        val weatherlistId = intent?.let{
+            val listID : String? = it.getStringExtra(WEATHER_LIST_ID_EXTRA_KEY)
+            if(listID in LIST_IDS) listID else null
+        }
+
+        if(weatherlistId == null){
+            stopSelf(startId)
+            return Service.START_NOT_STICKY
+        }
+        if (weatherlistId == UPCOMING_LIST_ID_EXTRA_VALUE) {
+            (application as WeatherApplication).requestQueue.add(
+                    GetRequest<WeatherForecast>(
+                            buildConfigUrlForecast(weatherlistId),
+                            WeatherForecast::class.java,
+                            {
+                                Log.v("DEMO", "Sucess")
+                                (application as WeatherApplication).weatherForecast = it
+                                processWeatherForecast(it,weatherlistId)
+                                stopSelf(startId)
+                            },
+                            {
+                                Log.v("DEMO", "Error")
+                                handleError(it)
+                                stopSelf(startId)
+                            }
+                    )
+            )
+        } else{
+            (application as WeatherApplication).requestQueue.add(
+                    GetRequest<WeatherDetails>(
+                    buildConfigUrlDetails(weatherlistId),
+                            WeatherDetails::class.java,
+                    {
+                        Log.v("DEMO", "Sucess")
+                        (application as WeatherApplication).weatherDetails = it
+                        processWeatherDetails(it,weatherlistId)
+                        stopSelf(startId)
+                    },
+                    {
+                        Log.v("DEMO", "Error")
+                        handleError(it)
+                        stopSelf(startId)
+                    })
+            )
+        }
         return Service.START_FLAG_REDELIVERY
     }
-    private fun buildConfigUrlForecast(): String {
-        val baseUrl = resources.getString(R.string.api_base_url_forecast)
+
+    private fun processWeatherForecast(forecast: WeatherForecast, weatherlistId: String) {
+        // Implementation note: This solution removes all existing entries from the DB before
+        // inserting the new ones. This is not the best approach.
+
+    }
+
+    private fun processWeatherDetails(details: WeatherDetails, weatherlistId: String) {
+        // Implementation note: This solution removes all existing entries from the DB before
+        // inserting the new ones. This is not the best approach.
+
+    }
+
+    private fun handleError(error: VolleyError) {
+        // TODO
+        Log.v("DEMO", "CABBUMMM")
+    }
+
+    private fun buildConfigUrlDetails(weatherListID: String): String {
+            val baseUrl = resources.getString(R.string.api_base_url)
+            val api_key = "${resources.getString(R.string.api_key_name)}=${resources.getString(R.string.api_key_value)}"
+            return "$baseUrl$weatherListID$city&$api_key"
+    }
+
+    private fun buildConfigUrlForecast(weatherListID : String): String {
         val api_count = resources.getString(R.string.api_count)
         val api_key = "${resources.getString(R.string.api_key_name)}=${resources.getString(R.string.api_key_value)}"
-        return "$baseUrl$city&$api_count&$api_key"
+        return "$BASE_URL$weatherListID$city&$api_count&$api_key"
     }
 
 }
