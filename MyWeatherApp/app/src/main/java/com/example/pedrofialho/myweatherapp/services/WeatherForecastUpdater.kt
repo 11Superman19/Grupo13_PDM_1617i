@@ -10,6 +10,7 @@ import com.example.pedrofialho.myweatherapp.WeatherApplication
 import com.example.pedrofialho.myweatherapp.comms.GetRequest
 import com.example.pedrofialho.myweatherapp.model.WeatherDetails
 import com.example.pedrofialho.myweatherapp.model.WeatherForecast
+import com.example.pedrofialho.myweatherapp.model.content.WeatherInfoProvider
 
 
 class WeatherForecastUpdater : Service() {
@@ -90,13 +91,27 @@ class WeatherForecastUpdater : Service() {
     private fun processWeatherForecast(forecast: WeatherForecast, weatherlistId: String) {
         // Implementation note: This solution removes all existing entries from the DB before
         // inserting the new ones. This is not the best approach.
+        val tableUri =
+                WeatherInfoProvider.FORECAST_CONTENT_URI
 
+        contentResolver.delete(tableUri, null, null)
+        //TODO : ACABAR O CONTENT VALUES
+      // val count = contentResolver.bulkInsert(tableUri, forecast.toContentValues())
+
+        //Log.v("DEMO", "Successfully updated $weatherlistId movie list with $count entries")
     }
 
     private fun processWeatherDetails(details: WeatherDetails, weatherlistId: String) {
         // Implementation note: This solution removes all existing entries from the DB before
         // inserting the new ones. This is not the best approach.
+        val tableUri =
+                WeatherInfoProvider.WEATHER_CONTENT_URI
 
+        contentResolver.delete(tableUri, null, null)
+        //TODO : ACABAR O CONTENT VALUES
+        //val count = contentResolver.bulkInsert(tableUri, details.toContentValues())
+
+        //Log.v("DEMO", "Successfully updated $weatherlistId movie list with $count entries")
     }
 
     private fun handleError(error: VolleyError) {

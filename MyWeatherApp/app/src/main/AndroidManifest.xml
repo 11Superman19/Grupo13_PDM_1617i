@@ -38,8 +38,15 @@
         <service
             android:name=".services.WeatherForecastUpdater"
             android:enabled="true"
-            android:exported="true">
-        </service>
+            android:exported="true"/>
+
+        <provider
+            android:name=".model.content.WeatherInfoProvider"
+            android:authorities="com.example.pedrofialho.myweatherapp"
+            android:enabled="true"
+            android:exported="true"
+            android:multiprocess="false"
+            />
     </application>
 
 </manifest>
