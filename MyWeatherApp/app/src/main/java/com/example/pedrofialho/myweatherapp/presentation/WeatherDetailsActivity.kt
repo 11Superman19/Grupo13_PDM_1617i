@@ -62,7 +62,7 @@ class WeatherDetailsActivity : AppCompatActivity() {
 
         mToolbar.setNavigationOnClickListener {
             finish()
-            startActivity(Intent(this,ChoiceActivity::class.java))
+            startActivity(Intent(this, ChoiceActivity::class.java))
             overridePendingTransition(0,R.anim.slide_right)
         }
 
