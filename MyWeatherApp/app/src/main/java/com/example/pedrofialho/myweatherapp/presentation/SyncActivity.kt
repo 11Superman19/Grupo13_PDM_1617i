@@ -39,6 +39,7 @@ class SyncActivity : AppCompatActivity() {
         connectivity = findViewById(R.id.Connectivity) as TextView
         wifi = findViewById(R.id.wifi) as RadioButton
         dados = findViewById(R.id.mobile) as RadioButton
+        dados.setText("esgay")
         check = findViewById(R.id.checkBox) as CheckBox
         timer = findViewById(R.id.timePicker) as TimePicker
 
