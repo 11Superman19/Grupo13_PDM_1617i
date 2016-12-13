@@ -8,10 +8,7 @@ import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.inputmethod.EditorInfo
-import android.widget.ArrayAdapter
-import android.widget.EditText
-import android.widget.Spinner
-import android.widget.TextView
+import android.widget.*
 import com.example.pedrofialho.myweatherapp.R
 import java.util.*
 
@@ -45,7 +42,6 @@ class GeneralSettingsActivity : AppCompatActivity() {
         mToolbar = findViewById(R.id.toolbar) as Toolbar
         city_edit = findViewById(R.id.city) as TextView
         spinner = findViewById(R.id.spinner) as Spinner
-
 
 
         actionBarId?.let {
