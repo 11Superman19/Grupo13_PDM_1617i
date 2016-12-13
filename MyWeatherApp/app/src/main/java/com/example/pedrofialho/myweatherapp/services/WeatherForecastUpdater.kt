@@ -11,6 +11,7 @@ import com.example.pedrofialho.myweatherapp.comms.GetRequest
 import com.example.pedrofialho.myweatherapp.model.WeatherDetails
 import com.example.pedrofialho.myweatherapp.model.WeatherForecast
 import com.example.pedrofialho.myweatherapp.model.content.WeatherInfoProvider
+import com.example.pedrofialho.myweatherapp.model.content.toContentValues
 
 
 class WeatherForecastUpdater : Service() {
@@ -96,9 +97,9 @@ class WeatherForecastUpdater : Service() {
 
         contentResolver.delete(tableUri, null, null)
         //TODO : ACABAR O CONTENT VALUES
-      // val count = contentResolver.bulkInsert(tableUri, forecast.toContentValues())
+       val count = contentResolver.insert(tableUri, forecast.toContentValues())
 
-        //Log.v("DEMO", "Successfully updated $weatherlistId movie list with $count entries")
+        Log.v("DEMO", "Successfully updated $weatherlistId movie list with $count entries")
     }
 
     private fun processWeatherDetails(details: WeatherDetails, weatherlistId: String) {
@@ -109,9 +110,9 @@ class WeatherForecastUpdater : Service() {
 
         contentResolver.delete(tableUri, null, null)
         //TODO : ACABAR O CONTENT VALUES
-        //val count = contentResolver.bulkInsert(tableUri, details.toContentValues())
+        val count = contentResolver.insert(tableUri, details.toContentValues())
 
-        //Log.v("DEMO", "Successfully updated $weatherlistId movie list with $count entries")
+        Log.v("DEMO", "Successfully updated $weatherlistId movie list with $count entries")
     }
 
     private fun handleError(error: VolleyError) {

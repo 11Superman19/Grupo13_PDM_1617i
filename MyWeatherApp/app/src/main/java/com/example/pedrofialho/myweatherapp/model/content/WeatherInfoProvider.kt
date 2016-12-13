@@ -8,7 +8,6 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.net.Uri
-import android.support.annotation.MainThread
 
 /**
  * Created by Tiago on 12/12/2016.
@@ -37,14 +36,13 @@ class WeatherInfoProvider : ContentProvider(){
         const val COLUMN_WIND = "WIND"
         const val COLUMN_ICON = "ICON"
 
-
         const val COLUMN_ID_IDX = 0
         const val COLUMN_NAME_IDX = 1
         const val COLUMN_COD_IDX = 2
         const val COLUMN_WEATHER_DESC_IDX = 3
         const val COLUMN_TEMP_IDX = 4
         const val COLUMN_WIND_IDX = 5
-        const val COLUMN_ICON_IDX= 6
+        const val COLUMN_ICON_IDX = 6
 
 
         // Private constants to be used by the implementation
@@ -68,71 +66,129 @@ class WeatherInfoProvider : ContentProvider(){
                     "$COLUMN_COD INTEGER NOT NULL , " +
                     "$COLUMN_WEATHER_DESC TEXT NOT NULL , " +
                     "$COLUMN_TEMP FLOAT NOT NULL , " +
-                    "$COLUMN_WIND FLOAT NOT NULL)"
+                    "$COLUMN_WIND FLOAT NOT NULL ," +
+                    "$COLUMN_ICON TEXT NOT NULL )"
             db?.execSQL(CREATE_CMD)
         }
 
         private fun deleteTable(db : SQLiteDatabase?, tableName: String) {
-            val CREATE_CMD = "DELETE TABLE IF EXISTS $tableName"
-            db?.execSQL(CREATE_CMD)
+            val DROP_CMD = "DELETE TABLE IF EXISTS $tableName"
+            db?.execSQL(DROP_CMD)
         }
 
 
         override fun onCreate(db : SQLiteDatabase?) {
-            if (WEATHER_TABLE_NAME == null)deleteTable(db, WEATHER_TABLE_NAME)
-            else createTable(db, WEATHER_TABLE_NAME)
-            if (FORECAST_TABLE_NAME == null)deleteTable(db, FORECAST_TABLE_NAME)
-            else createTable(db, FORECAST_TABLE_NAME)
+            createTable(db, WEATHER_TABLE_NAME)
+            createTable(db, FORECAST_TABLE_NAME)
         }
 
         override fun onUpgrade(db : SQLiteDatabase?, oldVersion : Int, newVersion : Int) {
-            if(newVersion>oldVersion){
                 deleteTable(db, WEATHER_TABLE_NAME)
                 createTable(db, WEATHER_TABLE_NAME)
                 deleteTable(db, FORECAST_TABLE_NAME)
                 createTable(db, FORECAST_TABLE_NAME)
-            }
         }
-
     }
-
+    /**
+     * @property dbHelper The DB helper instance to be used for DB accesses.
+     */
     @Volatile private lateinit var dbHelper: WeatherInfoDbHelper
+
+    /**
+     * @property uriMatcher The instance used to match an URI to its corresponding content type
+     */
     @Volatile private lateinit var uriMatcher: UriMatcher
 
-
-    override fun insert(p0: Uri?, p1: ContentValues?): Uri {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun query(p0: Uri?, p1: Array<out String>?, p2: String?, p3: Array<out String>?, p4: String?): Cursor {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    @MainThread
     override fun onCreate(): Boolean {
         dbHelper = WeatherInfoDbHelper()
         uriMatcher = UriMatcher(UriMatcher.NO_MATCH)
-        with (uriMatcher) {
-            addURI(AUTHORITY, WEATHER_TABLE_PATH, WEATHER_LIST_CODE)
-            addURI(AUTHORITY, "$WEATHER_TABLE_PATH/#", WEATHER_ITEM_CODE)
+        with(uriMatcher){
             addURI(AUTHORITY, FORECAST_TABLE_PATH, FORECAST_LIST_CODE)
-            addURI(AUTHORITY, "$FORECAST_TABLE_PATH/#", FORECAST_ITEM_CODE)
+            addURI(AUTHORITY, "$FORECAST_TABLE_PATH/#", FORECAST_LIST_CODE)
+            addURI(AUTHORITY, WEATHER_TABLE_PATH, WEATHER_LIST_CODE)
+            addURI(AUTHORITY, "$WEATHER_TABLE_PATH/#", WEATHER_LIST_CODE)
         }
         return true
     }
 
-
-    override fun update(URI: Uri?, p1: ContentValues?, p2: String?, p3: Array<out String>?): Int {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun getType(uri: Uri?): String  = when( uriMatcher.match(uri)){
+        FORECAST_LIST_CODE, WEATHER_LIST_CODE -> WEATHER_LIST_CONTENT_TYPE
+        FORECAST_ITEM_CODE, WEATHER_ITEM_CODE -> WEATHER_ITEM_CONTENT_TYPE
+        else -> throw IllegalArgumentException("Uri $uri not supported")
     }
 
-    override fun delete(uri : Uri?, selection : String?, selectionArgs : Array<out String>?): Int {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+    private fun resolveTableAndSelectionInfoFromUri(uri: Uri, selection: String?, selectionArgs: Array<String>?)
+            : Triple<String, String?, Array<String>?> {
+        val itemSelection = "$COLUMN_ID = ${uri.pathSegments.last()}"
+        return when (uriMatcher.match(uri)) {
+            FORECAST_LIST_CODE -> Triple(FORECAST_TABLE_NAME, itemSelection, null)
+            WEATHER_LIST_CODE -> Triple(WEATHER_TABLE_NAME, itemSelection, null)
+            else -> resolveTableInfoFromUri(uri).let { Triple(it.first, selection, selectionArgs) }
+        }
     }
 
-    override fun getType(p0: Uri?): String {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+    /**
+     * Helper function used to obtain the table information (i.e. table name and path) based on the
+     * given [uri]
+     * @param [uri] The table URI
+     * @return A [Pair] instance bearing the table name (the pair's first) and the table path
+     * part (the pair's second).
+     * @throws IllegalArgumentException if the received [uri] does not refer to an existing table
+     */
+    private fun resolveTableInfoFromUri(uri: Uri): Pair<String, String> = when (uriMatcher.match(uri)) {
+        FORECAST_LIST_CODE -> Pair(FORECAST_TABLE_NAME, FORECAST_TABLE_PATH)
+        WEATHER_LIST_CODE -> Pair(WEATHER_TABLE_NAME, WEATHER_TABLE_PATH)
+        else -> null
+    } ?: throw IllegalArgumentException("Uri $uri not supported")
 
+    override fun delete(uri: Uri, selection: String?, selectionArgs: Array<String>?): Int {
+        val params = resolveTableAndSelectionInfoFromUri(uri, selection, selectionArgs)
+        val db = dbHelper.writableDatabase
+        try {
+            val deletedCount = db.delete(params.first, params.second, params.third)
+            if (deletedCount != 0)
+                context.contentResolver.notifyChange(uri, null)
+            return deletedCount
+        }
+        finally {
+            db.close()
+        }
+    }
+
+
+    override fun insert(uri: Uri, values: ContentValues?): Uri? {
+        val tableInfo = resolveTableInfoFromUri(uri)
+        val db = dbHelper.writableDatabase
+        return try {
+            val id = db.insert(tableInfo.first, null, values)
+            if (id < 0) null else {
+                context.contentResolver.notifyChange(uri, null)
+                Uri.parse("content://$AUTHORITY/${tableInfo.second}/$id")
+            }
+        }
+        finally {
+            db.close()
+        }
+    }
+
+    override fun query(uri: Uri, projection: Array<String>?, selection: String?,
+                       selectionArgs: Array<String>?, sortOrder: String?): Cursor? {
+
+        val params = resolveTableAndSelectionInfoFromUri(uri, selection, selectionArgs)
+        val db = dbHelper.readableDatabase
+        return try {
+            db.query(params.first, projection, params.second, params.third, null, null, sortOrder)
+        }
+        finally {
+            db.close()
+        }
+    }
+
+
+
+    override fun update(uri: Uri, values: ContentValues?, selection: String?,
+                        selectionArgs: Array<String>?): Int {
+        throw UnsupportedOperationException("Updates are not supported")
     }
 
 }
