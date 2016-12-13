@@ -7,7 +7,10 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
+import android.widget.TextView
 import com.example.pedrofialho.myweatherapp.R
 import com.example.pedrofialho.myweatherapp.WeatherApplication
 import java.util.*
@@ -127,6 +130,6 @@ class GeneralSettingsActivity :AppCompatActivity(), AdapterView.OnItemSelectedLi
     }
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-        Toast.makeText(this,""+parent.getItemAtPosition(position),Toast.LENGTH_LONG).show()
+        //ver como meter as varias opções Spinner boa ideia?
     }
 }

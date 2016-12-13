@@ -27,6 +27,7 @@ class SettingsActivity : AppCompatActivity(){
 
     lateinit var general_button : ImageButton
     lateinit var connect_button : ImageButton
+    lateinit var notification_button : ImageButton
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,6 +37,9 @@ class SettingsActivity : AppCompatActivity(){
         mToolbar = findViewById(R.id.toolbar) as Toolbar
         general_button = findViewById(R.id.general_button) as ImageButton
         connect_button = findViewById(R.id.connect_button) as ImageButton
+        notification_button = findViewById(R.id.Notification_button) as ImageButton
+
+
 
         actionBarId?.let {
             setSupportActionBar(findViewById(it) as Toolbar)
@@ -56,6 +60,11 @@ class SettingsActivity : AppCompatActivity(){
 
         connect_button.setOnClickListener {
             startActivity(Intent(this,SyncActivity::class.java))
+            overridePendingTransition(R.anim.stay,R.anim.slide_right)
+        }
+
+        notification_button.setOnClickListener {
+            startActivity(Intent(this,NotificationSettingsActivity::class.java))
             overridePendingTransition(R.anim.stay,R.anim.slide_right)
         }
 

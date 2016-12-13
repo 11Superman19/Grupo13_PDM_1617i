@@ -65,4 +65,5 @@
     <string name="connectivity_string">Connectivity Definitions</string>
     <string name="connectivity_title">Connectivity</string>
     <string name="notification_title">Notification</string>
+    <string name="done_button">Done</string>
 </resources>
