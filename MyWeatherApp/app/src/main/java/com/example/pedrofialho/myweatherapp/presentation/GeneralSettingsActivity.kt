@@ -52,6 +52,7 @@ class GeneralSettingsActivity : AppCompatActivity() {
             setSupportActionBar(findViewById(it) as Toolbar)
             supportActionBar!!.setDisplayHomeAsUpEnabled(true)
             supportActionBar!!.setDisplayShowHomeEnabled(true)
+
         }
 
         mToolbar.setNavigationOnClickListener {
