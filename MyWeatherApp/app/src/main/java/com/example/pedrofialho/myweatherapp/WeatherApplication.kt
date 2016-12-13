@@ -45,18 +45,22 @@ class WeatherApplication : Application(){
         requestQueue = Volley.newRequestQueue(this)
         imageLoader = ImageLoader(requestQueue, NullImageCache())
 
-        val alarmManager_forecast = getSystemService(ALARM_SERVICE) as AlarmManager
 
-        alarmManager_forecast.setInexactRepeating(
-                AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                0,
-                AlarmManager.INTERVAL_DAY,
-                PendingIntent.getService(
-                        this,
-                        1,
-                        Intent(this, WeatherForecastUpdater::class.java),
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                )
-        )
+
+        fun scheduleUpdate(listId: String) {
+            val action = Intent(this, WeatherForecastUpdater::class.java)
+                    .putExtra(WeatherForecastUpdater.WEATHER_LIST_ID_EXTRA_KEY, listId)
+            (getSystemService(ALARM_SERVICE) as AlarmManager).setInexactRepeating(
+                    AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                    0,
+                    AlarmManager.INTERVAL_DAY,
+                    PendingIntent.getService(this, 1, action, PendingIntent.FLAG_UPDATE_CURRENT)
+            )
+        }
+
+        // Implementation note: This solution does not persist Alarm schedules across reboots
+
+        scheduleUpdate(WeatherForecastUpdater.UPCOMING_LIST_ID_EXTRA_VALUE)
+        scheduleUpdate(WeatherForecastUpdater.DAILY_ID_EXTRA_VALUE)
     }
     }

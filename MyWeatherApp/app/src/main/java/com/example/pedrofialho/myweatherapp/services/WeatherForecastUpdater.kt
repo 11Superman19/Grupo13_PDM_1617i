@@ -97,7 +97,7 @@ class WeatherForecastUpdater : Service() {
 
         contentResolver.delete(tableUri, null, null)
         //TODO : ACABAR O CONTENT VALUES
-       val count = contentResolver.bulkInsert(tableUri, forecast.toContentValues())
+       val count = contentResolver.insert(tableUri, forecast.toContentValues())
 
         Log.v("DEMO", "Successfully updated $weatherlistId movie list with $count entries")
     }
@@ -110,9 +110,9 @@ class WeatherForecastUpdater : Service() {
 
         contentResolver.delete(tableUri, null, null)
         //TODO : ACABAR O CONTENT VALUES
-        //val count = contentResolver.bulkInsert(tableUri, details.toContentValues())
+        val count = contentResolver.insert(tableUri, details.toContentValues())
 
-        //Log.v("DEMO", "Successfully updated $weatherlistId movie list with $count entries")
+        Log.v("DEMO", "Successfully updated $weatherlistId movie list with $count entries")
     }
 
     private fun handleError(error: VolleyError) {

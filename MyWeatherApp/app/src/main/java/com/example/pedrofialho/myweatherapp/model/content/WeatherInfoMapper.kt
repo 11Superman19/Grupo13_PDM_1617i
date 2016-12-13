@@ -3,23 +3,32 @@ package com.example.pedrofialho.myweatherapp.model.content
 import android.content.ContentValues
 import android.database.Cursor
 import com.example.pedrofialho.myweatherapp.model.WeatherDetails
+import com.example.pedrofialho.myweatherapp.model.WeatherForecast
 
 //retirar os pontos quando souber meter objetos e listas
 fun WeatherDetails.toContentValues() : ContentValues{
     val result = ContentValues()
     with(WeatherInfoProvider){
-        result.put(COLUMN_ID,weather?.component1()?.id)
-        result.put(COLUMN_NAME,weather?.component3()?.description)
-        result.put(COLUMN_ICON,weather?.component4()?.icon)
+        result.put(COLUMN_ID,weather?.get(0)?.id)
+        result.put(COLUMN_NAME,weather?.get(0)?.description)
+        result.put(COLUMN_ICON,weather?.get(0)?.icon)
     }
     return result
 }
 
-/*fun WeatherForecast.toContentValues() : Array<ContentValues> =
-        list.component5().weather.map{WeatherDetails::toContentValues}.toTypedArray()
-*/
+fun WeatherForecast.toContentValues() : ContentValues{
+    val result = ContentValues()
+    with(WeatherInfoProvider){
+        result.put(COLUMN_ID, list[0].weather[0].id)
+        result.put(COLUMN_NAME, list[0].weather[0].description)
+        result.put(COLUMN_ICON, list[0].weather[0].icon)
+    }
+    return result
+}
+
 
 //TODO :  Quando souber como meter objetos e listas completar
+//ver se fazer para forecast tb
 private fun toWeatherDetail(cursor : Cursor): WeatherDetails{
     with(WeatherInfoProvider.Companion){
         return WeatherDetails(
