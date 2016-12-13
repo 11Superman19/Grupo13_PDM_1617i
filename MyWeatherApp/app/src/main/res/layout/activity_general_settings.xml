@@ -33,12 +33,22 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:layout_below="@+id/toolbar" />
 
+    <Space
+        android:layout_width="40dp"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:layout_alignBottom="@+id/city"
+        android:id="@+id/space"
+        android:layout_toEndOf="@+id/city" />
+
     <Spinner
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/spinner"
-        android:layout_alignBottom="@+id/city"
-        android:layout_toEndOf="@+id/city" />
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/space"
+        android:layout_below="@+id/toolbar"
+        android:layout_alignBottom="@+id/space" />
 
 
 </RelativeLayout>

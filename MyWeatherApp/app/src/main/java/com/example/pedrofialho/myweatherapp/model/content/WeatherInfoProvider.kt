@@ -16,7 +16,7 @@ import android.net.Uri
 class WeatherInfoProvider : ContentProvider(){
 
     companion object {
-        const val AUTHORITY = "isel.pdm.demos.mymoviedb"
+        const val AUTHORITY = "com.example.pedrofialho.myweatherapp"
         const val WEATHER_TABLE_PATH = "weather"
         const val FORECAST_TABLE_PATH = "weather_list"
 

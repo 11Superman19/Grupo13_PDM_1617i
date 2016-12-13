@@ -4,15 +4,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
-import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
-import android.view.inputmethod.EditorInfo
+import android.view.View
 import android.widget.*
 import com.example.pedrofialho.myweatherapp.R
 import java.util.*
 
-class GeneralSettingsActivity : AppCompatActivity() {
+class GeneralSettingsActivity :AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     /**
      * @property actionBarId the identifier of the toolbar as specified in the activity layout, or
@@ -28,7 +27,7 @@ class GeneralSettingsActivity : AppCompatActivity() {
 
     val PREFS_NAME = "MyPrefsFile"
 
-    var arrayList = ArrayList<String>()
+    lateinit var mAdapter: ArrayAdapter<String>
 
 
     lateinit var mToolbar : Toolbar
@@ -42,8 +41,30 @@ class GeneralSettingsActivity : AppCompatActivity() {
         mToolbar = findViewById(R.id.toolbar) as Toolbar
         city_edit = findViewById(R.id.city) as TextView
         spinner = findViewById(R.id.spinner) as Spinner
+        val arrayList = ArrayList<String>()
+        arrayList.add("Lisboa")
+        arrayList.add("Madrid")
+        arrayList.add("Paris")
+        arrayList.add("Londres")
+        arrayList.add("Roma")
+        arrayList.add("Luxemburgo")
+        arrayList.add("Berlin")
+        arrayList.add("Bruxelas")
+        arrayList.add("Atenas")
+        arrayList.add("Amesterdão")
+        arrayList.add("Budapest")
+        arrayList.add("Moscovo")
+        arrayList.add("Dublin")
+        arrayList.add("Estocolmo")
+        arrayList.add("Bucareste")
 
 
+        mAdapter = ArrayAdapter(this,android.R.layout.simple_list_item_1,arrayList)
+
+        mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        spinner.adapter = mAdapter
+        spinner.onItemSelectedListener = this
         actionBarId?.let {
             setSupportActionBar(findViewById(it) as Toolbar)
             supportActionBar!!.setDisplayHomeAsUpEnabled(true)
@@ -99,5 +120,13 @@ class GeneralSettingsActivity : AppCompatActivity() {
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    override fun onNothingSelected(parent: AdapterView<*>?) {
+
+    }
+
+    override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+        Toast.makeText(this,""+parent.getItemAtPosition(position),Toast.LENGTH_LONG).show()
     }
 }

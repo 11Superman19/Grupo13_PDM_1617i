@@ -33,5 +33,5 @@
     <string name="choice_no">Não</string>
     <string name="choice_yes">Sim</string>
     <string name="leaving_option">Deseja Sair?</string>
-    <string name="city_general">Cidade</string>
+    <string name="city_general">Cidade :</string>
 </resources>

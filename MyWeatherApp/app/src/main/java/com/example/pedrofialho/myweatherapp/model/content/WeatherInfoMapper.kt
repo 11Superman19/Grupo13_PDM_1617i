@@ -41,7 +41,7 @@ private fun toWeatherDetail(cursor : Cursor): WeatherDetails{
                 clouds = null,
                 rain = null,
                 snow = null,
-                dt = cursor.getLong(COLUMN_DT_IDX)
+                dt = 0
         )
     }
 }

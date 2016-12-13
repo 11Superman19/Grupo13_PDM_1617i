@@ -60,5 +60,5 @@
     <string name="temp_max">Temp Max: </string>
     <string name="temp_min">Temp Min: </string>
     <string name="city_Detail">City :</string>
-    <string name="city_general">City</string>
+    <string name="city_general">City :</string>
 </resources>

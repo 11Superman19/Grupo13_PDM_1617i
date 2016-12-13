@@ -36,7 +36,7 @@ class PackShotView(ctx: Context, attrs: AttributeSet?, defStyle: Int) : LinearLa
                      imageLoader: ImageLoader,
                      urlBuilder: String) {
 
-        (findViewById(R.id.weatherTitle) as TextView).text = weatherDetail.weather[0].description
+        (findViewById(R.id.weatherTitle) as TextView).text = weatherDetail.weather!![0].description
             val url = urlBuilder
             Log.v(resources.getString(R.string.app_name), "Displaying image from URL $url")
             (findViewById(R.id.packShotImage) as NetworkImageView).setImageUrl(url, imageLoader)
