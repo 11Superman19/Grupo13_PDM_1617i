@@ -54,7 +54,7 @@ class SettingsActivity : AppCompatActivity(){
             overridePendingTransition(R.anim.stay,R.anim.slide_right)
         }
 
-        general_button.setOnClickListener {
+        connect_button.setOnClickListener {
             startActivity(Intent(this,SyncActivity::class.java))
             overridePendingTransition(R.anim.stay,R.anim.slide_right)
         }

@@ -1,8 +1,11 @@
 package com.example.pedrofialho.myweatherapp.presentation
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.CheckBox
 import android.widget.RadioButton
 import android.widget.TextView
@@ -49,6 +52,12 @@ class SyncActivity : AppCompatActivity() {
         }
 
 
+        mToolbar.setNavigationOnClickListener {
+            finish()
+            startActivity(Intent(this,SettingsActivity::class.java))
+            overridePendingTransition(0,R.anim.slide_right)
+        }
+
         actionBarId?.let {
             setSupportActionBar(findViewById(it) as Toolbar)
             supportActionBar!!.setDisplayHomeAsUpEnabled(true)
@@ -56,4 +65,28 @@ class SyncActivity : AppCompatActivity() {
 
         }
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+
+        actionBarMenuResId?.let {
+            menuInflater.inflate(it, menu)
+            return true
+        }
+
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean = when (item?.itemId) {
+        R.id.action_credits -> {
+            startActivity(Intent(this, CreditsActivity::class.java))
+            true
+        }
+        R.id.action_settings -> {
+            startActivity(Intent(this, SettingsActivity::class.java))
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
+    }
+
+
 }
