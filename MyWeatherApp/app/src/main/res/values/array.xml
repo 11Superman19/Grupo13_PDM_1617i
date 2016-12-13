@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="capitals_array">
+        <item>Lisboa</item>
+        <item>Madrid</item>
+        <item>Paris</item>
+        <item>Londres</item>
+        <item>Roma</item>
+        <item>Luxemburgo</item>
+        <item>Berlim</item>
+        <item>Bruxelas</item>
+        <item>Atenas</item>
+        <item>Amesterdão</item>
+        <item>Budapest</item>
+        <item>Moscovo</item>
+        <item>Dublin</item>
+        <item>Estocolmo</item>
+        <item>Bucareste</item>
+    </string-array>
+</resources>

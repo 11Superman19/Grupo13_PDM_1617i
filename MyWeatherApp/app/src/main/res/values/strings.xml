@@ -55,11 +55,11 @@
     <string name="notification_description">Notifications Settings</string>
     <string name="sync_description" translatable="false"><![CDATA[Sync & Data Definitions]]></string>
     <string name="country_general_settings">Choose a country(Pt or UK)</string>
-    <string name="city_general">City(Default : Lisbon)</string>
     <string name="leaving_option">Do you want to leave?</string>
     <string name="choice_yes">Yes</string>
     <string name="choice_no">No</string>
     <string name="temp_max">Temp Max: </string>
     <string name="temp_min">Temp Min: </string>
     <string name="city_Detail">City :</string>
+    <string name="city_general">City</string>
 </resources>

@@ -27,11 +27,11 @@
     <string name="pref_title_sync_frequency">Frequência de Atualização</string>
     <string name="pref_title_system_sync_settings">Definições de Sistema de Sincronismo</string>
     <string name="description_settings">Descrição</string>
-    <string name="city_general">Cidade(Definição : Lisboa)</string>
     <string name="country_general_settings">Escolha uma cidade(Pt ou UK)</string>
     <string name="general_description">Definições</string>
     <string name="notification_description">Definições de Notificações</string>
     <string name="choice_no">Não</string>
     <string name="choice_yes">Sim</string>
     <string name="leaving_option">Deseja Sair?</string>
+    <string name="city_general">Cidade</string>
 </resources>

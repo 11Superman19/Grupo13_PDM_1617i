@@ -8,8 +8,12 @@ import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.inputmethod.EditorInfo
+import android.widget.ArrayAdapter
 import android.widget.EditText
+import android.widget.Spinner
+import android.widget.TextView
 import com.example.pedrofialho.myweatherapp.R
+import java.util.*
 
 class GeneralSettingsActivity : AppCompatActivity() {
 
@@ -27,29 +31,21 @@ class GeneralSettingsActivity : AppCompatActivity() {
 
     val PREFS_NAME = "MyPrefsFile"
 
-    var city : String = "Lisbon"
+    var arrayList = ArrayList<String>()
+
 
     lateinit var mToolbar : Toolbar
-    lateinit var city_edit : EditText
+    lateinit var city_edit : TextView
+    lateinit var spinner : Spinner
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_general_settings)
 
         mToolbar = findViewById(R.id.toolbar) as Toolbar
-        city_edit = findViewById(R.id.city) as EditText
+        city_edit = findViewById(R.id.city) as TextView
+        spinner = findViewById(R.id.spinner) as Spinner
 
-
-        city_edit.setOnEditorActionListener(
-                { textView, i, keyEvent ->
-                    if (i == EditorInfo.IME_ACTION_SEARCH ||
-                            i == EditorInfo.IME_ACTION_DONE ||
-                            keyEvent.action == KeyEvent.ACTION_DOWN && keyEvent.keyCode == KeyEvent.KEYCODE_ENTER) {
-                        city = city_edit.text.toString()
-                        finishThisActivity()
-                    };true
-
-        })
 
 
         actionBarId?.let {
@@ -64,10 +60,10 @@ class GeneralSettingsActivity : AppCompatActivity() {
             overridePendingTransition(0,R.anim.slide_right)
         }
     }
+
     private fun finishThisActivity() {
         val settings = getSharedPreferences(PREFS_NAME, 0)
         val editor = settings.edit()
-        editor.putString("city", city)
         editor.apply()
         finish()
         startActivity(Intent(this,ChoiceActivity::class.java))
@@ -81,7 +77,6 @@ class GeneralSettingsActivity : AppCompatActivity() {
         // All objects are from android.context.Context
         val settings = getSharedPreferences(PREFS_NAME, 0)
         val editor = settings.edit()
-        editor.putString("city", city)
 
         // Commit the edits!
         editor.apply()
