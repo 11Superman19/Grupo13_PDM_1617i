@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import com.example.pedrofialho.myweatherapp.R
+import com.example.pedrofialho.myweatherapp.WeatherApplication
 import java.util.*
 
 class GeneralSettingsActivity :AppCompatActivity(), AdapterView.OnItemSelectedListener {
@@ -25,7 +26,6 @@ class GeneralSettingsActivity :AppCompatActivity(), AdapterView.OnItemSelectedLi
      */
     val actionBarMenuResId: Int? = R.menu.action_bar_activity
 
-    val PREFS_NAME = "MyPrefsFile"
 
     lateinit var mAdapter: ArrayAdapter<String>
 
@@ -80,7 +80,7 @@ class GeneralSettingsActivity :AppCompatActivity(), AdapterView.OnItemSelectedLi
     }
 
     private fun finishThisActivity() {
-        val settings = getSharedPreferences(PREFS_NAME, 0)
+        val settings = getSharedPreferences((application as WeatherApplication).PREFS_NAME, 0)
         val editor = settings.edit()
         editor.apply()
         finish()
@@ -93,7 +93,7 @@ class GeneralSettingsActivity :AppCompatActivity(), AdapterView.OnItemSelectedLi
 
         // We need an Editor object to make preference changes.
         // All objects are from android.context.Context
-        val settings = getSharedPreferences(PREFS_NAME, 0)
+        val settings = getSharedPreferences((application as WeatherApplication).PREFS_NAME, 0)
         val editor = settings.edit()
 
         // Commit the edits!

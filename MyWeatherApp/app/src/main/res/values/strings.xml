@@ -61,4 +61,8 @@
     <string name="temp_min">Temp Min: </string>
     <string name="city_Detail">City :</string>
     <string name="city_general">City :</string>
+    <string name="notification_string">Notification Definitions</string>
+    <string name="connectivity_string">Connectivity Definitions</string>
+    <string name="connectivity_title">Connectivity</string>
+    <string name="notification_title">Notification</string>
 </resources>

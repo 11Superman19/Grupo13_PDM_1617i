@@ -14,6 +14,12 @@ import com.example.pedrofialho.myweatherapp.services.WeatherForecastUpdater
 
 
 class WeatherApplication : Application(){
+
+    /**
+     * @property PREFS_NAME the name of the SharedPreferences to keep information
+     */
+
+    val PREFS_NAME = "MyPrefsFile"
     /**
      * @property weatherDetails The configuration information provided by the remote API,
      * or null if we could not reach it
@@ -52,7 +58,7 @@ class WeatherApplication : Application(){
                     .putExtra(WeatherForecastUpdater.WEATHER_LIST_ID_EXTRA_KEY, listId)
             (getSystemService(ALARM_SERVICE) as AlarmManager).setInexactRepeating(
                     AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    0,
+                    0, //aqui fica de quanto em quanto tempo o utilizador quer que façamos update a informação
                     AlarmManager.INTERVAL_DAY,
                     PendingIntent.getService(this, 1, action, PendingIntent.FLAG_UPDATE_CURRENT)
             )

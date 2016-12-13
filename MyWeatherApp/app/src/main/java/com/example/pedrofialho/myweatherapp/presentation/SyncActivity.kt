@@ -6,10 +6,8 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.CheckBox
 import android.widget.RadioButton
 import android.widget.TextView
-import android.widget.TimePicker
 import com.example.pedrofialho.myweatherapp.R
 
 class SyncActivity : AppCompatActivity() {
@@ -26,12 +24,12 @@ class SyncActivity : AppCompatActivity() {
     val actionBarMenuResId: Int? = R.menu.action_bar_activity
 
 
+
     lateinit var mToolbar : Toolbar
     lateinit var connectivity : TextView
     lateinit var wifi : RadioButton
     lateinit var dados : RadioButton
-    lateinit var check : CheckBox
-    lateinit var timer : TimePicker
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,15 +39,8 @@ class SyncActivity : AppCompatActivity() {
         connectivity = findViewById(R.id.Connectivity) as TextView
         wifi = findViewById(R.id.wifi) as RadioButton
         dados = findViewById(R.id.mobile) as RadioButton
-        check = findViewById(R.id.checkBox) as CheckBox
-        timer = findViewById(R.id.timePicker) as TimePicker
 
-        check.setOnClickListener {
-            if (check.isChecked){
-                timer.visibility=TimePicker.VISIBLE
-            }
-            else timer.visibility=TimePicker.INVISIBLE
-        }
+
 
 
         mToolbar.setNavigationOnClickListener {
