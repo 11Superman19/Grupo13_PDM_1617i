@@ -143,7 +143,11 @@ class SyncActivity : AppCompatActivity(),AdapterView.OnItemSelectedListener {
     }
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-        //meter a opção escolhida
+        val settings = getSharedPreferences((application as WeatherApplication).PREFS_NAME,0)
+        val editor = settings.edit()
+        editor.putString("bateria",parent.getItemAtPosition(position).toString())
+        editor.apply()
+        Toast.makeText(this,parent.getItemAtPosition(position).toString(),Toast.LENGTH_SHORT).show()
     }
 
 }
