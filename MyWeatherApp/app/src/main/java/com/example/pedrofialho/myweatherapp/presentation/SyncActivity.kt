@@ -6,9 +6,10 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.RadioButton
-import android.widget.TextView
+import android.view.View
+import android.widget.*
 import com.example.pedrofialho.myweatherapp.R
+import java.util.*
 
 class SyncActivity : AppCompatActivity() {
     /**
@@ -23,12 +24,12 @@ class SyncActivity : AppCompatActivity() {
      */
     val actionBarMenuResId: Int? = R.menu.action_bar_activity
 
-
+    lateinit var mAdapter: ArrayAdapter<String>
 
     lateinit var mToolbar : Toolbar
-    lateinit var connectivity : TextView
     lateinit var wifi : RadioButton
     lateinit var dados : RadioButton
+    lateinit var spinner : Spinner
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,10 +37,25 @@ class SyncActivity : AppCompatActivity() {
         setContentView(R.layout.activity_sync)
 
         mToolbar = findViewById(R.id.toolbar) as Toolbar
-        connectivity = findViewById(R.id.Connectivity) as TextView
         wifi = findViewById(R.id.wifi) as RadioButton
         dados = findViewById(R.id.mobile) as RadioButton
 
+        spinner = findViewById(R.id.percentagem) as Spinner
+        val arrayList = ArrayList<String>()
+        arrayList.add("100")
+        arrayList.add("90")
+        arrayList.add("80")
+        arrayList.add("70")
+        arrayList.add("60")
+        arrayList.add("50")
+        arrayList.add("40")
+        arrayList.add("30")
+        mAdapter = ArrayAdapter(this,android.R.layout.simple_list_item_1,arrayList)
+
+        mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        spinner.adapter = mAdapter
+        spinner.onItemSelectedListener = this
 
 
 
@@ -77,6 +93,10 @@ class SyncActivity : AppCompatActivity() {
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+        Toast.makeText(this,""+parent.getItemAtPosition(position), Toast.LENGTH_LONG).show()
     }
 
 

@@ -23,24 +23,6 @@
         tools:title="@string/app_name"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
-    <TextView
-        android:text="Connectivity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="59dp"
-        android:id="@+id/Connectivity"
-        android:layout_below="@+id/toolbar"
-        android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/wifi"
-        android:textAppearance="@style/TextAppearance.AppCompat.Button" />
-
-    <RadioButton
-        android:text="WiFi"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/wifi"
-        android:layout_alignBottom="@+id/Connectivity"
-        android:layout_centerHorizontal="true" />
 
     <RadioButton
         android:text="Mobile Data"
@@ -49,6 +31,43 @@
         android:layout_below="@+id/wifi"
         android:layout_alignStart="@+id/wifi"
         android:id="@+id/mobile" />
+
+    <TextView
+        android:text="Connectivity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:id="@+id/Connectivity"
+        android:textAppearance="@style/TextAppearance.AppCompat.Button"
+        android:layout_below="@+id/toolbar"
+        android:layout_alignParentStart="true" />
+
+    <RadioButton
+        android:text="WiFi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/wifi"
+        android:layout_below="@+id/Connectivity"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="19dp" />
+
+    <TextView
+        android:text="Update until X Battery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mobile"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="45dp"
+        android:id="@+id/Battery"
+        android:textAppearance="@style/TextAppearance.AppCompat.Button" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/percentagem"
+        android:layout_alignTop="@+id/Battery"
+        android:layout_toEndOf="@+id/Battery"
+        android:layout_marginStart="52dp" />
 
 
 </RelativeLayout>
