@@ -10,6 +10,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AppCompatActivity
+import android.widget.Toast
 import com.example.pedrofialho.myweatherapp.R.layout
 import com.example.pedrofialho.myweatherapp.WeatherApplication
 import java.util.*
@@ -28,6 +29,7 @@ class FirstActivity : AppCompatActivity() {
         val settings = getSharedPreferences((application as WeatherApplication).PREFS_NAME,0)
         val hour = settings.getInt("hour",0)
         val minutes = settings.getInt("minutes",0)
+        Toast.makeText(this,"BOAS"+hour,Toast.LENGTH_LONG).show()
         alarm_cal.set(Calendar.HOUR,hour)
         alarm_cal.set(Calendar.MINUTE,minutes)
 
@@ -36,11 +38,11 @@ class FirstActivity : AppCompatActivity() {
                 .setContentTitle("The time")
                 .setContentText("Hello World!")
 
-        val resultIntent = Intent(this,WeatherDetailsActivity::class.java)
+        val resultIntent = Intent(this,WeatherDetailsActivity::class.java)//mandar o parcelable
 
         val pendingIntent = PendingIntent.getActivity(
                 this,
-                alarm_cal.timeInMillis.toInt(),
+                (alarm_cal.timeInMillis.toInt()),
                 resultIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT)
 
