@@ -51,6 +51,7 @@ class SyncActivity : AppCompatActivity(),AdapterView.OnItemSelectedListener {
         choose = findViewById(R.id.choice) as Button
         val settings = getSharedPreferences((application as WeatherApplication).PREFS_NAME,0)
         val editor = settings.edit()
+        editor.putBoolean("connectivity_both",both)
 
         spinner = findViewById(R.id.percentagem) as Spinner
         val arrayList = ArrayList<String>()

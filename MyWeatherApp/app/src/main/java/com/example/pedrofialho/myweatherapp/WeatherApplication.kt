@@ -5,6 +5,7 @@ import android.app.Application
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.os.BatteryManager
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.ImageLoader
@@ -55,23 +56,39 @@ class WeatherApplication : Application(){
         imageLoader = ImageLoader(requestQueue, NullImageCache())
 
         //Aqui meter o limite da bateria
-
         val batteryManager = (getSystemService(Context.BATTERY_SERVICE) as BatteryManager)
         val batLevel = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
-        //agora o que fazer com isto?
         val limiteBattery = getSharedPreferences(PREFS_NAME,0).getInt("bateria",0)
-        // como verificar os currents updates?
+        //Aqui fica o tip de dados do qual podemos fazer update
+        val connManager = (getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
+        val mInfoConn = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
+        val bothConn = getSharedPreferences(PREFS_NAME,0).getBoolean("connectivity_both",true)
+        val typeInfoConn = getSharedPreferences(PREFS_NAME,0).getBoolean("connectivity",true) //assumir que esta no wifi
+        fun sendIntent(listId: String) {
+            val action = Intent(this, WeatherForecastUpdater::class.java)
+                    .putExtra(WeatherForecastUpdater.WEATHER_LIST_ID_EXTRA_KEY, listId)
+            (getSystemService(ALARM_SERVICE) as AlarmManager).setInexactRepeating(
+                    AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                    0, //aqui fica de quanto em quanto tempo o utilizador quer que façamos update a informação
+                    AlarmManager.INTERVAL_DAY,
+                    PendingIntent.getService(this, 1, action, PendingIntent.FLAG_UPDATE_CURRENT)
+            )
+        }
+
         fun scheduleUpdate(listId: String) {
 
-            if (batLevel >= limiteBattery) {
-                val action = Intent(this, WeatherForecastUpdater::class.java)
-                        .putExtra(WeatherForecastUpdater.WEATHER_LIST_ID_EXTRA_KEY, listId)
-                (getSystemService(ALARM_SERVICE) as AlarmManager).setInexactRepeating(
-                        AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                        0, //aqui fica de quanto em quanto tempo o utilizador quer que façamos update a informação
-                        AlarmManager.INTERVAL_DAY,
-                        PendingIntent.getService(this, 1, action, PendingIntent.FLAG_UPDATE_CURRENT)
-                )
+            if (bothConn) {
+                if (batLevel >= limiteBattery) {
+                    sendIntent(listId)
+                }
+            }else if(mInfoConn.isConnected){
+                    if(typeInfoConn){//true->wifi, false -> dados
+                        sendIntent(listId)
+                    }
+            } else{
+                if(!typeInfoConn){
+                    sendIntent(listId)
+                }
             }
         }
         // Implementation note: This solution does not persist Alarm schedules across reboots
