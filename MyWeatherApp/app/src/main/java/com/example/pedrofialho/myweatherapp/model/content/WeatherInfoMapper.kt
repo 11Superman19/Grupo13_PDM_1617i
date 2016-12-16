@@ -11,7 +11,7 @@ fun WeatherDetails.toContentValues() : ContentValues{
     with(WeatherInfoProvider){
         result.put(COLUMN_ID, weather[0].id)
         result.put(COLUMN_HUMIDITY, main.humidity)
-        result.put(COLUMN_WEATHER_DESC, weather[0].description)
+        result.put(COLUMN_WEATHER_DESC, weather[0].main)
         result.put(COLUMN_PRESSURE,main.pressure)
         result.put(COLUMN_TEMP,main.temp)
         result.put(COLUMN_TEMP_MAX,main.temp_max)
@@ -30,7 +30,7 @@ fun WeatherForecast.toContentValues() : ContentValues{
     with(WeatherInfoProvider){
         result.put(COLUMN_ID, list[0].weather[0].id)
         result.put(COLUMN_HUMIDITY, list[0].humidity)
-        result.put(COLUMN_WEATHER_DESC, list[0].weather[0].description)
+        result.put(COLUMN_WEATHER_DESC, list[0].weather[0].main)
         result.put(COLUMN_PRESSURE,list[0].pressure)
         result.put(COLUMN_TEMP,list[0].temp.day)
         result.put(COLUMN_TEMP_MAX,list[0].temp.max)
@@ -46,34 +46,67 @@ fun WeatherForecast.toContentValues() : ContentValues{
 
 //TODO :  Quando souber como meter objetos e listas completar
 //ver se fazer para forecast tb
-/*private fun toWeatherDetail(cursor : Cursor): WeatherDetails{
+private fun toWeatherDetail(cursor : Cursor): WeatherDetails{
     with(WeatherInfoProvider.Companion){
         return WeatherDetails(
                 id = cursor.getInt(COLUMN_ID_IDX),
-                name = cursor.getString(COLUMN_WEATHER_DESC_IDX),
+                name = "Lisbon",
                 cod = 0,
-                weather = null,
-                main = null,
-                wind = null,
+                weather = cursor.toWeatherList(),
+                main = toMainObject(cursor),
+                wind = toWindObject(cursor),
                 clouds = null,
                 rain = null,
                 snow = null,
                 dt = 0
         )
     }
-}*/
+}
 
+fun toWindObject(cursor: Cursor): WeatherDetails.Wind? {
+    with(WeatherInfoProvider.Companion){
+        return WeatherDetails.Wind(
+                speed = cursor.getDouble(COLUMN_WIND_IDX),
+                deg = 0.0
+        )
+    }
+}
+
+private fun toWeatherList(cursor: Cursor) : WeatherDetails.Weather{
+        with(WeatherInfoProvider.Companion){
+            return WeatherDetails.Weather(
+                    id = 0,
+                    main = cursor.getString(COLUMN_WEATHER_DESC_IDX),
+                    description = "",
+                    icon = cursor.getString(COLUMN_ICON_IDX)
+            )
+        }
+}
 //ver questao de ser weather details ou forecast ou fazer para os dois
-fun Cursor.toWeatherList() : List<WeatherDetails>{
+fun toMainObject(cursor: Cursor) : WeatherDetails.Main{
+    with(WeatherInfoProvider.Companion){
+        return WeatherDetails.Main(
+                temp = cursor.getFloat(COLUMN_TEMP_IDX),
+                pressure = cursor.getDouble(COLUMN_PRESSURE_IDX),
+                humidity = cursor.getInt(COLUMN_HUMIDITY_IDX),
+                temp_min = cursor.getFloat(COLUMN_TEMP_MIN_IDX),
+                temp_max = cursor.getFloat(COLUMN_TEMP_MAX_IDX),
+                sea_level = 0,
+                grnd_level = 0.0
+        )
+    }
+}
 
-    val cursorIterator = object : AbstractIterator<WeatherDetails>(){
+fun Cursor.toWeatherList() : List<WeatherDetails.Weather>{
+
+    val cursorIterator = object : AbstractIterator<WeatherDetails.Weather>(){
         override fun computeNext() {
             when(isAfterLast){
                 true -> done()
-              //  false -> setNext(toWeatherDetail(this@toWeatherList))
+                false -> setNext(toWeatherList(this@toWeatherList))
             }
         }
 
     }
-    return mutableListOf<WeatherDetails>().let { it.addAll(Iterable { cursorIterator });it }
+    return mutableListOf<WeatherDetails.Weather>().let { it.addAll(Iterable { cursorIterator });it }
 }
