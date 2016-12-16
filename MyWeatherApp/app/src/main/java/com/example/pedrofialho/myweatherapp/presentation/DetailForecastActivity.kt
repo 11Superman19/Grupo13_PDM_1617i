@@ -55,18 +55,17 @@ class DetailForecastActivity : AppCompatActivity() {
             (findViewById(R.id.packShot) as PackShotView).setWeatherInfo(forecast_detail, it.imageLoader, buildConfigUrl())
         }
 
-        (findViewById(R.id.temp) as TextView).text = ""+(forecast_detail.temp!!.day-273.15).toInt()+"ºC"
+        (findViewById(R.id.temp) as TextView).text = ""+(forecast_detail.temp.day-273.15).toInt()+"ºC"
         (findViewById(R.id.weather) as TextView).text = forecast_detail.weather[0].main
         (findViewById(R.id.day) as TextView).text = resources.getString(R.string.day_detail)+" "+getDay(forecast_detail.dt)
         (findViewById(R.id.humidity) as TextView).text = resources.getString(R.string.humidity_detail)+" "+forecast_detail.humidity+"%"
         (findViewById(R.id.pressure) as TextView).text = resources.getString(R.string.pressure_detail)+" "+forecast_detail.pressure+" hPa"
         (findViewById(R.id.Wind_speed) as TextView).text = resources.getString(R.string.wind_speed_detail)+" "+forecast_detail.speed+"m/s"
-        (findViewById(R.id.tempmax) as TextView).text = resources.getString(R.string.temp_max)+" "+(forecast_detail.temp!!.max-273.15).toInt()+"ºC"
-        (findViewById(R.id.tempmin) as TextView).text = resources.getString(R.string.temp_min)+" "+(forecast_detail.temp!!.min-273.15).toInt()+"ºC"
+        (findViewById(R.id.tempmax) as TextView).text = resources.getString(R.string.temp_max)+" "+(forecast_detail.temp.max-273.15).toInt()+"ºC"
+        (findViewById(R.id.tempmin) as TextView).text = resources.getString(R.string.temp_min)+" "+(forecast_detail.temp.min-273.15).toInt()+"ºC"
         (findViewById(R.id.clouds) as TextView).text = resources.getString(R.string.clouds_detail)+" "+forecast_detail.clouds+"%"
         (findViewById(R.id.rain) as TextView).text = resources.getString(R.string.rain_detail)+" "+forecast_detail.rain
         (findViewById(R.id.snow) as TextView).text = resources.getString(R.string.snow_detail)+" "+forecast_detail.snow
-
 
 
     }
