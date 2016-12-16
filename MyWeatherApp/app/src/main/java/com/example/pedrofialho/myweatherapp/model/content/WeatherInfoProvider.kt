@@ -28,21 +28,45 @@ class WeatherInfoProvider : ContentProvider(){
         val WEATHER_LIST_CONTENT_TYPE = "${ContentResolver.CURSOR_DIR_BASE_TYPE}/movies"
         val WEATHER_ITEM_CONTENT_TYPE = "${ContentResolver.CURSOR_ITEM_BASE_TYPE}/movie"
 
-        const val COLUMN_ID = "_ID"
-        const val COLUMN_NAME = "NAME"
-        const val COLUMN_COD = "CODE"
-        const val COLUMN_WEATHER_DESC = "WEATHER DESCRIPTION"
-        const val COLUMN_TEMP = "TEMPERATURE"  // main.temp
+
+        //SHARED INFO
+        const val COLUMN_ID = "_ID"//SHARE
+        const val COLUMN_HUMIDITY = "HUMIDITY"//SHARE
+        const val COLUMN_WEATHER_DESC = "WEATHER DESCRIPTION"//SHARE
+        const val COLUMN_PRESSURE = "AIR PRESSURE"//SHARE
+        const val COLUMN_TEMP = "TEMPERATURE"//SHARE
+        const val COLUMN_TEMP_MAX = "MAX TEMP"//SHARE
+        const val COLUMN_TEMP_MIN = "MIN TEMP"//SHARE
+        const val COLUMN_CLOUDS = "CLOUDS"//SHARE
+        const val COLUMN_RAIN = "RAIN"//SHARE
+        const val COLUMN_SNOW = "SNOW"//SHARE
+
+        //weatherDetails INFO
         const val COLUMN_WIND = "WIND"
         const val COLUMN_ICON = "ICON"
 
-        const val COLUMN_ID_IDX = 0
-        const val COLUMN_NAME_IDX = 1
-        const val COLUMN_COD_IDX = 2
-        const val COLUMN_WEATHER_DESC_IDX = 3
-        const val COLUMN_TEMP_IDX = 4
-        const val COLUMN_WIND_IDX = 5
-        const val COLUMN_ICON_IDX = 6
+        //weatherForecast INFO
+        const val COLUMN_DT = "DT"
+
+
+        //shared idx
+        const val COLUMN_ID_IDX = 0//SHARE
+        const val COLUMN_HUMIDITY_IDX = 1 //SHARE
+        const val COLUMN_WEATHER_DESC_IDX = 2 //SHARE
+        const val COLUMN_PRESSURE_IDX = 3//SHARE
+        const val COLUMN_TEMP_IDX = 4//SHARE
+        const val COLUMN_TEMP_MAX_IDX =5//SHARE
+        const val COLUMN_TEMP_MIN_IDX=6//SHARE
+        const val COLUMN_CLOUDS_IDX = 7//SHARE
+        const val COLUMN_RAIN_IDX = 8//SHARE
+        const val COLUMN_SNOW_IDX = 9//SHARE
+        //idx for weatherdetails
+        const val COLUMN_WIND_IDX =10
+        const val COLUMN_ICON_IDX = 11
+        //IDX FOR FORECAST
+        const val COLUMN_DT_IDX = 10
+
+        //idx for weatherforecast
 
 
         // Private constants to be used by the implementation
@@ -59,15 +83,36 @@ class WeatherInfoProvider : ContentProvider(){
     private inner class WeatherInfoDbHelper(version : Int = 1, dbName : String = "WEATHER_DB") :
         SQLiteOpenHelper(this@WeatherInfoProvider.context,dbName,null,version){
 
-        private fun createTable(db : SQLiteDatabase?, tableName : String){
+        private fun createDetailsTable(db : SQLiteDatabase?, tableName : String){
             val CREATE_CMD = "CREATE TABLE $tableName ( "+
                     "$COLUMN_ID INTEGER PRIMARY KEY , " +
-                    "$COLUMN_NAME TEXT NOT NULL , " +
-                    "$COLUMN_COD INTEGER NOT NULL , " +
+                    "$COLUMN_HUMIDITY INTEGER , " +
                     "$COLUMN_WEATHER_DESC TEXT NOT NULL , " +
+                    "$COLUMN_PRESSURE FLOAT NOT NULL , " +
                     "$COLUMN_TEMP FLOAT NOT NULL , " +
+                    "$COLUMN_TEMP_MAX FLOAT NOT NULL , " +
+                    "$COLUMN_TEMP_MIN FLOAT NOT NULL , " +
+                    "$COLUMN_CLOUDS INTEGER , " +
+                    "$COLUMN_RAIN INTEGER , " +
+                    "$COLUMN_SNOW INTEGER , " +
                     "$COLUMN_WIND FLOAT NOT NULL ," +
                     "$COLUMN_ICON TEXT NOT NULL )"
+            db?.execSQL(CREATE_CMD)
+        }
+
+        private fun createForecastTable(db : SQLiteDatabase?, tableName : String){
+            val CREATE_CMD = "CREATE TABLE $tableName ( "+
+                    "$COLUMN_ID INTEGER PRIMARY KEY , " +
+                    "$COLUMN_HUMIDITY INTEGER , " +
+                    "$COLUMN_WEATHER_DESC TEXT NOT NULL , " +
+                    "$COLUMN_PRESSURE FLOAT NOT NULL , " +
+                    "$COLUMN_TEMP FLOAT NOT NULL , " +
+                    "$COLUMN_TEMP_MAX FLOAT NOT NULL , " +
+                    "$COLUMN_TEMP_MIN FLOAT NOT NULL , " +
+                    "$COLUMN_CLOUDS INTEGER , " +
+                    "$COLUMN_RAIN INTEGER , " +
+                    "$COLUMN_SNOW INTEGER , " +
+                    "$COLUMN_DT INTEGER NOT NULL )"
             db?.execSQL(CREATE_CMD)
         }
 
@@ -78,15 +123,15 @@ class WeatherInfoProvider : ContentProvider(){
 
 
         override fun onCreate(db : SQLiteDatabase?) {
-            createTable(db, WEATHER_TABLE_NAME)
-            createTable(db, FORECAST_TABLE_NAME)
+            createDetailsTable(db, WEATHER_TABLE_NAME)
+            createForecastTable(db, FORECAST_TABLE_NAME)
         }
 
         override fun onUpgrade(db : SQLiteDatabase?, oldVersion : Int, newVersion : Int) {
                 deleteTable(db, WEATHER_TABLE_NAME)
-                createTable(db, WEATHER_TABLE_NAME)
+                createDetailsTable(db, WEATHER_TABLE_NAME)
                 deleteTable(db, FORECAST_TABLE_NAME)
-                createTable(db, FORECAST_TABLE_NAME)
+                createForecastTable(db, FORECAST_TABLE_NAME)
         }
     }
     /**
