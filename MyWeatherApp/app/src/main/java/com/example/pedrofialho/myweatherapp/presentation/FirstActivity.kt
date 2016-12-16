@@ -2,6 +2,7 @@ package com.example.pedrofialho.myweatherapp.presentation
 
 
 
+import android.app.AlarmManager
 import android.app.Notification
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -14,6 +15,11 @@ import android.widget.Toast
 import com.example.pedrofialho.myweatherapp.R.layout
 import com.example.pedrofialho.myweatherapp.WeatherApplication
 import java.util.*
+import android.app.PendingIntent.FLAG_UPDATE_CURRENT
+import android.app.AlarmManager.RTC_WAKEUP
+import android.app.AlarmManager.INTERVAL_DAY
+import com.example.pedrofialho.myweatherapp.services.NotificationMessage
+
 
 class FirstActivity : AppCompatActivity() {
 
@@ -24,36 +30,29 @@ class FirstActivity : AppCompatActivity() {
         /*
         Nao sei onde por o sitio onde lançar a notificação perguntar ao prof
          */
+
         val alarm_cal = Calendar.getInstance()
         alarm_cal.timeInMillis = System.currentTimeMillis()
         val settings = getSharedPreferences((application as WeatherApplication).PREFS_NAME,0)
         val hour = settings.getInt("hour",0)
         val minutes = settings.getInt("minutes",0)
-        Toast.makeText(this,"BOAS"+hour,Toast.LENGTH_LONG).show()
+        Toast.makeText(this,"BOAS "+hour,Toast.LENGTH_LONG).show()
         alarm_cal.set(Calendar.HOUR,hour)
         alarm_cal.set(Calendar.MINUTE,minutes)
 
-        val mBuilder = Notification.Builder(this)
-                .setSmallIcon(android.R.drawable.ic_dialog_email)
-                .setContentTitle("The time")
-                .setContentText("Hello World!")
 
-        val resultIntent = Intent(this,WeatherDetailsActivity::class.java)//mandar o parcelable
+        val notificationmassage = Intent(applicationContext, NotificationMessage::class.java)
 
-        val pendingIntent = PendingIntent.getActivity(
-                this,
-                (alarm_cal.timeInMillis.toInt()),
-                resultIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT)
-
-        mBuilder.setContentIntent(pendingIntent)
+//This is alarm manager
+        val pi = PendingIntent.getService(this, 0, notificationmassage, PendingIntent.FLAG_UPDATE_CURRENT)
+        val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        am.setRepeating(AlarmManager.RTC_WAKEUP, alarm_cal.timeInMillis,
+                AlarmManager.INTERVAL_DAY, pi)
 
 
-        val mNotificationId = 1
 
-        val mNotifyMgr = (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
 
-        mNotifyMgr.notify(mNotificationId,mBuilder.build())
+
         val mHandler = Handler()
         mHandler.postDelayed({ startActivity(Intent(this,ChoiceActivity::class.java))}, 2000L)
     }
