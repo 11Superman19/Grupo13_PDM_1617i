@@ -55,10 +55,34 @@ private fun toWeatherDetail(cursor : Cursor): WeatherDetails{
                 weather = cursor.toWeatherList(),
                 main = toMainObject(cursor),
                 wind = toWindObject(cursor),
-                clouds = null,
-                rain = null,
-                snow = null,
+                clouds = toCloudsObject(cursor),
+                rain = toRainObject(cursor),
+                snow = toSnowObject(cursor),
                 dt = 0
+        )
+    }
+}
+
+fun toSnowObject(cursor: Cursor): WeatherDetails.Snow? {
+    with(WeatherInfoProvider.Companion){
+        return WeatherDetails.Snow(
+                `3h` = cursor.getInt(COLUMN_SNOW_IDX)
+        )
+    }
+}
+
+fun toRainObject(cursor: Cursor): WeatherDetails.Rain? {
+    with(WeatherInfoProvider.Companion){
+        return WeatherDetails.Rain(
+                `3h` = cursor.getInt(COLUMN_RAIN_IDX)
+        )
+    }
+}
+
+fun toCloudsObject(cursor: Cursor): WeatherDetails.Clouds? {
+    with(WeatherInfoProvider.Companion){
+        return WeatherDetails.Clouds(
+                all = cursor.getInt(COLUMN_CLOUDS_IDX)
         )
     }
 }

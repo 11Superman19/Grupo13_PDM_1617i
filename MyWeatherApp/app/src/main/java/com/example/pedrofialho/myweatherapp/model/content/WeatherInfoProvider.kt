@@ -66,9 +66,6 @@ class WeatherInfoProvider : ContentProvider(){
         //IDX FOR FORECAST
         const val COLUMN_DT_IDX = 10
 
-        //idx for weatherforecast
-
-
         // Private constants to be used by the implementation
         private const val WEATHER_TABLE_NAME = "Weather"
         private const val FORECAST_TABLE_NAME = "Forecast"
