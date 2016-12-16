@@ -97,6 +97,7 @@ class SyncActivity : AppCompatActivity(),AdapterView.OnItemSelectedListener {
             } else if(selectedId == dados.id) {
                 textToPresent = "You choose Mobile Data option"
 
+
             } else {
                 textToPresent = "You choose Both options"
             }
