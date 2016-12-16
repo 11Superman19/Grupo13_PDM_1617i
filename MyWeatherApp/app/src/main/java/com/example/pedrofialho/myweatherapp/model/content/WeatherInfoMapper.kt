@@ -38,11 +38,62 @@ fun WeatherForecast.toContentValues() : ContentValues{
         result.put(COLUMN_CLOUDS,list[0].clouds)
         result.put(COLUMN_RAIN, list[0].rain)
         result.put(COLUMN_SNOW,list[0].snow)
-        result.put(COLUMN_DT,cnt)
+        result.put(COLUMN_CNT,cnt)
     }
     return result
 }
 
+
+private fun toForecastDetail(cursor: Cursor):WeatherForecast{
+    with(WeatherInfoProvider.Companion){
+        return WeatherForecast(
+                cnt = cursor.getInt(COLUMN_CNT_IDX),
+                list = cursor.toForecastDetail()
+        )
+    }
+}
+fun Cursor.toForecastDetail():List<WeatherForecast.List_Weather> {
+    val cursorIterator = object : AbstractIterator<WeatherForecast.List_Weather>() {
+        override fun computeNext() {
+            when (isAfterLast) {
+                true -> done()
+                false -> setNext(toForecastList(this@toForecastDetail))
+            }
+        }
+
+    }
+    return mutableListOf<WeatherForecast.List_Weather>().let { it.addAll(Iterable { cursorIterator });it }
+}
+
+private fun toForecastList(cursor: Cursor) : WeatherForecast.List_Weather{
+    with(WeatherInfoProvider.Companion) {
+        return WeatherForecast.List_Weather(
+                dt = cursor.getLong(COLUMN_DT_IDX),
+                temp = toTempObject(cursor),
+                pressure = cursor.getFloat(COLUMN_PRESSURE_IDX),
+                humidity = cursor.getFloat(COLUMN_HUMIDITY_IDX),
+                weather = cursor.toWeatherList(),
+                speed = cursor.getFloat(COLUMN_WIND_IDX),
+                deg = 0.0.toFloat(),
+                clouds = cursor.getFloat(COLUMN_CLOUDS_IDX),
+                rain = cursor.getFloat(COLUMN_RAIN_IDX),
+                snow = cursor.getFloat(COLUMN_SNOW_IDX)
+        )
+    }
+}
+
+fun toTempObject(cursor: Cursor): WeatherForecast.List_Weather.Temp {
+    with(WeatherInfoProvider.Companion){
+        return WeatherForecast.List_Weather.Temp(
+                day = cursor.getFloat(COLUMN_TEMP_IDX),
+                min = cursor.getFloat(COLUMN_TEMP_MIN_IDX),
+                max = cursor.getFloat(COLUMN_TEMP_MAX_IDX),
+                night = 0.0.toFloat(),
+                eve = 0.0.toFloat(),
+                morn = 0.0.toFloat()
+        )
+    }
+}
 
 //TODO :  Quando souber como meter objetos e listas completar
 //ver se fazer para forecast tb

@@ -9,10 +9,6 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.net.Uri
 
-/**
- * Created by Tiago on 12/12/2016.
- */
-
 class WeatherInfoProvider : ContentProvider(){
 
     companion object {
@@ -46,6 +42,7 @@ class WeatherInfoProvider : ContentProvider(){
         const val COLUMN_ICON = "ICON"
 
         //weatherForecast INFO
+        const val COLUMN_CNT = "CNT"
         const val COLUMN_DT = "DT"
 
 
@@ -64,7 +61,8 @@ class WeatherInfoProvider : ContentProvider(){
         const val COLUMN_WIND_IDX =10
         const val COLUMN_ICON_IDX = 11
         //IDX FOR FORECAST
-        const val COLUMN_DT_IDX = 10
+        const val COLUMN_CNT_IDX = 10
+        const val COLUMN_DT_IDX = 11
 
         // Private constants to be used by the implementation
         private const val WEATHER_TABLE_NAME = "Weather"
@@ -108,8 +106,8 @@ class WeatherInfoProvider : ContentProvider(){
                     "$COLUMN_TEMP_MIN FLOAT NOT NULL , " +
                     "$COLUMN_CLOUDS INTEGER , " +
                     "$COLUMN_RAIN INTEGER , " +
-                    "$COLUMN_SNOW INTEGER , " +
-                    "$COLUMN_DT INTEGER NOT NULL )"
+                    "$COLUMN_CNT INTEGER NOT NULL, " +
+                    "$COLUMN_DT LONG NOT NULL )"
             db?.execSQL(CREATE_CMD)
         }
 
