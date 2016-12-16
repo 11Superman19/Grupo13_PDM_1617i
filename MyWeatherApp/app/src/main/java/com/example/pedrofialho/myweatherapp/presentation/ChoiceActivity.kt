@@ -3,18 +3,24 @@ package com.example.pedrofialho.myweatherapp.presentation
 import android.animation.ObjectAnimator
 import android.app.AlertDialog
 import android.content.Intent
+import android.os.AsyncTask
 import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.Toast
+import com.android.volley.toolbox.RequestFuture
 import com.example.pedrofialho.myweatherapp.R
 import com.example.pedrofialho.myweatherapp.WeatherApplication
+import com.example.pedrofialho.myweatherapp.comms.GetRequest
+import com.example.pedrofialho.myweatherapp.model.WeatherDetails
+import com.example.pedrofialho.myweatherapp.model.WeatherForecast
 
 class ChoiceActivity : AppCompatActivity() {
     /**
@@ -45,9 +51,6 @@ class ChoiceActivity : AppCompatActivity() {
         val settings = getSharedPreferences(PREFS_NAME, 0)
         val silent = settings.getString("city", city)
         city = silent
-        val editor = settings.edit()
-        editor.clear()
-        editor.apply()
 
         animation_forecast = ObjectAnimator.ofFloat(findViewById(R.id.imageView11), "rotationY", 0.0f, 360f)
         animation_forecast!!.duration = 3600
@@ -67,26 +70,74 @@ class ChoiceActivity : AppCompatActivity() {
         }
 
         (findViewById(R.id.daily) as Button).setOnClickListener {
-            fetchCityWeatherInfo()
+           // fetchCityWeatherInfo()
+            fetchCityWeatherInfoWithAsyncTask()
             animation_daily!!.pause()
             animation_forecast!!.pause()
             (findViewById(R.id.progressBar2) as ProgressBar).visibility = ProgressBar.VISIBLE
         }
         (findViewById(R.id.forecast) as Button).setOnClickListener {
-            fetchWeatherForecastInfo()
+        //    fetchWeatherForecastInfo()
+            fetchWeatherForecastInfoWithAysncTask()
             animation_daily!!.pause()
             animation_forecast!!.pause()
             (findViewById(R.id.progressBar2) as ProgressBar).visibility = ProgressBar.VISIBLE
         }
     }
 
+    private fun fetchWeatherForecastInfoWithAysncTask() {
+        val future: RequestFuture<WeatherForecast> = RequestFuture.newFuture()
+        val queue = (application as WeatherApplication).requestQueue
+
+        (object : AsyncTask<String,Unit,WeatherForecast>(){
+            override fun doInBackground(vararg params: String?): WeatherForecast {
+                Log.v("Pedro","doInBackground in ${Thread.currentThread().id}")
+                queue.add(GetRequest<WeatherForecast>(
+                        buildConfigUrlForecast("forecast/daily?q="),
+                        WeatherForecast::class.java,
+                        {response -> future.onResponse(response)},
+                        { error -> future.onErrorResponse(error)}
+                ))
+                return future.get()
+            }
+
+            override fun onPostExecute(result: WeatherForecast?) {
+                Log.v("Pedro", "onPostExecute in ${Thread.currentThread().id}")
+                (application as WeatherApplication).weatherForecast = result
+                startActivity(ForecastActivity.createIntent(this@ChoiceActivity, (application as WeatherApplication).weatherForecast!!))
+            }
+        }).execute()
+    }
+
+    private fun fetchCityWeatherInfoWithAsyncTask() {
+        val future: RequestFuture<WeatherDetails> = RequestFuture.newFuture()
+        val queue = (application as WeatherApplication).requestQueue
+
+        (object : AsyncTask<String,Unit,WeatherDetails>(){
+            override fun doInBackground(vararg params: String?): WeatherDetails {
+                Log.v("Pedro","doInBackground in ${Thread.currentThread().id}")
+                queue.add(GetRequest<WeatherDetails>(
+                        buildConfigUrlDetails("weather?q="),
+                        WeatherDetails::class.java,
+                        {response-> future.onResponse(response)},
+                        {error -> future.onErrorResponse(error)}
+                ))
+                return future.get()
+            }
+
+            override fun onPostExecute(result: WeatherDetails?) {
+                Log.v("Pedro", "onPostExecute in ${Thread.currentThread().id}")
+                (application as WeatherApplication).weatherDetails = result
+                startActivity(WeatherDetailsActivity.createIntent(this@ChoiceActivity,(application as WeatherApplication).weatherDetails!!))
+            }
+        })
+    }
+
     private fun fetchWeatherForecastInfo() {
-        //TODO : FETCH WEATHER WITH ASYNC TASK
         startActivity(ForecastActivity.createIntent(this, (application as WeatherApplication).weatherForecast!!))
     }
 
     private fun fetchCityWeatherInfo() {
-        //TODO : FETCH WEATHER WITH ASYNC TASK
         startActivity(WeatherDetailsActivity.createIntent(this,(application as WeatherApplication).weatherDetails!!))
     }
 
@@ -131,5 +182,18 @@ class ChoiceActivity : AppCompatActivity() {
         }
         else -> super.onOptionsItemSelected(item)
     }
+    private fun buildConfigUrlDetails(weatherListID: String): String {
+        val baseUrl = resources.getString(R.string.api_base_url)
+        val api_key = "${resources.getString(R.string.api_key_name)}=${resources.getString(R.string.api_key_value)}"
+        return "$baseUrl$weatherListID$city&$api_key"
+    }
+
+    private fun buildConfigUrlForecast(weatherListID : String): String {
+        val baseUrl = resources.getString(R.string.api_base_url_forecast)
+        val api_count = resources.getString(R.string.api_count)
+        val api_key = "${resources.getString(R.string.api_key_name)}=${resources.getString(R.string.api_key_value)}"
+        return "$baseUrl$weatherListID$city&$api_count&$api_key"
+    }
+
 
 }

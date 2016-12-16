@@ -37,10 +37,6 @@ class WeatherForecastUpdater : Service() {
         val settings = getSharedPreferences(PREFS_NAME, 0)
         val silent = settings.getString("city", city)
         city = silent
-        val editor = settings.edit()
-        editor.clear()
-        editor.apply()
-
         val weatherlistId = intent?.let{
             val listID : String? = it.getStringExtra(WEATHER_LIST_ID_EXTRA_KEY)
             if(listID in LIST_IDS) listID else null
