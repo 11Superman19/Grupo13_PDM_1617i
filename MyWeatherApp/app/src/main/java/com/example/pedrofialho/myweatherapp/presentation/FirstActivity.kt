@@ -3,22 +3,16 @@ package com.example.pedrofialho.myweatherapp.presentation
 
 
 import android.app.AlarmManager
-import android.app.Notification
-import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AppCompatActivity
-import android.widget.Toast
 import com.example.pedrofialho.myweatherapp.R.layout
 import com.example.pedrofialho.myweatherapp.WeatherApplication
-import java.util.*
-import android.app.PendingIntent.FLAG_UPDATE_CURRENT
-import android.app.AlarmManager.RTC_WAKEUP
-import android.app.AlarmManager.INTERVAL_DAY
 import com.example.pedrofialho.myweatherapp.services.NotificationMessage
+import java.util.*
 
 
 class FirstActivity : AppCompatActivity() {
@@ -36,7 +30,6 @@ class FirstActivity : AppCompatActivity() {
         val settings = getSharedPreferences((application as WeatherApplication).PREFS_NAME,0)
         val hour = settings.getInt("hour",0)
         val minutes = settings.getInt("minutes",0)
-        Toast.makeText(this,"BOAS "+hour,Toast.LENGTH_LONG).show()
         alarm_cal.set(Calendar.HOUR,hour)
         alarm_cal.set(Calendar.MINUTE,minutes)
 
