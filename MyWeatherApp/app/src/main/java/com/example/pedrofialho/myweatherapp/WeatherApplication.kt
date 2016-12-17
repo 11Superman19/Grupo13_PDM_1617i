@@ -94,6 +94,6 @@ class WeatherApplication : Application(){
         // Implementation note: This solution does not persist Alarm schedules across reboots
 
         scheduleUpdate(WeatherForecastUpdater.UPCOMING_LIST_ID_EXTRA_VALUE)
-        scheduleUpdate(WeatherForecastUpdater.DAILY_ID_EXTRA_VALUE)
+       // scheduleUpdate(WeatherForecastUpdater.DAILY_ID_EXTRA_VALUE)
     }
     }

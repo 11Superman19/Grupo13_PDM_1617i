@@ -21,18 +21,18 @@ class WeatherInfoProvider : ContentProvider(){
         const val EXHIBITION_CONTENT = "content://$AUTHORITY/$FORECAST_TABLE_PATH"
         val FORECAST_CONTENT_URI: Uri = Uri.parse(EXHIBITION_CONTENT)
 
-        val WEATHER_LIST_CONTENT_TYPE = "${ContentResolver.CURSOR_DIR_BASE_TYPE}/movies"
-        val WEATHER_ITEM_CONTENT_TYPE = "${ContentResolver.CURSOR_ITEM_BASE_TYPE}/movie"
+        val WEATHER_LIST_CONTENT_TYPE = "${ContentResolver.CURSOR_DIR_BASE_TYPE}/forecast"
+        val WEATHER_ITEM_CONTENT_TYPE = "${ContentResolver.CURSOR_ITEM_BASE_TYPE}/detail"
 
 
         //SHARED INFO
         const val COLUMN_ID = "_ID"//SHARE
         const val COLUMN_HUMIDITY = "HUMIDITY"//SHARE
         const val COLUMN_WEATHER_DESC = "WEATHER_DESCRIPTION"//SHARE
-        const val COLUMN_PRESSURE = "AIR_PRESSURE"//SHARE
+        const val COLUMN_PRESSURE = "PRESSURE"//SHARE
         const val COLUMN_TEMP = "TEMPERATURE"//SHARE
-        const val COLUMN_TEMP_MAX = "MAX_TEMP"//SHARE
-        const val COLUMN_TEMP_MIN = "MIN_TEMP"//SHARE
+        const val COLUMN_TEMP_MAX = "MAX"//SHARE
+        const val COLUMN_TEMP_MIN = "MIN"//SHARE
         const val COLUMN_CLOUDS = "CLOUDS"//SHARE
         const val COLUMN_RAIN = "RAIN"//SHARE
         const val COLUMN_SNOW = "SNOW"//SHARE
