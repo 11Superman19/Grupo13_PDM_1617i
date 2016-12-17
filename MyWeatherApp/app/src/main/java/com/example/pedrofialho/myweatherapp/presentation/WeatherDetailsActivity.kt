@@ -46,6 +46,7 @@ class WeatherDetailsActivity : AppCompatActivity() {
 
         mToolbar = findViewById(R.id.toolbar) as Toolbar
 
+
         actionBarId?.let {
             setSupportActionBar(findViewById(it) as Toolbar)
             supportActionBar!!.setDisplayHomeAsUpEnabled(true)

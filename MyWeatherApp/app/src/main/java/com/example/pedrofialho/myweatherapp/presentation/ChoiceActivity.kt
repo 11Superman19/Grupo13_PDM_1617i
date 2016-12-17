@@ -104,11 +104,12 @@ class ChoiceActivity : AppCompatActivity() {
 
 
         val notificationmassage = Intent(applicationContext, NotificationMessage::class.java)
+       // notificationmassage.putExtra("weather_details_extra",(application as WeatherApplication).weatherDetails)
 
 //This is alarm manager
         val pi = PendingIntent.getBroadcast(this, 1, notificationmassage, 0)
         val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        am.setInexactRepeating(AlarmManager.RTC_WAKEUP, alarm_cal.timeInMillis,
+        am.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, 0,
                 AlarmManager.INTERVAL_FIFTEEN_MINUTES, pi)//falta testar
 
 

@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
         android:name=".WeatherApplication"
@@ -41,6 +42,10 @@
             android:enabled="true"
             android:exported="true" />
 
+        <service android:name=".services.NotificationService"
+            android:enabled="true"
+            android:exported="true"/>
+
         <provider
             android:name=".model.content.WeatherInfoProvider"
             android:authorities="com.example.pedrofialho.myweatherapp"
@@ -52,8 +57,13 @@
         <activity android:name=".presentation.NotificationSettingsActivity"/>
         <receiver
             android:name=".services.NotificationMessage"
-            android:enabled="true"
-            />
+            android:enabled="true">
+            <intent-filter>
+                <action
+                    android:name="android.intent.action.BOOT_COMPLETED">
+                </action>
+            </intent-filter>
+            </receiver>
     </application>
 
 </manifest>
