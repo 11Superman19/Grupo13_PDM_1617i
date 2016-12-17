@@ -8,7 +8,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
-import android.os.Handler
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.Log
@@ -75,7 +74,6 @@ class ChoiceActivity : AppCompatActivity() {
         }
 
         (findViewById(R.id.daily) as Button).setOnClickListener {
-           // fetchCityWeatherInfo()
             (findViewById(R.id.progressBar2) as ProgressBar).visibility = ProgressBar.VISIBLE
             fetchCityWeatherInfoWithAsyncTask()
             animation_daily!!.pause()
@@ -83,7 +81,6 @@ class ChoiceActivity : AppCompatActivity() {
             (findViewById(R.id.progressBar2) as ProgressBar).visibility = ProgressBar.INVISIBLE
         }
         (findViewById(R.id.forecast) as Button).setOnClickListener {
-        //    fetchWeatherForecastInfo()
             (findViewById(R.id.progressBar2) as ProgressBar).visibility = ProgressBar.VISIBLE
             fetchWeatherForecastInfoWithAysncTask()
             animation_daily!!.pause()
@@ -100,7 +97,7 @@ class ChoiceActivity : AppCompatActivity() {
         val minutes = settings.getInt("minutes",0)
         alarm_cal.set(Calendar.HOUR,hour)
         alarm_cal.set(Calendar.MINUTE,minutes)
-        Toast.makeText(this, "Hour:$hour Minutes:$minutes",Toast.LENGTH_LONG).show()
+        Toast.makeText(this, "Hour: "+alarm_cal.timeInMillis,Toast.LENGTH_LONG).show()
 
 
         val notificationmassage = Intent(applicationContext, NotificationMessage::class.java)
@@ -109,13 +106,8 @@ class ChoiceActivity : AppCompatActivity() {
 //This is alarm manager
         val pi = PendingIntent.getBroadcast(this, 1, notificationmassage, 0)
         val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        am.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, 0,
+        am.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, alarm_cal.timeInMillis,
                 AlarmManager.INTERVAL_FIFTEEN_MINUTES, pi)//falta testar
-
-
-
-
-
     }
 
     private fun fetchWeatherForecastInfoWithAysncTask() {
@@ -137,7 +129,8 @@ class ChoiceActivity : AppCompatActivity() {
             override fun onPostExecute(result: WeatherForecast) {
                 Log.v("Pedro", "onPostExecute in ${Thread.currentThread().id}")
                 (application as WeatherApplication).weatherForecast = result
-                startActivity((application as WeatherApplication).weatherForecast?.let { ForecastActivity.createIntent(this@ChoiceActivity, it) })
+                startActivity((application as WeatherApplication).weatherForecast?.let {
+                    ForecastActivity.createIntent(this@ChoiceActivity, it) })
             }
         }).execute()
     }
@@ -161,22 +154,10 @@ class ChoiceActivity : AppCompatActivity() {
             override fun onPostExecute(result: WeatherDetails?) {
                 Log.v("Pedro", "onPostExecute in ${Thread.currentThread().id}")
                 (application as WeatherApplication).weatherDetails = result
-                startActivity((application as WeatherApplication).weatherDetails?.let { WeatherDetailsActivity.createIntent(this@ChoiceActivity, it) })
+                startActivity((application as WeatherApplication).weatherDetails?.let {
+                    WeatherDetailsActivity.createIntent(this@ChoiceActivity, it) })
             }
         }).execute()
-    }
-
-    private fun fetchWeatherForecastInfo() {
-        startActivity(ForecastActivity.createIntent(this, (application as WeatherApplication).weatherForecast!!))
-    }
-
-    private fun fetchCityWeatherInfo() {
-        startActivity(WeatherDetailsActivity.createIntent(this,(application as WeatherApplication).weatherDetails!!))
-    }
-
-    private fun handleFatalError() {
-            Toast.makeText(this, "Data Not Available", Toast.LENGTH_LONG).show()
-            Handler(mainLooper).postDelayed( { finish() }, 3000)
     }
 
     override fun onBackPressed() {
