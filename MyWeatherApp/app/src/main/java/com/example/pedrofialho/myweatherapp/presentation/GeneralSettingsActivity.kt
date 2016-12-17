@@ -76,7 +76,7 @@ class GeneralSettingsActivity :AppCompatActivity(), AdapterView.OnItemSelectedLi
         }
 
         mToolbar.setNavigationOnClickListener {
-            finish()
+            //finish()
             startActivity(Intent(this,SettingsActivity::class.java))
             overridePendingTransition(0,R.anim.slide_right)
         }

@@ -58,7 +58,7 @@ class WeatherApplication : Application(){
         //Aqui meter o limite da bateria
         val batteryManager = (getSystemService(Context.BATTERY_SERVICE) as BatteryManager)
         val batLevel = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
-        val limiteBattery = getSharedPreferences(PREFS_NAME,0).getInt("bateria",0)
+        val limiteBattery = Integer.parseInt(getSharedPreferences(PREFS_NAME,0).getString("bateria",""))
         //Aqui fica o tip de dados do qual podemos fazer update
         val connManager = (getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
         val mInfoConn = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
@@ -94,6 +94,6 @@ class WeatherApplication : Application(){
         // Implementation note: This solution does not persist Alarm schedules across reboots
 
         scheduleUpdate(WeatherForecastUpdater.UPCOMING_LIST_ID_EXTRA_VALUE)
-       // scheduleUpdate(WeatherForecastUpdater.DAILY_ID_EXTRA_VALUE)
+        scheduleUpdate(WeatherForecastUpdater.DAILY_ID_EXTRA_VALUE)
     }
     }

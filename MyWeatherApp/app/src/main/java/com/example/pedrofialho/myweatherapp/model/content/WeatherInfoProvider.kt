@@ -159,7 +159,7 @@ class WeatherInfoProvider : ContentProvider(){
 
     private fun resolveTableAndSelectionInfoFromUri(uri: Uri, selection: String?, selectionArgs: Array<String>?)
             : Triple<String, String?, Array<String>?> {
-        val itemSelection = "$COLUMN_ID = ${uri.pathSegments.last()}"
+        val itemSelection = "$COLUMN_ID = ${uri.pathSegments.first()}"
         return when (uriMatcher.match(uri)) {
             FORECAST_LIST_CODE -> Triple(FORECAST_TABLE_NAME, itemSelection, null)
             WEATHER_LIST_CODE -> Triple(WEATHER_TABLE_NAME, itemSelection, null)
