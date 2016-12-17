@@ -9,6 +9,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AppCompatActivity
+import android.widget.Toast
 import com.example.pedrofialho.myweatherapp.R.layout
 import com.example.pedrofialho.myweatherapp.WeatherApplication
 import com.example.pedrofialho.myweatherapp.services.NotificationMessage
@@ -32,6 +33,7 @@ class FirstActivity : AppCompatActivity() {
         val minutes = settings.getInt("minutes",0)
         alarm_cal.set(Calendar.HOUR,hour)
         alarm_cal.set(Calendar.MINUTE,minutes)
+        Toast.makeText(this,""+hour,Toast.LENGTH_LONG).show()
 
 
         val notificationmassage = Intent(applicationContext, NotificationMessage::class.java)

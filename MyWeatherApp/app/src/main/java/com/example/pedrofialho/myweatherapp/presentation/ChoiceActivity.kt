@@ -41,14 +41,13 @@ class ChoiceActivity : AppCompatActivity() {
 
     var city : String = "Lisbon"
 
-    val PREFS_NAME = "MyPrefsFile"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_choice)
 
-        // Restore preferences
-        val settings = getSharedPreferences(PREFS_NAME, 0)
+
+        val settings = getSharedPreferences((application as WeatherApplication).PREFS_NAME, 0)
         val silent = settings.getString("city", city)
         city = silent
 
@@ -71,17 +70,19 @@ class ChoiceActivity : AppCompatActivity() {
 
         (findViewById(R.id.daily) as Button).setOnClickListener {
            // fetchCityWeatherInfo()
+            (findViewById(R.id.progressBar2) as ProgressBar).visibility = ProgressBar.VISIBLE
             fetchCityWeatherInfoWithAsyncTask()
             animation_daily!!.pause()
             animation_forecast!!.pause()
-            (findViewById(R.id.progressBar2) as ProgressBar).visibility = ProgressBar.VISIBLE
+            (findViewById(R.id.progressBar2) as ProgressBar).visibility = ProgressBar.INVISIBLE
         }
         (findViewById(R.id.forecast) as Button).setOnClickListener {
         //    fetchWeatherForecastInfo()
+            (findViewById(R.id.progressBar2) as ProgressBar).visibility = ProgressBar.VISIBLE
             fetchWeatherForecastInfoWithAysncTask()
             animation_daily!!.pause()
             animation_forecast!!.pause()
-            (findViewById(R.id.progressBar2) as ProgressBar).visibility = ProgressBar.VISIBLE
+            (findViewById(R.id.progressBar2) as ProgressBar).visibility = ProgressBar.INVISIBLE
         }
     }
 
@@ -101,10 +102,10 @@ class ChoiceActivity : AppCompatActivity() {
                 return future.get()
             }
 
-            override fun onPostExecute(result: WeatherForecast?) {
+            override fun onPostExecute(result: WeatherForecast) {
                 Log.v("Pedro", "onPostExecute in ${Thread.currentThread().id}")
                 (application as WeatherApplication).weatherForecast = result
-                startActivity(ForecastActivity.createIntent(this@ChoiceActivity, (application as WeatherApplication).weatherForecast!!))
+                startActivity((application as WeatherApplication).weatherForecast?.let { ForecastActivity.createIntent(this@ChoiceActivity, it) })
             }
         }).execute()
     }
@@ -115,7 +116,7 @@ class ChoiceActivity : AppCompatActivity() {
 
         (object : AsyncTask<String,Unit,WeatherDetails>(){
             override fun doInBackground(vararg params: String?): WeatherDetails {
-                Log.v("Pedro","doInBackground in ${Thread.currentThread().id}")
+                Log.v("Pedro","doInBackground in ${Thread.currentThread().id}"+"Weather Details")
                 queue.add(GetRequest<WeatherDetails>(
                         buildConfigUrlDetails("weather?q="),
                         WeatherDetails::class.java,
@@ -128,9 +129,9 @@ class ChoiceActivity : AppCompatActivity() {
             override fun onPostExecute(result: WeatherDetails?) {
                 Log.v("Pedro", "onPostExecute in ${Thread.currentThread().id}")
                 (application as WeatherApplication).weatherDetails = result
-                startActivity(WeatherDetailsActivity.createIntent(this@ChoiceActivity,(application as WeatherApplication).weatherDetails!!))
+                startActivity((application as WeatherApplication).weatherDetails?.let { WeatherDetailsActivity.createIntent(this@ChoiceActivity, it) })
             }
-        })
+        }).execute()
     }
 
     private fun fetchWeatherForecastInfo() {
