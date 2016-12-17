@@ -21,7 +21,7 @@ class NotificationSettingsActivity : AppCompatActivity() {
      * @property actionBarId the identifier of the toolbar as specified in the activity layout, or
      * null if the activity does not include a toolbar
      */
-    val actionBarId: Int? = R.id.toolbar
+    val actionBarId: Int? = R.id.toolbarNotification
 
     /**
      * @property actionBarMenuResId the menu resource identifier that specifies the toolbar's
@@ -33,7 +33,7 @@ class NotificationSettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notification_settings)
 
-        mToolbar = findViewById(R.id.toolbar) as Toolbar
+        mToolbar = findViewById(R.id.toolbarNotification) as Toolbar
         check = findViewById(R.id.checkBox) as CheckBox
         timer = findViewById(R.id.timePicker) as TimePicker
         button = findViewById(R.id.done_button) as Button
@@ -50,16 +50,16 @@ class NotificationSettingsActivity : AppCompatActivity() {
             }
         }
 
-        mToolbar.setNavigationOnClickListener {
-            finish()
-            startActivity(Intent(this,SettingsActivity::class.java))
-            overridePendingTransition(0,R.anim.slide_right)
-        }
         actionBarId?.let {
             setSupportActionBar(findViewById(it) as Toolbar)
             supportActionBar!!.setDisplayHomeAsUpEnabled(true)
             supportActionBar!!.setDisplayShowHomeEnabled(true)
+        }
 
+        mToolbar.setNavigationOnClickListener {
+            finish()
+            startActivity(Intent(this,SettingsActivity::class.java))
+            overridePendingTransition(0,R.anim.slide_right)
         }
         button.setOnClickListener {
             val hour = timer.hour
