@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.TimePicker
+import android.widget.Toast
 import com.example.pedrofialho.myweatherapp.R
 import com.example.pedrofialho.myweatherapp.WeatherApplication
 
@@ -69,6 +70,8 @@ class NotificationSettingsActivity : AppCompatActivity() {
             editor.putInt("hour",hour)
             editor.putInt("minutes",minutes)
             editor.apply()
+            Toast.makeText(this@NotificationSettingsActivity,"Time Updated",Toast.LENGTH_SHORT).show()
+            finish()
         }
     }
 
