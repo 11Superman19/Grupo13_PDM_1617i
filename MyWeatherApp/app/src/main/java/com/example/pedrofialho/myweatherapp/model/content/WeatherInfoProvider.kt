@@ -28,11 +28,11 @@ class WeatherInfoProvider : ContentProvider(){
         //SHARED INFO
         const val COLUMN_ID = "_ID"//SHARE
         const val COLUMN_HUMIDITY = "HUMIDITY"//SHARE
-        const val COLUMN_WEATHER_DESC = "WEATHERDESCRIPTION"//SHARE
-        const val COLUMN_PRESSURE = "AIRPRESSURE"//SHARE
+        const val COLUMN_WEATHER_DESC = "WEATHER_DESCRIPTION"//SHARE
+        const val COLUMN_PRESSURE = "AIR_PRESSURE"//SHARE
         const val COLUMN_TEMP = "TEMPERATURE"//SHARE
-        const val COLUMN_TEMP_MAX = "MAXTEMP"//SHARE
-        const val COLUMN_TEMP_MIN = "MINTEMP"//SHARE
+        const val COLUMN_TEMP_MAX = "MAX_TEMP"//SHARE
+        const val COLUMN_TEMP_MIN = "MIN_TEMP"//SHARE
         const val COLUMN_CLOUDS = "CLOUDS"//SHARE
         const val COLUMN_RAIN = "RAIN"//SHARE
         const val COLUMN_SNOW = "SNOW"//SHARE

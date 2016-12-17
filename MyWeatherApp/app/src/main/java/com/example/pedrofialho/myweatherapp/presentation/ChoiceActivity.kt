@@ -1,7 +1,10 @@
 package com.example.pedrofialho.myweatherapp.presentation
 
 import android.animation.ObjectAnimator
+import android.app.AlarmManager
 import android.app.AlertDialog
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
@@ -21,6 +24,8 @@ import com.example.pedrofialho.myweatherapp.WeatherApplication
 import com.example.pedrofialho.myweatherapp.comms.GetRequest
 import com.example.pedrofialho.myweatherapp.model.WeatherDetails
 import com.example.pedrofialho.myweatherapp.model.WeatherForecast
+import com.example.pedrofialho.myweatherapp.services.NotificationMessage
+import java.util.*
 
 class ChoiceActivity : AppCompatActivity() {
     /**
@@ -51,6 +56,7 @@ class ChoiceActivity : AppCompatActivity() {
         val silent = settings.getString("city", city)
         city = silent
 
+        setAlarm()
         animation_forecast = ObjectAnimator.ofFloat(findViewById(R.id.imageView11), "rotationY", 0.0f, 360f)
         animation_forecast!!.duration = 3600
         animation_forecast!!.repeatCount = ObjectAnimator.INFINITE
@@ -84,6 +90,31 @@ class ChoiceActivity : AppCompatActivity() {
             animation_forecast!!.pause()
             (findViewById(R.id.progressBar2) as ProgressBar).visibility = ProgressBar.INVISIBLE
         }
+    }
+
+    private fun setAlarm() {
+        val alarm_cal = Calendar.getInstance()
+        alarm_cal.timeInMillis = System.currentTimeMillis()
+        val settings = getSharedPreferences((application as WeatherApplication).PREFS_NAME,0)
+        val hour = settings.getInt("hour",0)
+        val minutes = settings.getInt("minutes",0)
+        alarm_cal.set(Calendar.HOUR,hour)
+        alarm_cal.set(Calendar.MINUTE,minutes)
+        Toast.makeText(this, "Hour:$hour Minutes:$minutes",Toast.LENGTH_LONG).show()
+
+
+        val notificationmassage = Intent(applicationContext, NotificationMessage::class.java)
+
+//This is alarm manager
+        val pi = PendingIntent.getBroadcast(this, 1, notificationmassage, 0)
+        val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        am.setInexactRepeating(AlarmManager.RTC_WAKEUP, alarm_cal.timeInMillis,
+                AlarmManager.INTERVAL_FIFTEEN_MINUTES, pi)//falta testar
+
+
+
+
+
     }
 
     private fun fetchWeatherForecastInfoWithAysncTask() {

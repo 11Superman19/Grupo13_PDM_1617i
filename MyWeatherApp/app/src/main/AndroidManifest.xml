@@ -49,7 +49,11 @@
             android:multiprocess="false" />
 
         <activity android:name=".presentation.SyncActivity" />
-        <activity android:name=".presentation.NotificationSettingsActivity"></activity>
+        <activity android:name=".presentation.NotificationSettingsActivity"/>
+        <receiver
+            android:name=".services.NotificationMessage"
+            android:enabled="true"
+            />
     </application>
 
 </manifest>
