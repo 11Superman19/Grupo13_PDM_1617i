@@ -18,7 +18,7 @@ class SyncActivity : AppCompatActivity(),AdapterView.OnItemSelectedListener {
      * @property actionBarId the identifier of the toolbar as specified in the activity layout, or
      * null if the activity does not include a toolbar
      */
-    val actionBarId: Int? = R.id.toolbar
+    val actionBarId: Int? = R.id.toolbarSync
 
     /**
      * @property actionBarMenuResId the menu resource identifier that specifies the toolbar's
@@ -43,7 +43,7 @@ class SyncActivity : AppCompatActivity(),AdapterView.OnItemSelectedListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sync)
 
-        mToolbar = findViewById(R.id.toolbar) as Toolbar
+        mToolbar = findViewById(R.id.toolbarSync) as Toolbar
         connectivity = findViewById(R.id.Connectivity) as TextView
         wifi = findViewById(R.id.wifi) as RadioButton
         dados = findViewById(R.id.mobile) as RadioButton
@@ -104,17 +104,17 @@ class SyncActivity : AppCompatActivity(),AdapterView.OnItemSelectedListener {
             this@SyncActivity.finish()
         }
 
-        mToolbar.setNavigationOnClickListener {
-            finish()
-            startActivity(Intent(this,SettingsActivity::class.java))
-            overridePendingTransition(0,R.anim.slide_right)
-        }
-
         actionBarId?.let {
             setSupportActionBar(findViewById(it) as Toolbar)
             supportActionBar!!.setDisplayHomeAsUpEnabled(true)
             supportActionBar!!.setDisplayShowHomeEnabled(true)
 
+        }
+
+        mToolbar.setNavigationOnClickListener {
+            finish()
+            startActivity(Intent(this,SettingsActivity::class.java))
+            overridePendingTransition(0,R.anim.slide_right)
         }
     }
 
