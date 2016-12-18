@@ -6,6 +6,7 @@ import android.app.AlertDialog
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -68,6 +69,9 @@ class ChoiceActivity : AppCompatActivity() {
         animation_daily!!.repeatCount = ObjectAnimator.INFINITE
         animation_daily!!.interpolator = AccelerateDecelerateInterpolator()
         animation_daily!!.start()
+        val connManager = (getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
+        val mInfoConn = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
+        val mInfoData = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
 
         actionBarId?.let {
             setSupportActionBar(findViewById(it) as Toolbar)
@@ -75,7 +79,13 @@ class ChoiceActivity : AppCompatActivity() {
 
         (findViewById(R.id.daily) as Button).setOnClickListener {
             (findViewById(R.id.progressBar2) as ProgressBar).visibility = ProgressBar.VISIBLE
-            fetchCityWeatherInfoWithAsyncTask()
+            if (!mInfoConn.isConnected){
+                if(!mInfoData.isConnected){
+                    startActivity(WeatherDetailsActivity.createIntent(this@ChoiceActivity,(application as WeatherApplication).weatherDetails))
+                }else{
+                    fetchCityWeatherInfoWithAsyncTask()
+                }
+            }else fetchCityWeatherInfoWithAsyncTask()
             animation_daily!!.pause()
             animation_forecast!!.pause()
             (findViewById(R.id.progressBar2) as ProgressBar).visibility = ProgressBar.INVISIBLE

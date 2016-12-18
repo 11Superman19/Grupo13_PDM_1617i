@@ -32,11 +32,11 @@ class PackShotView(ctx: Context, attrs: AttributeSet?, defStyle: Int) : LinearLa
      * @param imageLoader The pack shot image provider
      * @param urlBuilder The function used to convert the given image path to the corresponding URL
      */
-    fun setWeatherInfo(weatherDetail: WeatherDetails,
+    fun setWeatherInfo(weatherDetail: WeatherDetails?,
                      imageLoader: ImageLoader,
                      urlBuilder: String) {
 
-        (findViewById(R.id.weatherTitle) as TextView).text = weatherDetail.weather!![0].description
+        (findViewById(R.id.weatherTitle) as TextView).text = weatherDetail?.weather!![0].description
             val url = urlBuilder
             Log.v(resources.getString(R.string.app_name), "Displaying image from URL $url")
             (findViewById(R.id.packShotImage) as NetworkImageView).setImageUrl(url, imageLoader)

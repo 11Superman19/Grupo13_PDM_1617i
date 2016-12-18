@@ -14,6 +14,7 @@ import com.example.pedrofialho.myweatherapp.R
 import com.example.pedrofialho.myweatherapp.WeatherApplication
 import com.example.pedrofialho.myweatherapp.model.WeatherDetails
 import com.example.pedrofialho.myweatherapp.model.content.WeatherInfoProvider
+import com.example.pedrofialho.myweatherapp.model.content.toWeatherDetail
 import com.example.pedrofialho.myweatherapp.presentation.widget.PackShotView
 import java.text.DateFormat
 import java.util.*
@@ -34,12 +35,12 @@ class WeatherDetailsActivity : AppCompatActivity() {
 
     lateinit var mToolbar: Toolbar
 
-    lateinit var weather_details: WeatherDetails
+    var weather_details: WeatherDetails? = null
 
     companion object {
         val EXTRA_DETAILS = "weather_details_extra"
 
-    fun createIntent(origin: Context, weatherDetail: WeatherDetails) =
+    fun createIntent(origin: Context, weatherDetail: WeatherDetails?) =
             Intent(origin, WeatherDetailsActivity::class.java).putExtra(EXTRA_DETAILS, weatherDetail)
 }
 
@@ -60,11 +61,12 @@ class WeatherDetailsActivity : AppCompatActivity() {
 
 
         val it = intent
-        if(it == null){
+        weather_details = it.getParcelableExtra(EXTRA_DETAILS)
+        if(weather_details == null){
             readValuesFrommDataBase()
         }
        else{
-            readValuesFromExtra(it)
+            readValuesFromExtra()
         }
 
         mToolbar.setNavigationOnClickListener {
@@ -92,27 +94,26 @@ class WeatherDetailsActivity : AppCompatActivity() {
 
     }
 
-    private fun readValuesFromExtra(it : Intent) {
-        weather_details = it.getParcelableExtra(EXTRA_DETAILS)
+    private fun readValuesFromExtra() {
         (application as WeatherApplication).let {
             (findViewById(R.id.packShot) as PackShotView).setWeatherInfo(weather_details, it.imageLoader, buildConfigUrl())
         }
 
-        (findViewById(R.id.temp) as TextView).text = ""+(weather_details.main.temp-273.15).toInt()+"ºC"
-        (findViewById(R.id.weather) as TextView).text = weather_details.weather[0].main
+        (findViewById(R.id.temp) as TextView).text = ""+(weather_details?.main?.temp!! -273.15).toInt()+"ºC"
+        (findViewById(R.id.weather) as TextView).text = weather_details?.weather?.get(0)?.main
         (findViewById(R.id.day) as TextView).text = resources.getString(R.string.day_detail)+" "+getDay()
         (findViewById(R.id.timeOfDay) as TextView).text = resources.getString(R.string.time)+" "+getCurrentTime()
-        (findViewById(R.id.humidity) as TextView).text = resources.getString(R.string.humidity_detail)+" "+ weather_details.main.humidity+"%"
-        (findViewById(R.id.pressure) as TextView).text = resources.getString(R.string.pressure_detail)+" "+ weather_details.main.pressure+" hPa"
-        (findViewById(R.id.Wind_speed) as TextView).text = resources.getString(R.string.wind_speed_detail)+" "+weather_details.wind!!.speed+"m/s"
-        (findViewById(R.id.tempmax) as TextView).text = resources.getString(R.string.temp_max)+" "+(weather_details.main.temp_max-273.15).toInt()+"ºC"
-        (findViewById(R.id.tempmin) as TextView).text = resources.getString(R.string.temp_min)+" "+(weather_details.main.temp_min-273.15).toInt()+"ºC"
-        (findViewById(R.id.clouds) as TextView).text = resources.getString(R.string.clouds_detail)+" "+weather_details.clouds!!.all+"%"
-        if(weather_details.rain==null)(findViewById(R.id.rain) as TextView).text = resources.getString(R.string.rain_detail)+" "+0
-        else (findViewById(R.id.rain) as TextView).text = resources.getString(R.string.rain_detail)+" "+weather_details.rain
+        (findViewById(R.id.humidity) as TextView).text = resources.getString(R.string.humidity_detail)+" "+ weather_details?.main?.humidity +"%"
+        (findViewById(R.id.pressure) as TextView).text = resources.getString(R.string.pressure_detail)+" "+ weather_details?.main?.pressure +" hPa"
+        (findViewById(R.id.Wind_speed) as TextView).text = resources.getString(R.string.wind_speed_detail)+" "+weather_details?.wind!!.speed+"m/s"
+        (findViewById(R.id.tempmax) as TextView).text = resources.getString(R.string.temp_max)+" "+ (weather_details?.main?.temp_max?.minus(273.15))?.toInt() +"ºC"
+        (findViewById(R.id.tempmin) as TextView).text = resources.getString(R.string.temp_min)+" "+ (weather_details?.main?.temp_min?.minus(273.15))?.toInt() +"ºC"
+        (findViewById(R.id.clouds) as TextView).text = resources.getString(R.string.clouds_detail)+" "+weather_details?.clouds!!.all+"%"
+        if(weather_details?.rain==null)(findViewById(R.id.rain) as TextView).text = resources.getString(R.string.rain_detail)+" "+0
+        else (findViewById(R.id.rain) as TextView).text = resources.getString(R.string.rain_detail)+" "+weather_details?.rain
 
-        if(weather_details.snow==null)  (findViewById(R.id.snow) as TextView).text = resources.getString(R.string.snow_detail)+" "+0
-        else (findViewById(R.id.snow) as TextView).text = resources.getString(R.string.snow_detail)+" "+weather_details.snow
+        if(weather_details?.snow==null)  (findViewById(R.id.snow) as TextView).text = resources.getString(R.string.snow_detail)+" "+0
+        else (findViewById(R.id.snow) as TextView).text = resources.getString(R.string.snow_detail)+" "+weather_details?.snow
 
 
     }
@@ -123,29 +124,9 @@ class WeatherDetailsActivity : AppCompatActivity() {
                     WeatherInfoProvider.WEATHER_CONTENT_URI
 
             cursor = contentResolver.query(tableUri,null,null,null,null)
-
-            if(cursor!=null){
-                if(cursor.moveToFirst()){
-                    do{
-                        (findViewById(R.id.temp) as TextView).text = ""+(cursor.getFloat(cursor.getColumnIndex(WeatherInfoProvider.COLUMN_TEMP))-273.15).toInt()+"ºC"
-                        (findViewById(R.id.weather) as TextView).text = cursor.getString(cursor.getColumnIndex(WeatherInfoProvider.COLUMN_WEATHER_DESC))
-                        (findViewById(R.id.day) as TextView).text = resources.getString(R.string.day_detail)+" "+getDay()
-                        (findViewById(R.id.timeOfDay) as TextView).text = resources.getString(R.string.time)+" "+getCurrentTime()
-                        (findViewById(R.id.humidity) as TextView).text = resources.getString(R.string.humidity_detail)+" "+ cursor.getInt(cursor.getColumnIndex(WeatherInfoProvider.COLUMN_HUMIDITY))+"%"
-                        (findViewById(R.id.pressure) as TextView).text = resources.getString(R.string.pressure_detail)+" "+ cursor.getFloat(cursor.getColumnIndex(WeatherInfoProvider.COLUMN_PRESSURE))+" hPa"
-                        (findViewById(R.id.Wind_speed) as TextView).text = resources.getString(R.string.wind_speed_detail)+" "+cursor.getFloat(cursor.getColumnIndex(WeatherInfoProvider.COLUMN_WIND))+"m/s"
-                        (findViewById(R.id.tempmax) as TextView).text = resources.getString(R.string.temp_max)+" "+(cursor.getFloat(cursor.getColumnIndex(WeatherInfoProvider.COLUMN_TEMP_MAX))-273.15).toInt()+"ºC"
-                        (findViewById(R.id.tempmin) as TextView).text = resources.getString(R.string.temp_min)+" "+(cursor.getFloat(cursor.getColumnIndex(WeatherInfoProvider.COLUMN_TEMP_MIN))-273.15).toInt()+"ºC"
-                        (findViewById(R.id.clouds) as TextView).text = resources.getString(R.string.clouds_detail)+" "+cursor.getInt(cursor.getColumnIndex(WeatherInfoProvider.COLUMN_CLOUDS))+"%"
-                        if(weather_details.rain==null)(findViewById(R.id.rain) as TextView).text = resources.getString(R.string.rain_detail)+" "+0
-                        else (findViewById(R.id.rain) as TextView).text = resources.getString(R.string.rain_detail)+" "+cursor.getInt(cursor.getColumnIndex(WeatherInfoProvider.COLUMN_RAIN))
-
-                        if(weather_details.snow==null)  (findViewById(R.id.snow) as TextView).text = resources.getString(R.string.snow_detail)+" "+0
-                        else (findViewById(R.id.snow) as TextView).text = resources.getString(R.string.snow_detail)+" "+cursor.getInt(cursor.getColumnIndex(WeatherInfoProvider.COLUMN_SNOW))
-                    }while (cursor.moveToNext())
-                }
-                cursor.close()
-            }
+            weather_details = toWeatherDetail(cursor)
+            readValuesFromExtra()
+            cursor.close()
     }
 
 
@@ -161,7 +142,7 @@ class WeatherDetailsActivity : AppCompatActivity() {
     private fun buildConfigUrl(): String {
         val baseUrl : String = "http://openweathermap.org/img/w/"
         val endUrl : String = ".png"
-        return "$baseUrl${weather_details.weather[0].icon}$endUrl"
+        return "$baseUrl${weather_details?.weather?.get(0)?.icon}$endUrl"
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

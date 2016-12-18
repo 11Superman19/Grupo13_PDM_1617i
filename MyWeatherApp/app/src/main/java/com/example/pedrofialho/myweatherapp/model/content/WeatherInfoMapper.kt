@@ -44,7 +44,7 @@ fun WeatherForecast.toContentValues() : ContentValues{
 }
 
 
-private fun toForecastDetail(cursor: Cursor):WeatherForecast{
+fun toForecastDetail(cursor: Cursor):WeatherForecast{
     with(WeatherInfoProvider.Companion){
         return WeatherForecast(
                 cnt = cursor.getInt(COLUMN_CNT_IDX),
@@ -94,7 +94,7 @@ fun toTempObject(cursor: Cursor): WeatherForecast.List_Weather.Temp {
         )
     }
 }
-private fun toWeatherDetail(cursor : Cursor): WeatherDetails{
+fun toWeatherDetail(cursor : Cursor): WeatherDetails{
     with(WeatherInfoProvider.Companion){
         return WeatherDetails(
                 id = cursor.getInt(COLUMN_ID_IDX),
