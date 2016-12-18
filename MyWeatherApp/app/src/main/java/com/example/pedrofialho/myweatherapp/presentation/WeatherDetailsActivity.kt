@@ -63,7 +63,7 @@ class WeatherDetailsActivity : AppCompatActivity() {
         val it = intent
         weather_details = it.getParcelableExtra(EXTRA_DETAILS)
         if(weather_details == null){
-            readValuesFrommDataBase()
+            readValuesFromDataBase()
         }
        else{
             readValuesFromExtra()
@@ -118,15 +118,17 @@ class WeatherDetailsActivity : AppCompatActivity() {
 
     }
 
-    private fun readValuesFrommDataBase() {
-        val cursor : Cursor?
-        val tableUri =
-                    WeatherInfoProvider.WEATHER_CONTENT_URI
-
-            cursor = contentResolver.query(tableUri,null,null,null,null)
-            weather_details = toWeatherDetail(cursor)
-            readValuesFromExtra()
-            cursor.close()
+    private fun readValuesFromDataBase() {
+        var cursor : Cursor? = null
+       try {
+           val tableUri =
+                   WeatherInfoProvider.WEATHER_CONTENT_URI
+           cursor = contentResolver.query(tableUri,null,null,null,null)
+           weather_details = toWeatherDetail(cursor)
+           readValuesFromExtra()
+       }finally {
+           cursor?.close()
+       }
     }
 
 
