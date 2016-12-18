@@ -7,10 +7,7 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Spinner
-import android.widget.TextView
+import android.widget.*
 import com.example.pedrofialho.myweatherapp.R
 import com.example.pedrofialho.myweatherapp.WeatherApplication
 import java.util.*
@@ -36,6 +33,7 @@ class GeneralSettingsActivity :AppCompatActivity(), AdapterView.OnItemSelectedLi
     lateinit var mToolbar : Toolbar
     lateinit var city_edit : TextView
     lateinit var spinner : Spinner
+    lateinit var arrayList : ArrayList<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +42,7 @@ class GeneralSettingsActivity :AppCompatActivity(), AdapterView.OnItemSelectedLi
         mToolbar = findViewById(R.id.toolbar) as Toolbar
         city_edit = findViewById(R.id.city) as TextView
         spinner = findViewById(R.id.spinner) as Spinner
-        val arrayList = ArrayList<String>()
+        arrayList = ArrayList<String>()
         arrayList.add("Lisboa")
         arrayList.add("Madrid")
         arrayList.add("Paris")
@@ -67,6 +65,7 @@ class GeneralSettingsActivity :AppCompatActivity(), AdapterView.OnItemSelectedLi
         mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
         spinner.adapter = mAdapter
+
         spinner.onItemSelectedListener = this
         actionBarId?.let {
             setSupportActionBar(findViewById(it) as Toolbar)
@@ -80,27 +79,6 @@ class GeneralSettingsActivity :AppCompatActivity(), AdapterView.OnItemSelectedLi
             startActivity(Intent(this,SettingsActivity::class.java))
             overridePendingTransition(0,R.anim.slide_right)
         }
-    }
-
-    private fun finishThisActivity() {
-        val settings = getSharedPreferences((application as WeatherApplication).PREFS_NAME, 0)
-        val editor = settings.edit()
-        editor.apply()
-        finish()
-        startActivity(Intent(this,ChoiceActivity::class.java))
-        overridePendingTransition(0,R.anim.slide_right)
-    }
-
-    override fun onStop() {
-        super.onStop()
-
-        // We need an Editor object to make preference changes.
-        // All objects are from android.context.Context
-        val settings = getSharedPreferences((application as WeatherApplication).PREFS_NAME, 0)
-        val editor = settings.edit()
-
-        // Commit the edits!
-        editor.apply()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -130,6 +108,10 @@ class GeneralSettingsActivity :AppCompatActivity(), AdapterView.OnItemSelectedLi
     }
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-        //ver como meter as varias opções Spinner boa ideia?
+        val settings = getSharedPreferences((application as WeatherApplication).PREFS_NAME,0)
+        val editor = settings.edit()
+        editor.putString(parent.getItemAtPosition(position).toString(),"")
+        editor.apply()
+        Toast.makeText(this@GeneralSettingsActivity,"Your new Favorite Location is : "+parent.getItemAtPosition(position).toString(),Toast.LENGTH_SHORT).show()
     }
 }
