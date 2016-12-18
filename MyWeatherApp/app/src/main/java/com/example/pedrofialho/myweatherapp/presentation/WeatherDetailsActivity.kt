@@ -118,8 +118,8 @@ class WeatherDetailsActivity : AppCompatActivity() {
     }
 
     private fun readValuesFrommDataBase() {
-        var cursor : Cursor? = null
-            val tableUri =
+        val cursor : Cursor?
+        val tableUri =
                     WeatherInfoProvider.WEATHER_CONTENT_URI
 
             cursor = contentResolver.query(tableUri,null,null,null,null)
@@ -142,7 +142,7 @@ class WeatherDetailsActivity : AppCompatActivity() {
 
                         if(weather_details.snow==null)  (findViewById(R.id.snow) as TextView).text = resources.getString(R.string.snow_detail)+" "+0
                         else (findViewById(R.id.snow) as TextView).text = resources.getString(R.string.snow_detail)+" "+cursor.getInt(cursor.getColumnIndex(WeatherInfoProvider.COLUMN_SNOW))
-                    }while (cursor.isAfterLast)
+                    }while (cursor.moveToNext())
                 }
                 cursor.close()
             }
