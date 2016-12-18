@@ -70,16 +70,6 @@ class WeatherApplication : Application(){
         val mInfoConn = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
         val bothConn = getSharedPreferences(PREFS_NAME,0).getBoolean("connectivity_both",true)
         val typeInfoConn = getSharedPreferences(PREFS_NAME,0).getBoolean("connectivity",true) //assumir que esta no wifi
-        fun sendIntent(listId: String) {
-            val action = Intent(this, WeatherForecastUpdater::class.java)
-                    .putExtra(WeatherForecastUpdater.WEATHER_LIST_ID_EXTRA_KEY, listId)
-            (getSystemService(ALARM_SERVICE) as AlarmManager).setInexactRepeating(
-                    AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    0, //aqui fica de quanto em quanto tempo o utilizador quer que façamos update a informação
-                    AlarmManager.INTERVAL_DAY,
-                    PendingIntent.getService(this, 1, action, PendingIntent.FLAG_UPDATE_CURRENT)
-            )
-        }
 
         fun scheduleUpdate(listId: String) {
 
@@ -101,5 +91,15 @@ class WeatherApplication : Application(){
 
         scheduleUpdate(WeatherForecastUpdater.UPCOMING_LIST_ID_EXTRA_VALUE)
         scheduleUpdate(WeatherForecastUpdater.DAILY_ID_EXTRA_VALUE)
+    }
+  private fun sendIntent(listId: String) {
+        val action = Intent(this, WeatherForecastUpdater::class.java)
+                .putExtra(WeatherForecastUpdater.WEATHER_LIST_ID_EXTRA_KEY, listId)
+        (getSystemService(ALARM_SERVICE) as AlarmManager).setInexactRepeating(
+                AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                0, //aqui fica de quanto em quanto tempo o utilizador quer que façamos update a informação
+                AlarmManager.INTERVAL_DAY,
+                PendingIntent.getService(this, 1, action, PendingIntent.FLAG_UPDATE_CURRENT)
+        )
     }
     }
