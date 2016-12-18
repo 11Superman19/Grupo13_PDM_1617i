@@ -119,17 +119,13 @@ class WeatherDetailsActivity : AppCompatActivity() {
     }
 
     private fun readValuesFromDataBase() {
-        var cursor : Cursor? = null
-       try {
+        val cursor : Cursor?
            val tableUri =
                    WeatherInfoProvider.WEATHER_CONTENT_URI
-           cursor = contentResolver.query(tableUri,null,null,null,null)
-           weather_details = toWeatherDetail(cursor)
+           cursor = contentResolver.query(tableUri, null, null, null, null)// o que meter nos parametros
+           weather_details = toWeatherDetail(cursor = cursor)
            readValuesFromExtra()
-       }finally {
-           cursor?.close()
        }
-    }
 
 
     private fun getCurrentTime() : String{

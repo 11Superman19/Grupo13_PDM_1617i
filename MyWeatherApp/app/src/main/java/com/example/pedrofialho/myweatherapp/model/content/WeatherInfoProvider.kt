@@ -216,12 +216,7 @@ class WeatherInfoProvider : ContentProvider(){
 
         val params = resolveTableAndSelectionInfoFromUri(uri, selection, selectionArgs)
         val db = dbHelper.readableDatabase
-        return try {
-            db.query(params.first, projection, params.second, params.third, null, null, sortOrder)
-        }
-        finally {
-            db.close()
-        }
+        return db.query(params.first, projection, params.second, params.third, null, null, sortOrder)
     }
 
 

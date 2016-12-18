@@ -107,7 +107,7 @@ class ChoiceActivity : AppCompatActivity() {
         val minutes = settings.getInt("minutes",0)
         alarm_cal.set(Calendar.HOUR_OF_DAY,hour)
         alarm_cal.set(Calendar.MINUTE,minutes)
-        Toast.makeText(this, "Hour: "+alarm_cal.timeInMillis,Toast.LENGTH_LONG).show()
+        Toast.makeText(this, "Hour: "+hour+"Minutes: "+minutes,Toast.LENGTH_LONG).show()
 
 
         val notificationmassage = Intent(applicationContext, NotificationMessage::class.java)
