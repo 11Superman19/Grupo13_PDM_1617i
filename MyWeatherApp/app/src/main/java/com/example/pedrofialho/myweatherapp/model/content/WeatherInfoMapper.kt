@@ -94,9 +94,6 @@ fun toTempObject(cursor: Cursor): WeatherForecast.List_Weather.Temp {
         )
     }
 }
-
-//TODO :  Quando souber como meter objetos e listas completar
-//ver se fazer para forecast tb
 private fun toWeatherDetail(cursor : Cursor): WeatherDetails{
     with(WeatherInfoProvider.Companion){
         return WeatherDetails(

@@ -58,7 +58,13 @@ class WeatherApplication : Application(){
         //Aqui meter o limite da bateria
         val batteryManager = (getSystemService(Context.BATTERY_SERVICE) as BatteryManager)
         val batLevel = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
-        val limiteBattery = Integer.parseInt(getSharedPreferences(PREFS_NAME,0).getString("bateria",""))
+        val batteryString = getSharedPreferences(PREFS_NAME,0).getString("bateria","")
+        var limiteBattery = 0
+        if(batteryString==""){
+            limiteBattery = 10
+        }else{
+            limiteBattery = Integer.parseInt(batteryString)
+        }
         //Aqui fica o tip de dados do qual podemos fazer update
         val connManager = (getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
         val mInfoConn = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)

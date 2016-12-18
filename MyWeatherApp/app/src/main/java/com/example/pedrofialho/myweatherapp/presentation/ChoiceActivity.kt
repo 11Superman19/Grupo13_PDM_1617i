@@ -95,7 +95,7 @@ class ChoiceActivity : AppCompatActivity() {
         val settings = getSharedPreferences((application as WeatherApplication).PREFS_NAME,0)
         val hour = settings.getInt("hour",0)
         val minutes = settings.getInt("minutes",0)
-        alarm_cal.set(Calendar.HOUR,hour)
+        alarm_cal.set(Calendar.HOUR_OF_DAY,hour)
         alarm_cal.set(Calendar.MINUTE,minutes)
         Toast.makeText(this, "Hour: "+alarm_cal.timeInMillis,Toast.LENGTH_LONG).show()
 
@@ -106,8 +106,8 @@ class ChoiceActivity : AppCompatActivity() {
 //This is alarm manager
         val pi = PendingIntent.getBroadcast(this, 1, notificationmassage, 0)
         val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        am.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, alarm_cal.timeInMillis,
-                AlarmManager.INTERVAL_FIFTEEN_MINUTES, pi)//falta testar
+        am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, alarm_cal.timeInMillis,
+                AlarmManager.INTERVAL_DAY, pi)
     }
 
     private fun fetchWeatherForecastInfoWithAysncTask() {
