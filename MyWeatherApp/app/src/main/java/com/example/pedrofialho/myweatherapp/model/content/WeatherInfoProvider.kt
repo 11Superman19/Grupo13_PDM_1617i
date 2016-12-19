@@ -118,7 +118,9 @@ class WeatherInfoProvider : ContentProvider(){
 
 
         override fun onCreate(db : SQLiteDatabase?) {
+            deleteTable(db, WEATHER_TABLE_NAME)
             createDetailsTable(db, WEATHER_TABLE_NAME)
+            deleteTable(db, FORECAST_TABLE_NAME)
             createForecastTable(db, FORECAST_TABLE_NAME)
         }
 
