@@ -16,10 +16,10 @@ class WeatherInfoProvider : ContentProvider(){
         const val WEATHER_TABLE_PATH = "weather"
         const val FORECAST_TABLE_PATH = "weather_list"
 
-        const val UPCOMING_CONTENT = "content://$AUTHORITY/$WEATHER_TABLE_PATH"
-        val WEATHER_CONTENT_URI: Uri = Uri.parse(UPCOMING_CONTENT)
-        const val EXHIBITION_CONTENT = "content://$AUTHORITY/$FORECAST_TABLE_PATH"
-        val FORECAST_CONTENT_URI: Uri = Uri.parse(EXHIBITION_CONTENT)
+        const val EXHIBITION_CONTENT = "content://$AUTHORITY/$WEATHER_TABLE_PATH"
+        val WEATHER_CONTENT_URI: Uri = Uri.parse(EXHIBITION_CONTENT)
+        const val UPCOMING_CONTENT = "content://$AUTHORITY/$FORECAST_TABLE_PATH"
+        val FORECAST_CONTENT_URI: Uri = Uri.parse(UPCOMING_CONTENT)
 
         val WEATHER_LIST_CONTENT_TYPE = "${ContentResolver.CURSOR_DIR_BASE_TYPE}/forecast"
         val WEATHER_ITEM_CONTENT_TYPE = "${ContentResolver.CURSOR_ITEM_BASE_TYPE}/detail"

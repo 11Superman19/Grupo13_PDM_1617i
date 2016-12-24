@@ -14,7 +14,7 @@ import com.example.pedrofialho.myweatherapp.R
 import com.example.pedrofialho.myweatherapp.R.layout
 import com.example.pedrofialho.myweatherapp.model.WeatherForecast
 import com.example.pedrofialho.myweatherapp.model.content.WeatherInfoProvider
-import com.example.pedrofialho.myweatherapp.model.content.toForecastDetail
+import com.example.pedrofialho.myweatherapp.model.content.toForecast
 
 class ForecastActivity : ListActivity(){
 
@@ -62,7 +62,8 @@ class ForecastActivity : ListActivity(){
                 WeatherInfoProvider.COLUMN_DT)
         cursor = contentResolver.query(tableUri,projection,null,null,null)
         cursor.moveToFirst()
-        weather_forecast = toForecastDetail(cursor = cursor)
+        weather_forecast = toForecast(cursor = cursor)
+
     }
 
 

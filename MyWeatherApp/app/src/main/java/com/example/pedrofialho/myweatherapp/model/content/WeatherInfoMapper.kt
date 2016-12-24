@@ -60,7 +60,7 @@ fun WeatherForecast.toContentValues() : ContentValues{
 }
 
 
-fun toForecastDetail(cursor: Cursor):WeatherForecast{
+fun toForecast(cursor: Cursor):WeatherForecast{
     with(WeatherInfoProvider.Companion){
         return WeatherForecast(
                 cnt = cursor.getInt(COLUMN_CNT_IDX),
