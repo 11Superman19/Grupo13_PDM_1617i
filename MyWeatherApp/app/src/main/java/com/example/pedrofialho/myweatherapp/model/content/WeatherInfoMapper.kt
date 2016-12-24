@@ -40,6 +40,7 @@ fun WeatherForecast.toContentValues() : ContentValues{
             result.put(COLUMN_TEMP_MIN,list[i].temp.min)
             result.put(COLUMN_CLOUDS,list[i].clouds)
             result.put(COLUMN_RAIN, list[i].rain)
+            result.put(COLUMN_SNOW,list[i].snow)
             result.put(COLUMN_CNT,cnt)
             result.put(COLUMN_DT,list[i].dt)
            ++i

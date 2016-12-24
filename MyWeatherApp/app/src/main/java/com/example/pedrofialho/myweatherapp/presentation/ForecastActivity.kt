@@ -58,6 +58,7 @@ class ForecastActivity : ListActivity(){
                 WeatherInfoProvider.COLUMN_TEMP_MIN,
                 WeatherInfoProvider.COLUMN_CLOUDS,
                 WeatherInfoProvider.COLUMN_RAIN,
+                WeatherInfoProvider.COLUMN_SNOW,
                 WeatherInfoProvider.COLUMN_CNT,
                 WeatherInfoProvider.COLUMN_DT)
         cursor = contentResolver.query(tableUri,projection,null,null,null)
