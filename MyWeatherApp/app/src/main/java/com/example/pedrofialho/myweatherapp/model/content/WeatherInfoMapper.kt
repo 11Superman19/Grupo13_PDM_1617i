@@ -42,9 +42,9 @@ fun WeatherForecast.toContentValues() : ContentValues{
         result.put(COLUMN_DT,list[0].dt)*/
         var i = 0
        while (i < list.size){
-            result.put(COLUMN_ID, list[i].weather[0].id)
+            result.put(COLUMN_ID, list[i].weather[i].id)
             result.put(COLUMN_HUMIDITY, list[i].humidity)
-            result.put(COLUMN_WEATHER_DESC, list[i].weather[0].main)
+            result.put(COLUMN_WEATHER_DESC, list[i].weather[i].main)
             result.put(COLUMN_PRESSURE,list[i].pressure)
             result.put(COLUMN_TEMP,list[i].temp.day)
             result.put(COLUMN_TEMP_MAX,list[i].temp.max)
