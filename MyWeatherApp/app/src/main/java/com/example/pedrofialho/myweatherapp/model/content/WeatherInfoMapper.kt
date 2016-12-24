@@ -29,17 +29,6 @@ fun WeatherDetails.toContentValues() : ContentValues{
 fun WeatherForecast.toContentValues() : ContentValues{
     val result = ContentValues()
     with(WeatherInfoProvider){
-      /*  result.put(COLUMN_ID, list[0].weather[0].id)
-        result.put(COLUMN_HUMIDITY, list[0].humidity)
-        result.put(COLUMN_WEATHER_DESC, list[0].weather[0].main)
-        result.put(COLUMN_PRESSURE,list[0].pressure)
-        result.put(COLUMN_TEMP,list[0].temp.day)
-        result.put(COLUMN_TEMP_MAX,list[0].temp.max)
-        result.put(COLUMN_TEMP_MIN,list[0].temp.min)
-        result.put(COLUMN_CLOUDS,list[0].clouds)
-        result.put(COLUMN_RAIN, list[0].rain)
-        result.put(COLUMN_CNT,cnt)
-        result.put(COLUMN_DT,list[0].dt)*/
         var i = 0
        while (i < list.size){
             result.put(COLUMN_ID, list[i].weather[i].id)
