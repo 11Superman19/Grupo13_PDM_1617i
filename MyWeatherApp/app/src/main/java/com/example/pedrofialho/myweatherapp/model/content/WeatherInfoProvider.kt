@@ -106,6 +106,7 @@ class WeatherInfoProvider : ContentProvider(){
                     "$COLUMN_TEMP_MIN FLOAT NOT NULL , " +
                     "$COLUMN_CLOUDS INTEGER , " +
                     "$COLUMN_RAIN INTEGER , " +
+                    "$COLUMN_SNOW INTEGER , " +
                     "$COLUMN_CNT INTEGER NOT NULL, " +
                     "$COLUMN_DT LONG NOT NULL )"
             db?.execSQL(CREATE_CMD)
