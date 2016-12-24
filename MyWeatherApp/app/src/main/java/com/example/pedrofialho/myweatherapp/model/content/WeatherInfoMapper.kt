@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.database.Cursor
 import com.example.pedrofialho.myweatherapp.model.WeatherDetails
 import com.example.pedrofialho.myweatherapp.model.WeatherForecast
+import java.util.*
 
 //retirar os pontos quando souber meter objetos e listas
 fun WeatherDetails.toContentValues() : ContentValues{
@@ -113,7 +114,7 @@ fun toWeatherDetail(cursor : Cursor): WeatherDetails{
     with(WeatherInfoProvider.Companion){
         return WeatherDetails(
                 id = cursor.getInt(COLUMN_ID_IDX),
-                name = "Lisbon",
+                name = "Lisbon",//meter cidade por default
                 cod = 0,
                 weather = cursor.toWeatherList(),
                 main = toMainObject(cursor),
@@ -159,16 +160,7 @@ fun toWindObject(cursor: Cursor): WeatherDetails.Wind? {
     }
 }
 
-private fun toWeatherList(cursor: Cursor) : WeatherDetails.Weather{
-        with(WeatherInfoProvider.Companion){
-            return WeatherDetails.Weather(
-                    id = 0,
-                    main = cursor.getString(COLUMN_WEATHER_DESC_IDX),
-                    description = "",
-                    icon = cursor.getString(COLUMN_ICON_IDX)
-            )
-        }
-}
+
 //ver questao de ser weather details ou forecast ou fazer para os dois
 fun toMainObject(cursor: Cursor) : WeatherDetails.Main{
     with(WeatherInfoProvider.Companion){
@@ -184,16 +176,27 @@ fun toMainObject(cursor: Cursor) : WeatherDetails.Main{
     }
 }
 
+private fun toWeather(cursor: Cursor) : WeatherDetails.Weather{
+    with(WeatherInfoProvider.Companion){
+        return WeatherDetails.Weather(
+                id = 0,
+                main = cursor.getString(COLUMN_WEATHER_DESC_IDX),
+                description = "",
+                icon = cursor.getString(COLUMN_ICON_IDX)
+        )
+    }
+}
 fun Cursor.toWeatherList() : List<WeatherDetails.Weather>{
-
-    val cursorIterator = object : AbstractIterator<WeatherDetails.Weather>(){
+    val weather = ArrayList<WeatherDetails.Weather>()
+    weather.add(toWeather(this@toWeatherList))
+    return weather
+    /*val cursorIterator = object : AbstractIterator<WeatherDetails.Weather>(){
         override fun computeNext() {
             when(isAfterLast){
                 true -> done()
-                false -> setNext(toWeatherList(this@toWeatherList))
+                false -> setNext(toWeather(this@toWeatherList))
             }
         }
-
     }
-    return mutableListOf<WeatherDetails.Weather>().let { it.addAll(Iterable { cursorIterator });it }
+    return mutableListOf<WeatherDetails.Weather>().let { it.addAll(Iterable { cursorIterator });it }*/
 }

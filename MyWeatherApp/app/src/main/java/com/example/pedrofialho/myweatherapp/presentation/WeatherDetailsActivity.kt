@@ -122,7 +122,20 @@ class WeatherDetailsActivity : AppCompatActivity() {
         val cursor : Cursor?
            val tableUri =
                    WeatherInfoProvider.WEATHER_CONTENT_URI
-           cursor = contentResolver.query(tableUri, null, null, null, null)// o que meter nos parametros
+        val projection = arrayOf(WeatherInfoProvider.COLUMN_ID,
+                WeatherInfoProvider.COLUMN_HUMIDITY,
+                WeatherInfoProvider.COLUMN_WEATHER_DESC,
+                WeatherInfoProvider.COLUMN_PRESSURE,
+                WeatherInfoProvider.COLUMN_TEMP,
+                WeatherInfoProvider.COLUMN_TEMP_MAX,
+                WeatherInfoProvider.COLUMN_TEMP_MIN,
+                WeatherInfoProvider.COLUMN_CLOUDS,
+                WeatherInfoProvider.COLUMN_RAIN,
+                WeatherInfoProvider.COLUMN_SNOW,
+                WeatherInfoProvider.COLUMN_WIND,
+                WeatherInfoProvider.COLUMN_ICON)
+           cursor = contentResolver.query(tableUri, projection, null, null, null)
+           cursor.moveToFirst()
            weather_details = toWeatherDetail(cursor = cursor)
            readValuesFromExtra()
        }

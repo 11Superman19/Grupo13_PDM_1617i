@@ -24,7 +24,7 @@ import com.example.pedrofialho.myweatherapp.WeatherApplication
 import com.example.pedrofialho.myweatherapp.comms.GetRequest
 import com.example.pedrofialho.myweatherapp.model.WeatherDetails
 import com.example.pedrofialho.myweatherapp.model.WeatherForecast
-import com.example.pedrofialho.myweatherapp.services.NotificationMessage
+import com.example.pedrofialho.myweatherapp.services.NotificationService
 import java.util.*
 
 class ChoiceActivity : AppCompatActivity() {
@@ -110,11 +110,11 @@ class ChoiceActivity : AppCompatActivity() {
         Toast.makeText(this, "Hour: "+hour+"Minutes: "+minutes,Toast.LENGTH_LONG).show()
 
 
-        val notificationmassage = Intent(applicationContext, NotificationMessage::class.java)
+        val notificationmassage = Intent(applicationContext, NotificationService::class.java)
        // notificationmassage.putExtra("weather_details_extra",(application as WeatherApplication).weatherDetails)
 
 //This is alarm manager
-        val pi = PendingIntent.getBroadcast(this, 1, notificationmassage, 0)
+        val pi = PendingIntent.getService(this, 1, notificationmassage, 0)
         val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, alarm_cal.timeInMillis,
                 AlarmManager.INTERVAL_DAY, pi)

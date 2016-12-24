@@ -1,8 +1,6 @@
 package com.example.pedrofialho.myweatherapp
 
-import android.app.AlarmManager
 import android.app.Application
-import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
@@ -73,7 +71,7 @@ class WeatherApplication : Application(){
 
         fun scheduleUpdate(listId: String) {
 
-            if (bothConn) {
+         /*   if (bothConn) {
                 if (batLevel >= limiteBattery) {
                     sendIntent(listId)
                 }
@@ -85,7 +83,8 @@ class WeatherApplication : Application(){
                 if(!typeInfoConn){
                     sendIntent(listId)
                 }
-            }
+            }*/
+            sendIntent(listId)
         }
         // Implementation note: This solution does not persist Alarm schedules across reboots
 
@@ -95,11 +94,12 @@ class WeatherApplication : Application(){
   private fun sendIntent(listId: String) {
         val action = Intent(this, WeatherForecastUpdater::class.java)
                 .putExtra(WeatherForecastUpdater.WEATHER_LIST_ID_EXTRA_KEY, listId)
-        (getSystemService(ALARM_SERVICE) as AlarmManager).setInexactRepeating(
+        startService(action)
+       /* (getSystemService(ALARM_SERVICE) as AlarmManager).setInexactRepeating(
                 AlarmManager.ELAPSED_REALTIME_WAKEUP,
                 0, //aqui fica de quanto em quanto tempo o utilizador quer que façamos update a informação
-                AlarmManager.INTERVAL_DAY,
+                AlarmManager.INTERVAL_FIFTEEN_MINUTES,
                 PendingIntent.getService(this, 1, action, PendingIntent.FLAG_UPDATE_CURRENT)
-        )
+        )*/
     }
     }
