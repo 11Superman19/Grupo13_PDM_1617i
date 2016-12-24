@@ -92,7 +92,7 @@ class WeatherForecastUpdater : Service() {
                 WeatherInfoProvider.FORECAST_CONTENT_URI
 
         contentResolver.delete(tableUri, null, null)
-       val count = contentResolver.insert(tableUri, forecast.toContentValues())
+       val count = contentResolver.bulkInsert(tableUri, forecast.toContentValues())
 
         Log.v("DEMO", "Successfully updated $weatherlistId list with $count entries")
     }

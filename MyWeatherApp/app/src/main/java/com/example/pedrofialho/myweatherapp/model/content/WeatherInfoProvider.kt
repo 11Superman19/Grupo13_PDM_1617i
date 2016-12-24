@@ -36,10 +36,10 @@ class WeatherInfoProvider : ContentProvider(){
         const val COLUMN_CLOUDS = "CLOUDS"//SHARE
         const val COLUMN_RAIN = "RAIN"//SHARE
         const val COLUMN_SNOW = "SNOW"//SHARE
+        const val COLUMN_ICON = "ICON"
 
         //weatherDetails INFO
         const val COLUMN_WIND = "WIND"
-        const val COLUMN_ICON = "ICON"
 
         //weatherForecast INFO
         const val COLUMN_CNT = "CNT"
@@ -62,7 +62,7 @@ class WeatherInfoProvider : ContentProvider(){
         const val COLUMN_ICON_IDX = 11
         //IDX FOR FORECAST
         const val COLUMN_CNT_IDX = 10
-        const val COLUMN_DT_IDX = 11
+        const val COLUMN_DT_IDX = 12
 
         // Private constants to be used by the implementation
         private const val WEATHER_TABLE_NAME = "Weather"
@@ -108,6 +108,7 @@ class WeatherInfoProvider : ContentProvider(){
                     "$COLUMN_RAIN INTEGER , " +
                     "$COLUMN_SNOW INTEGER , " +
                     "$COLUMN_CNT INTEGER NOT NULL, " +
+                    "$COLUMN_ICON TEXT NOT NULL, " +
                     "$COLUMN_DT LONG NOT NULL )"
             db?.execSQL(CREATE_CMD)
         }

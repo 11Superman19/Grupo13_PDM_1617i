@@ -26,28 +26,32 @@ fun WeatherDetails.toContentValues() : ContentValues{
     return result
 }
 
-fun WeatherForecast.toContentValues() : ContentValues{
+fun WeatherForecast.List_Weather.toForecastList() : ContentValues{
     val result = ContentValues()
     with(WeatherInfoProvider){
         var i = 0
-       while (i < list.size){
-            result.put(COLUMN_ID, list[i].weather[i].id)
-            result.put(COLUMN_HUMIDITY, list[i].humidity)
-            result.put(COLUMN_WEATHER_DESC, list[i].weather[i].main)
-            result.put(COLUMN_PRESSURE,list[i].pressure)
-            result.put(COLUMN_TEMP,list[i].temp.day)
-            result.put(COLUMN_TEMP_MAX,list[i].temp.max)
-            result.put(COLUMN_TEMP_MIN,list[i].temp.min)
-            result.put(COLUMN_CLOUDS,list[i].clouds)
-            result.put(COLUMN_RAIN, list[i].rain)
-            result.put(COLUMN_SNOW,list[i].snow)
-            result.put(COLUMN_CNT,cnt)
-            result.put(COLUMN_DT,list[i].dt)
-           ++i
+        while (i < 16){
+            result.put(COLUMN_ID, weather[0].id)
+            result.put(COLUMN_HUMIDITY, humidity)
+            result.put(COLUMN_WEATHER_DESC, weather[0].main)
+            result.put(COLUMN_PRESSURE,pressure)
+            result.put(COLUMN_TEMP,temp.day)
+            result.put(COLUMN_TEMP_MAX,temp.max)
+            result.put(COLUMN_TEMP_MIN,temp.min)
+            result.put(COLUMN_CLOUDS,clouds)
+            result.put(COLUMN_RAIN, rain)
+            result.put(COLUMN_SNOW,snow)
+            result.put(COLUMN_CNT,16)
+            result.put(COLUMN_ICON,weather[0].icon)
+            result.put(COLUMN_DT,dt)
+            ++i
         }
     }
     return result
 }
+fun WeatherForecast.toContentValues() : Array<ContentValues> =
+        list.map(WeatherForecast.List_Weather::toForecastList).toTypedArray()
+
 
 
 fun toForecast(cursor: Cursor):WeatherForecast{
