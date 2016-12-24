@@ -6,31 +6,12 @@ import com.example.pedrofialho.myweatherapp.model.WeatherDetails
 import com.example.pedrofialho.myweatherapp.model.WeatherForecast
 import java.util.*
 
-//retirar os pontos quando souber meter objetos e listas
-fun WeatherDetails.toContentValues() : ContentValues{
-    val result = ContentValues()
-    with(WeatherInfoProvider){
-        result.put(COLUMN_ID, weather[0].id)
-        result.put(COLUMN_HUMIDITY, main.humidity)
-        result.put(COLUMN_WEATHER_DESC, weather[0].main)
-        result.put(COLUMN_PRESSURE,main.pressure)
-        result.put(COLUMN_TEMP,main.temp)
-        result.put(COLUMN_TEMP_MAX,main.temp_max)
-        result.put(COLUMN_TEMP_MIN,main.temp_min)
-        result.put(COLUMN_CLOUDS,clouds?.all)
-        result.put(COLUMN_RAIN, rain?.`3h`)
-        result.put(COLUMN_SNOW,snow?.`3h`)
-        result.put(COLUMN_WIND, wind?.speed)
-        result.put(COLUMN_ICON,weather[0].icon)
-    }
-    return result
-}
-
+/**
+ * Forecast part
+ */
 fun WeatherForecast.List_Weather.toForecastList() : ContentValues{
     val result = ContentValues()
     with(WeatherInfoProvider){
-        var i = 0
-        while (i < 16){
             result.put(COLUMN_ID, weather[0].id)
             result.put(COLUMN_HUMIDITY, humidity)
             result.put(COLUMN_WEATHER_DESC, weather[0].main)
@@ -44,8 +25,6 @@ fun WeatherForecast.List_Weather.toForecastList() : ContentValues{
             result.put(COLUMN_CNT,16)
             result.put(COLUMN_ICON,weather[0].icon)
             result.put(COLUMN_DT,dt)
-            ++i
-        }
     }
     return result
 }
@@ -106,6 +85,30 @@ fun toTempObject(cursor: Cursor): WeatherForecast.List_Weather.Temp {
                 morn = 0.0.toFloat()
         )
     }
+}
+
+/**
+ * Weather detail part
+ */
+
+
+fun WeatherDetails.toContentValues() : ContentValues{
+    val result = ContentValues()
+    with(WeatherInfoProvider){
+        result.put(COLUMN_ID, weather[0].id)
+        result.put(COLUMN_HUMIDITY, main.humidity)
+        result.put(COLUMN_WEATHER_DESC, weather[0].main)
+        result.put(COLUMN_PRESSURE,main.pressure)
+        result.put(COLUMN_TEMP,main.temp)
+        result.put(COLUMN_TEMP_MAX,main.temp_max)
+        result.put(COLUMN_TEMP_MIN,main.temp_min)
+        result.put(COLUMN_CLOUDS,clouds?.all)
+        result.put(COLUMN_RAIN, rain?.`3h`)
+        result.put(COLUMN_SNOW,snow?.`3h`)
+        result.put(COLUMN_WIND, wind?.speed)
+        result.put(COLUMN_ICON,weather[0].icon)
+    }
+    return result
 }
 fun toWeatherDetail(cursor : Cursor): WeatherDetails{
     with(WeatherInfoProvider.Companion){

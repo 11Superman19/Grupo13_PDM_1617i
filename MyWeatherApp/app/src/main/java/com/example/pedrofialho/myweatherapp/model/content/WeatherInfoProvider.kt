@@ -97,7 +97,7 @@ class WeatherInfoProvider : ContentProvider(){
 
         private fun createForecastTable(db : SQLiteDatabase?, tableName : String){
             val CREATE_CMD = "CREATE TABLE $tableName ( "+
-                    "$COLUMN_ID INTEGER PRIMARY KEY , " +
+                    "$COLUMN_ID INTEGER , " +
                     "$COLUMN_HUMIDITY INTEGER , " +
                     "$COLUMN_WEATHER_DESC TEXT NOT NULL , " +
                     "$COLUMN_PRESSURE FLOAT NOT NULL , " +
