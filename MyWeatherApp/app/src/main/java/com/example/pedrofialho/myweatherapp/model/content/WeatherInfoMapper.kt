@@ -69,7 +69,10 @@ fun toForecastDetail(cursor: Cursor):WeatherForecast{
     }
 }
 fun Cursor.toForecastDetail():List<WeatherForecast.List_Weather> {
-    val cursorIterator = object : AbstractIterator<WeatherForecast.List_Weather>() {
+    val forecast = ArrayList<WeatherForecast.List_Weather>()
+    forecast.add(toForecastList(this@toForecastDetail))
+    return forecast
+   /* val cursorIterator = object : AbstractIterator<WeatherForecast.List_Weather>() {
         override fun computeNext() {
             when (isAfterLast) {
                 true -> done()
@@ -78,7 +81,7 @@ fun Cursor.toForecastDetail():List<WeatherForecast.List_Weather> {
         }
 
     }
-    return mutableListOf<WeatherForecast.List_Weather>().let { it.addAll(Iterable { cursorIterator });it }
+    return mutableListOf<WeatherForecast.List_Weather>().let { it.addAll(Iterable { cursorIterator });it }*/
 }
 
 private fun toForecastList(cursor: Cursor) : WeatherForecast.List_Weather{

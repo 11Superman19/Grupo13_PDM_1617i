@@ -92,7 +92,13 @@ class ChoiceActivity : AppCompatActivity() {
         }
         (findViewById(R.id.forecast) as Button).setOnClickListener {
             (findViewById(R.id.progressBar2) as ProgressBar).visibility = ProgressBar.VISIBLE
-            fetchWeatherForecastInfoWithAysncTask()
+            if (!mInfoConn.isConnected){
+                if(!mInfoData.isConnected){
+                    startActivity(ForecastActivity.createIntent(this@ChoiceActivity,(application as WeatherApplication).weatherForecast))
+                }else{
+                    fetchWeatherForecastInfoWithAysncTask()
+                }
+            }else fetchWeatherForecastInfoWithAysncTask()
             animation_daily!!.pause()
             animation_forecast!!.pause()
             (findViewById(R.id.progressBar2) as ProgressBar).visibility = ProgressBar.INVISIBLE
