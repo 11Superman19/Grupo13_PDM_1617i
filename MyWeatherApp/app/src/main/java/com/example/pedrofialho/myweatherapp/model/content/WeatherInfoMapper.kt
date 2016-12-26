@@ -43,7 +43,13 @@ fun toForecast(cursor: Cursor):WeatherForecast{
 }
 fun Cursor.toForecastDetail():List<WeatherForecast.List_Weather> {
     val forecast = ArrayList<WeatherForecast.List_Weather>()
-    forecast.add(toForecastList(this@toForecastDetail))
+    val cursorIterator = this@toForecastDetail
+    if(cursorIterator.moveToFirst()) {
+        do {
+            val forecastItem = com.example.pedrofialho.myweatherapp.model.content.toForecastList(cursorIterator)
+            forecast.add(forecastItem)
+        }while (cursorIterator.moveToNext())
+    }
     return forecast
    /* val cursorIterator = object : AbstractIterator<WeatherForecast.List_Weather>() {
         override fun computeNext() {

@@ -63,8 +63,9 @@ class ForecastActivity : ListActivity(){
                 WeatherInfoProvider.COLUMN_ICON,
                 WeatherInfoProvider.COLUMN_DT)
         cursor = contentResolver.query(tableUri,projection,null,null,null)
-        cursor.moveToFirst()
-        weather_forecast = toForecast(cursor = cursor)
+        if(cursor.moveToFirst()){
+            weather_forecast = toForecast(cursor = cursor)
+        }
 
     }
 
