@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.os.BatteryManager
+import android.widget.Toast
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.ImageLoader
 import com.android.volley.toolbox.Volley
@@ -66,13 +67,18 @@ class WeatherApplication : Application(){
         //Aqui fica o tip de dados do qual podemos fazer update
         val connManager = (getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
         val mInfoConn = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
+        val minfoData = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
         val bothConn = getSharedPreferences(PREFS_NAME,0).getBoolean("connectivity_both",true)
         val typeInfoConn = getSharedPreferences(PREFS_NAME,0).getBoolean("connectivity",true) //assumir que esta no wifi
 
         fun scheduleUpdate(listId: String) {
 
-         /*   if (bothConn) {
-                if (batLevel >= limiteBattery) {
+            if (bothConn) {
+                if(mInfoConn.isConnected) {
+                    if (batLevel >= limiteBattery) {
+                        sendIntent(listId)
+                    }
+                }else if (minfoData.isConnected){
                     sendIntent(listId)
                 }
             }else if(mInfoConn.isConnected){
@@ -83,8 +89,7 @@ class WeatherApplication : Application(){
                 if(!typeInfoConn){
                     sendIntent(listId)
                 }
-            }*/
-            sendIntent(listId)
+            }
         }
         // Implementation note: This solution does not persist Alarm schedules across reboots
 
@@ -95,6 +100,7 @@ class WeatherApplication : Application(){
         val action = Intent(this, WeatherForecastUpdater::class.java)
                 .putExtra(WeatherForecastUpdater.WEATHER_LIST_ID_EXTRA_KEY, listId)
         startService(action)
+      Toast.makeText(this,"UPDATED",Toast.LENGTH_LONG).show()
        /* (getSystemService(ALARM_SERVICE) as AlarmManager).setInexactRepeating(
                 AlarmManager.ELAPSED_REALTIME_WAKEUP,
                 0, //aqui fica de quanto em quanto tempo o utilizador quer que façamos update a informação
