@@ -38,9 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/Connectivity"
-        android:checkedButton="@+id/both"
-        >
+        android:layout_below="@+id/Connectivity">
         <RadioButton
             android:id="@+id/wifi"
             android:layout_width="wrap_content"

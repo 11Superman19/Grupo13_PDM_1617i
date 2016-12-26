@@ -77,16 +77,20 @@ class WeatherApplication : Application(){
                 if(mInfoConn.isConnected) {
                     if (batLevel >= limiteBattery) {
                         sendIntent(listId)
+                        Toast.makeText(this,"UPDATED WIFI", Toast.LENGTH_LONG).show()
                     }
                 }else if (minfoData.isConnected){
+                    Toast.makeText(this,"UPDATED DADOS",Toast.LENGTH_LONG).show()
                     sendIntent(listId)
                 }
             }else if(mInfoConn.isConnected){
                     if(typeInfoConn){//true->wifi, false -> dados
+                        Toast.makeText(this,"ONLY WIFI",Toast.LENGTH_LONG).show()
                         sendIntent(listId)
                     }
             } else{
                 if(!typeInfoConn){
+                    Toast.makeText(this,"ONLY DATA",Toast.LENGTH_LONG).show()
                     sendIntent(listId)
                 }
             }
@@ -100,7 +104,6 @@ class WeatherApplication : Application(){
         val action = Intent(this, WeatherForecastUpdater::class.java)
                 .putExtra(WeatherForecastUpdater.WEATHER_LIST_ID_EXTRA_KEY, listId)
         startService(action)
-      Toast.makeText(this,"UPDATED",Toast.LENGTH_LONG).show()
        /* (getSystemService(ALARM_SERVICE) as AlarmManager).setInexactRepeating(
                 AlarmManager.ELAPSED_REALTIME_WAKEUP,
                 0, //aqui fica de quanto em quanto tempo o utilizador quer que façamos update a informação

@@ -52,6 +52,12 @@ class SyncActivity : AppCompatActivity(),AdapterView.OnItemSelectedListener {
         val settings = getSharedPreferences((application as WeatherApplication).PREFS_NAME,0)
         val editor = settings.edit()
         editor.putBoolean("connectivity_both",both)
+        both = settings.getBoolean("connectivity_both",false)
+        if(both){
+            radioGroup.check(R.id.both)
+        }else if(settings.getBoolean("connectivity",true)){
+            radioGroup.check(R.id.wifi)
+        }else radioGroup.check(R.id.mobile)
 
         spinner = findViewById(R.id.percentagem) as Spinner
         val arrayList = ArrayList<String>()
@@ -75,15 +81,14 @@ class SyncActivity : AppCompatActivity(),AdapterView.OnItemSelectedListener {
         radioGroup.setOnCheckedChangeListener { radioGroup, i ->
             if (i==R.id.wifi){
                 both=false
-                Toast.makeText(this@SyncActivity,"WIFI",Toast.LENGTH_SHORT).show()
                 editor.putBoolean("connectivity",true)
+                editor.putBoolean("connectivity_both",both)
             }else if(i==R.id.mobile){
                 both=false
-                Toast.makeText(this@SyncActivity,"MOBILE",Toast.LENGTH_SHORT).show()
                 editor.putBoolean("connectivity",false)
+                editor.putBoolean("connectivity_both",both)
             }else if(i==R.id.both){
                 both=true
-                Toast.makeText(this@SyncActivity,"BOTH",Toast.LENGTH_SHORT).show()
                 editor.putBoolean("connectivity_both",both)
             }
         }
@@ -148,7 +153,6 @@ class SyncActivity : AppCompatActivity(),AdapterView.OnItemSelectedListener {
         val editor = settings.edit()
         editor.putString("bateria",parent.getItemAtPosition(position).toString())
         editor.apply()
-        Toast.makeText(this,parent.getItemAtPosition(position).toString(),Toast.LENGTH_SHORT).show()
     }
 
 }
