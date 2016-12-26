@@ -71,31 +71,17 @@ class GeneralSettingsActivity :AppCompatActivity(), AdapterView.OnItemSelectedLi
                 val mgr = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 mgr.hideSoftInputFromWindow(mEditBoxText.windowToken,0)
                 mEditBoxText.text.clear()
-                arrayList.add(text)
+               val settings = getSharedPreferences((application as WeatherApplication).PREFS_NAME,0)
+                val editor = settings.edit()
+                editor.putString("option",text)
+                editor.apply()
                 Toast.makeText(this@GeneralSettingsActivity,text+" was added to the options",Toast.LENGTH_SHORT).show()
                 setAdapter()
-              //  startActivity(Intent(this@GeneralSettingsActivity,GeneralSettingsActivity::class.java))
                 return@OnEditorActionListener true // consume.
             }
             false
         })
-        arrayList.add("Lisboa")
-        arrayList.add("Madrid")
-        arrayList.add("Paris")
-        arrayList.add("Londres")
-        arrayList.add("Roma")
-        arrayList.add("Luxemburgo")
-        arrayList.add("Berlin")
-        arrayList.add("Bruxelas")
-        arrayList.add("Atenas")
-        arrayList.add("Amesterdão")
-        arrayList.add("Budapest")
-        arrayList.add("Moscovo")
-        arrayList.add("Dublin")
-        arrayList.add("Estocolmo")
-        arrayList.add("Bucareste")
-
-
+        addFirstParam()
         setAdapter()
 
         spinner.onItemSelectedListener = this
@@ -113,7 +99,28 @@ class GeneralSettingsActivity :AppCompatActivity(), AdapterView.OnItemSelectedLi
         }
     }
 
+    private fun addFirstParam() {
+        arrayList.add("Lisboa")
+        arrayList.add("Madrid")
+        arrayList.add("Paris")
+        arrayList.add("Londres")
+        arrayList.add("Roma")
+        arrayList.add("Luxemburgo")
+        arrayList.add("Berlin")
+        arrayList.add("Bruxelas")
+        arrayList.add("Atenas")
+        arrayList.add("Amesterdão")
+        arrayList.add("Budapest")
+        arrayList.add("Moscovo")
+        arrayList.add("Dublin")
+        arrayList.add("Estocolmo")
+        arrayList.add("Bucareste")
+    }
+
     private fun setAdapter() {
+        val option = getSharedPreferences((application as WeatherApplication).PREFS_NAME,0).getString("option","")
+        if(option!="")arrayList.add(option)
+        arrayList.sort()
         mAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, arrayList)
 
         mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
