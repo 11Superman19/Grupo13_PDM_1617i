@@ -1,12 +1,16 @@
 package com.example.pedrofialho.myweatherapp.presentation
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import com.example.pedrofialho.myweatherapp.R
 import com.example.pedrofialho.myweatherapp.WeatherApplication
@@ -34,6 +38,9 @@ class GeneralSettingsActivity :AppCompatActivity(), AdapterView.OnItemSelectedLi
     lateinit var city_edit : TextView
     lateinit var spinner : Spinner
     lateinit var arrayList : ArrayList<String>
+    lateinit var mEditBoxText : EditText
+    lateinit var mFAB : ImageButton
+    var isEdit = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +49,36 @@ class GeneralSettingsActivity :AppCompatActivity(), AdapterView.OnItemSelectedLi
         mToolbar = findViewById(R.id.toolbar) as Toolbar
         city_edit = findViewById(R.id.city) as TextView
         spinner = findViewById(R.id.spinner) as Spinner
+        mEditBoxText = findViewById(R.id.editText) as EditText
+        mFAB = findViewById(R.id.addOption) as ImageButton
         arrayList = ArrayList<String>()
+        mFAB.setOnClickListener {
+            if(isEdit){
+                mEditBoxText.visibility = EditText.VISIBLE
+                mFAB.setImageResource(android.R.drawable.ic_delete)
+            }else{
+                mEditBoxText.visibility = EditText.INVISIBLE
+                mFAB.setImageResource(android.R.drawable.ic_input_add)
+            }
+            isEdit = !isEdit
+        }
+        mEditBoxText.setOnEditorActionListener(TextView.OnEditorActionListener { textView, actionId, keyEvent ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH ||
+                    actionId == EditorInfo.IME_ACTION_DONE ||
+                    keyEvent.action == KeyEvent.ACTION_DOWN && keyEvent.keyCode == KeyEvent.KEYCODE_ENTER) {
+                // the user is done typing.
+                val text = mEditBoxText.text.toString()
+                val mgr = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                mgr.hideSoftInputFromWindow(mEditBoxText.windowToken,0)
+                mEditBoxText.text.clear()
+                arrayList.add(text)
+                Toast.makeText(this@GeneralSettingsActivity,text+" was added to the options",Toast.LENGTH_SHORT).show()
+                setAdapter()
+              //  startActivity(Intent(this@GeneralSettingsActivity,GeneralSettingsActivity::class.java))
+                return@OnEditorActionListener true // consume.
+            }
+            false
+        })
         arrayList.add("Lisboa")
         arrayList.add("Madrid")
         arrayList.add("Paris")
@@ -60,11 +96,7 @@ class GeneralSettingsActivity :AppCompatActivity(), AdapterView.OnItemSelectedLi
         arrayList.add("Bucareste")
 
 
-        mAdapter = ArrayAdapter(this,android.R.layout.simple_list_item_1,arrayList)
-
-        mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
-        spinner.adapter = mAdapter
+        setAdapter()
 
         spinner.onItemSelectedListener = this
         actionBarId?.let {
@@ -79,6 +111,14 @@ class GeneralSettingsActivity :AppCompatActivity(), AdapterView.OnItemSelectedLi
             startActivity(Intent(this,SettingsActivity::class.java))
             overridePendingTransition(0,R.anim.slide_right)
         }
+    }
+
+    private fun setAdapter() {
+        mAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, arrayList)
+
+        mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        spinner.adapter = mAdapter
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
