@@ -1,6 +1,7 @@
 package com.example.pedrofialho.myweatherapp.presentation.widget
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.util.AttributeSet
 import android.util.Log
 import android.widget.LinearLayout
@@ -8,12 +9,12 @@ import android.widget.TextView
 import com.android.volley.toolbox.ImageLoader
 import com.android.volley.toolbox.NetworkImageView
 import com.example.pedrofialho.myweatherapp.R
+import com.example.pedrofialho.myweatherapp.WeatherApplication
 import com.example.pedrofialho.myweatherapp.model.WeatherDetails
 import com.example.pedrofialho.myweatherapp.model.WeatherForecast
 
 
 class PackShotView(ctx: Context, attrs: AttributeSet?, defStyle: Int) : LinearLayout(ctx, attrs, defStyle) {
-
     init {
         inflate(context, R.layout.pack_shot_view, this)
         (findViewById(R.id.packShotImage) as NetworkImageView).setDefaultImageResId(R.drawable.pack_shot_empty)
@@ -39,7 +40,17 @@ class PackShotView(ctx: Context, attrs: AttributeSet?, defStyle: Int) : LinearLa
         (findViewById(R.id.weatherTitle) as TextView).text = weatherDetail?.weather!![0].description
             val url = urlBuilder
             Log.v(resources.getString(R.string.app_name), "Displaying image from URL $url")
-            (findViewById(R.id.packShotImage) as NetworkImageView).setImageUrl(url, imageLoader)
+
+            (findViewById(R.id.packShotImage) as NetworkImageView).setImageUrl(url,imageLoader)
+    }
+    fun addBitmapToMemoryCache(key : String?, bitmap: Bitmap?){
+        if(getBitmapFromMemCache(key) == null){
+            (this.context.applicationContext as WeatherApplication).mMemoryCache.putBitmap(key,bitmap)
+        }
+    }
+
+    fun getBitmapFromMemCache(key: String?): Bitmap? {
+        return (this.context.applicationContext as WeatherApplication).mMemoryCache.getBitmap(key)
     }
 
     fun setWeatherInfo(weatherForecast: WeatherForecast.List_Weather,
