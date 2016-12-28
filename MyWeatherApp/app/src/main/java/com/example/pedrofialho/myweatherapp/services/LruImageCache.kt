@@ -15,6 +15,9 @@ class LruImageCache(maxSize: Int) : LruCache<String, Bitmap>(maxSize), ImageLoad
         }
     }
 
+    override fun create(key: String?): Bitmap {
+        return super.create(key)
+    }
 
     override fun getBitmap(url: String?): Bitmap {
        return get(url)
@@ -22,6 +25,7 @@ class LruImageCache(maxSize: Int) : LruCache<String, Bitmap>(maxSize), ImageLoad
 
     override fun putBitmap(url: String?, bitmap: Bitmap?) {
        put(url,bitmap)
+
     }
 
     override fun sizeOf(key: String?, value: Bitmap?): Int = (value!!.byteCount)/1024
