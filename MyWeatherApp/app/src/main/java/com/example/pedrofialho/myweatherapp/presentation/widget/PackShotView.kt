@@ -2,8 +2,6 @@ package com.example.pedrofialho.myweatherapp.presentation.widget
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.os.AsyncTask
 import android.util.AttributeSet
 import android.util.Log
 import android.widget.ImageView
@@ -14,9 +12,6 @@ import com.example.pedrofialho.myweatherapp.R
 import com.example.pedrofialho.myweatherapp.WeatherApplication
 import com.example.pedrofialho.myweatherapp.model.WeatherDetails
 import com.example.pedrofialho.myweatherapp.model.WeatherForecast
-import java.io.BufferedInputStream
-import java.io.ByteArrayOutputStream
-import java.net.URL
 
 
 class PackShotView(ctx: Context, attrs: AttributeSet?, defStyle: Int) : LinearLayout(ctx, attrs, defStyle) {
@@ -45,47 +40,16 @@ class PackShotView(ctx: Context, attrs: AttributeSet?, defStyle: Int) : LinearLa
         (findViewById(R.id.weatherTitle) as TextView).text = weatherDetail?.weather!![0].description
             val url = urlBuilder
             Log.v(resources.getString(R.string.app_name), "Displaying image from URL $url")
-        getBitmapAsync(url)
         bitmap = getBitmap(url,bitmap)
         (findViewById(R.id.packShotImage) as ImageView).setImageBitmap(bitmap)
     }
 
-    private fun getBitmapAsync(url: String){
-        (object : AsyncTask<String, Unit, Bitmap>() {
-            override fun doInBackground(vararg params: String?): Bitmap {
-                Log.v("Pedro", "doInBackground in ${Thread.currentThread().id}")
-                var bis : BufferedInputStream? = null
-                val out = ByteArrayOutputStream()
-                try {
-                    val mUrl = URL(url)
-                    val inP = mUrl.openConnection().inputStream
-                    bis = BufferedInputStream(inP,1024*8)
-                    var len = 0
-                    val buffer = ByteArray(1024)
-                    do {
-                        len = bis.read(buffer)
-                        if(len==-1) break
-                        out.write(buffer, 0, len)
-                    } while (len != -1)
-                    val data = out.toByteArray()
-                    val image = BitmapFactory.decodeByteArray(data,0,data.size)
-                    this@PackShotView.bitmap = image
-                    return image
-                }finally {
-                    out.close()
-                    bis?.close()
-                }
-            }
-            override fun onPostExecute(result: Bitmap?) {
-                Log.v("Pedro","Sync done")
-                bitmap = result
-            }
-        }).execute().get()
-    }
-
     fun getBitmap(key: String?,bitmap: Bitmap?) : Bitmap?{
-        addBitmapToMemoryCache(key,bitmap)
-        val newBitmap : Bitmap? = getBitmapFromMemCache(key)
+        var newBitmap : Bitmap? = getBitmapFromMemCache(key)
+        if(newBitmap == null){
+            addBitmapToMemoryCache(key,bitmap)
+        }
+        newBitmap = getBitmapFromMemCache(key)
         return newBitmap
     }
     fun addBitmapToMemoryCache(key : String?, bitmap: Bitmap?){
@@ -103,7 +67,6 @@ class PackShotView(ctx: Context, attrs: AttributeSet?, defStyle: Int) : LinearLa
         (findViewById(R.id.weatherTitle) as TextView).text = weatherForecast.weather[0].description
         val url = urlBuilder
         Log.v(resources.getString(R.string.app_name), "Displaying image from URL $url")
-        getBitmapAsync(url)
         bitmap = getBitmap(url,bitmap)
         (findViewById(R.id.packShotImage) as ImageView).setImageBitmap(bitmap)
     }

@@ -56,7 +56,7 @@ class WeatherApplication : Application(){
     override fun onCreate() {
         super.onCreate()
         requestQueue = Volley.newRequestQueue(this)
-        mMemoryCache = LruImageCache(LruImageCache.getDefaultLruCacheSize())
+        mMemoryCache = LruImageCache(1024*8)
         imageLoader = ImageLoader(requestQueue, NullImageCache())
 
         //Aqui meter o limite da bateria
