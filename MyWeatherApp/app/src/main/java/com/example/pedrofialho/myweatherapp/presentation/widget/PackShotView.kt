@@ -7,6 +7,7 @@ import android.util.Log
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import com.android.volley.toolbox.ImageLoader
 import com.example.pedrofialho.myweatherapp.R
 import com.example.pedrofialho.myweatherapp.WeatherApplication
@@ -19,7 +20,6 @@ class PackShotView(ctx: Context, attrs: AttributeSet?, defStyle: Int) : LinearLa
     init {
         inflate(context, R.layout.pack_shot_view, this)
         (findViewById(R.id.packShotImage) as ImageView).setImageResource(R.drawable.pack_shot_empty)
-        //(findViewById(R.id.packShotImage) as ImageView).setErrorImageResId(R.drawable.pack_shot_empty)
 
         if(isInEditMode)
             (findViewById(R.id.weatherTitle) as TextView).text = resources.getString(R.string.weather_details_tools_title)
@@ -41,7 +41,10 @@ class PackShotView(ctx: Context, attrs: AttributeSet?, defStyle: Int) : LinearLa
             val url = urlBuilder
             Log.v(resources.getString(R.string.app_name), "Displaying image from URL $url")
         bitmap = getBitmap(url,bitmap)
-        (findViewById(R.id.packShotImage) as ImageView).setImageBitmap(bitmap)
+        if(bitmap == null){
+            (findViewById(R.id.packShotImage) as ImageView).setImageResource(R.drawable.pack_shot_empty)
+        }
+        else (findViewById(R.id.packShotImage) as ImageView).setImageBitmap(bitmap)
     }
 
     fun getBitmap(key: String?,bitmap: Bitmap?) : Bitmap?{
@@ -50,6 +53,9 @@ class PackShotView(ctx: Context, attrs: AttributeSet?, defStyle: Int) : LinearLa
             addBitmapToMemoryCache(key,bitmap)
         }
         newBitmap = getBitmapFromMemCache(key)
+        if(newBitmap == null){
+            Toast.makeText(this.context,"Image not available try connect to the web",Toast.LENGTH_SHORT).show()
+        }
         return newBitmap
     }
     fun addBitmapToMemoryCache(key : String?, bitmap: Bitmap?){

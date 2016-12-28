@@ -12,7 +12,6 @@ import com.android.volley.toolbox.Volley
 import com.example.pedrofialho.myweatherapp.model.WeatherDetails
 import com.example.pedrofialho.myweatherapp.model.WeatherForecast
 import com.example.pedrofialho.myweatherapp.services.LruImageCache
-import com.example.pedrofialho.myweatherapp.services.NullImageCache
 import com.example.pedrofialho.myweatherapp.services.WeatherForecastUpdater
 
 
@@ -57,7 +56,7 @@ class WeatherApplication : Application(){
         super.onCreate()
         requestQueue = Volley.newRequestQueue(this)
         mMemoryCache = LruImageCache(1024*8)
-        imageLoader = ImageLoader(requestQueue, NullImageCache())
+        imageLoader = ImageLoader(requestQueue, mMemoryCache)
 
         //Aqui meter o limite da bateria
         val batteryManager = (getSystemService(Context.BATTERY_SERVICE) as BatteryManager)

@@ -7,12 +7,12 @@ import android.util.Log
 import com.android.volley.toolbox.ImageLoader
 import java.io.BufferedInputStream
 import java.io.ByteArrayOutputStream
+import java.io.IOException
 import java.net.URL
 import java.util.*
 
 class LruImageCache : ImageLoader.ImageCache {
     private var map: LinkedHashMap<String, Bitmap>
-    /** Size of this cache in units. Not necessarily the number of elements.  */
     private var maxSize: Int = 0
     private var bitmap : Bitmap? = null
 
@@ -29,8 +29,8 @@ class LruImageCache : ImageLoader.ImageCache {
         this.map = LinkedHashMap<String,Bitmap>(0, 0.75f, true)
     }
 
-    override fun getBitmap(url: String?): Bitmap {
-        return get(url) as Bitmap
+    override fun getBitmap(url: String?): Bitmap? {
+        return get(url)
     }
 
     private fun get(key: String?): Bitmap? {
@@ -67,8 +67,8 @@ class LruImageCache : ImageLoader.ImageCache {
     }
 
     private fun getBitmapAsync(url: String){
-        (object : AsyncTask<String, Unit, Bitmap>() {
-            override fun doInBackground(vararg params: String?): Bitmap {
+        (object : AsyncTask<String, Unit, Bitmap?>() {
+            override fun doInBackground(vararg params: String?): Bitmap? {
                 Log.v("Pedro", "doInBackground in ${Thread.currentThread().id}")
                 var bis : BufferedInputStream? = null
                 val out = ByteArrayOutputStream()
@@ -87,13 +87,20 @@ class LruImageCache : ImageLoader.ImageCache {
                     val image = BitmapFactory.decodeByteArray(data,0,data.size)
                     bitmap = image
                     return image
-                }finally {
-                    out.close()
-                    bis?.close()
+                }catch (ex : IOException){
+                    ex.printStackTrace()
+                    return null
                 }
+                    finally {
+                        out.close()
+                        bis?.close()
+                    }
             }
             override fun onPostExecute(result: Bitmap?) {
                 Log.v("Pedro","Sync done")
+                if(result == null){
+                    return
+                }
                 bitmap = result
             }
         }).execute().get()
@@ -104,12 +111,20 @@ class LruImageCache : ImageLoader.ImageCache {
     }
 
     private fun put(url: String?, bitmap: Bitmap?) {
-        if (url == null || bitmap == null) {
-            throw NullPointerException("url == null || bitmap == null")
+        var newBitmap : Bitmap? = null
+        if (url == null) {
+            throw NullPointerException("url == null")
+        }
+        if(bitmap == null){
+            create(url)
+            newBitmap = this.bitmap
+        }
+        if(newBitmap == null){
+            return
         }
         synchronized(this) {
             putCount++
-            map.put(url, bitmap)
+            map.put(url, newBitmap as Bitmap)
         }
     }
     /**

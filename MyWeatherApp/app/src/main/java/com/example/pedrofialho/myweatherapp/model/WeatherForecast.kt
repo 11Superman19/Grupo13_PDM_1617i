@@ -70,7 +70,7 @@ data class WeatherForecast(
             val date = Date(dt * 1000L) // *1000 is to convert seconds to milliseconds
             val to_return : String?
 
-            val sdf = SimpleDateFormat("dd-MM-yyyy - "+formatedNumber(temp.max, temp.min))
+            val sdf = SimpleDateFormat("dd-MM-yyyy : "+formatedNumber(temp.max, temp.min))
 
             sdf.timeZone = TimeZone.getTimeZone("UTC+0")
             val formattedDate = sdf.format(date)
