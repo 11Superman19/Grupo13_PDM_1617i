@@ -107,7 +107,7 @@
             <item>
                 <shape android:shape="oval">
 
-                    <solid android:color="@color/colorPrimary" />
+                    <solid android:color="@android:color/holo_orange_light" />
                     <!-- change color here-->
                 </shape>
             </item>

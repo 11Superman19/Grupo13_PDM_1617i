@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.os.BatteryManager
-import android.widget.Toast
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.ImageLoader
 import com.android.volley.toolbox.Volley
@@ -81,20 +80,16 @@ class WeatherApplication : Application(){
                 if(mInfoConn.isConnected) {
                     if (batLevel >= limiteBattery) {
                         sendIntent(listId)
-                        Toast.makeText(this,"UPDATED WIFI", Toast.LENGTH_LONG).show()
                     }
                 }else if (minfoData.isConnected){
-                    Toast.makeText(this,"UPDATED DADOS",Toast.LENGTH_LONG).show()
                     sendIntent(listId)
                 }
             }else if(mInfoConn.isConnected){
                     if(typeInfoConn){//true->wifi, false -> dados
-                        Toast.makeText(this,"ONLY WIFI",Toast.LENGTH_LONG).show()
                         sendIntent(listId)
                     }
             } else{
                 if(!typeInfoConn){
-                    Toast.makeText(this,"ONLY DATA",Toast.LENGTH_LONG).show()
                     sendIntent(listId)
                 }
             }
