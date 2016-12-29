@@ -58,8 +58,6 @@ class WeatherApplication : Application(){
         requestQueue = Volley.newRequestQueue(this)
         mMemoryCache = LruImageCache(1024*8)
         imageLoader = ImageLoader(requestQueue, mMemoryCache)
-
-        //Aqui meter o limite da bateria
         val batteryManager = (getSystemService(Context.BATTERY_SERVICE) as BatteryManager)
         val batLevel = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
         val batteryString = getSharedPreferences(PREFS_NAME,0).getString("bateria","")
@@ -69,7 +67,6 @@ class WeatherApplication : Application(){
         }else{
             limiteBattery = Integer.parseInt(batteryString)
         }
-        //Aqui fica o tip de dados do qual podemos fazer update
         val connManager = (getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
         val mInfoConn = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
         val minfoData = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
