@@ -19,7 +19,7 @@ class NotificationService : Service(){
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-      //  weather_details = intent.getParcelableExtra("weather_details_extra")
+        weather_details = intent.getParcelableExtra("weather_details_extra")
         Log.v("Pedro","Service working")
         showNotification(applicationContext)
         Toast.makeText(this, "Notification", Toast.LENGTH_LONG).show()

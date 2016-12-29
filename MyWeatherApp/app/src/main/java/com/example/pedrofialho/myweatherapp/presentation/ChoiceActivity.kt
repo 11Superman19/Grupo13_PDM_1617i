@@ -17,7 +17,6 @@ import android.view.MenuItem
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
 import android.widget.ProgressBar
-import android.widget.Toast
 import com.android.volley.toolbox.RequestFuture
 import com.example.pedrofialho.myweatherapp.R
 import com.example.pedrofialho.myweatherapp.WeatherApplication
@@ -113,11 +112,9 @@ class ChoiceActivity : AppCompatActivity() {
         val minutes = settings.getInt("minutes",0)
         alarm_cal.set(Calendar.HOUR_OF_DAY,hour)
         alarm_cal.set(Calendar.MINUTE,minutes)
-        Toast.makeText(this, "Hour: "+hour+"Minutes: "+minutes,Toast.LENGTH_LONG).show()
-
 
         val notificationmassage = Intent(applicationContext, NotificationService::class.java)
-       // notificationmassage.putExtra("weather_details_extra",(application as WeatherApplication).weatherDetails)
+        notificationmassage.putExtra("weather_details_extra",(application as WeatherApplication).weatherDetails)
 
 //This is alarm manager
         val pi = PendingIntent.getService(this, 1, notificationmassage, 0)
