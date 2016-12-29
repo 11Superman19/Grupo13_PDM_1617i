@@ -1,6 +1,7 @@
 package com.example.pedrofialho.myweatherapp.presentation.widget
 
 import android.content.Context
+import android.content.ContextWrapper
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.AttributeSet
@@ -8,15 +9,12 @@ import android.util.Log
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import com.android.volley.toolbox.ImageLoader
 import com.example.pedrofialho.myweatherapp.R
 import com.example.pedrofialho.myweatherapp.WeatherApplication
 import com.example.pedrofialho.myweatherapp.model.WeatherDetails
 import com.example.pedrofialho.myweatherapp.model.WeatherForecast
-import java.io.File
-import java.io.FileOutputStream
-import java.util.*
+import java.io.*
 
 
 class PackShotView(ctx: Context, attrs: AttributeSet?, defStyle: Int) : LinearLayout(ctx, attrs, defStyle) {
@@ -51,33 +49,43 @@ class PackShotView(ctx: Context, attrs: AttributeSet?, defStyle: Int) : LinearLa
         else (findViewById(R.id.packShotImage) as ImageView).setImageBitmap(bitmap)
     }
 
-    private fun getImage(key : String?) : Bitmap? {
-        val root = this.context.filesDir.toString()
-        val myDir = File(root + "/saved_images")
-        val fname = "Image-$key.jpg"
-        val file = File(myDir, fname)
-        return BitmapFactory.decodeFile(file.toString())
-    }
-
-    private fun saveImage(key : String?) {
-        val root = this.context.filesDir.toString()
-        val myDir = File(root + "/saved_images")
-        myDir.mkdirs()
-        val generator = Random()
-        var n = 10000
-        n = generator.nextInt(n)
-        val fname = "Image-$key.jpg"
-        val file = File(myDir, fname)
-        if (file.exists()) file.delete()
+    private fun getImage(path : String?) : Bitmap? {
         try {
-            val out = FileOutputStream(file)
-            bitmap?.compress(Bitmap.CompressFormat.JPEG, 90, out)
-            out.flush()
-            out.close()
-
-        } catch (e: Exception) {
+            val cw = ContextWrapper(this.context.applicationContext)
+            // path to /data/data/yourapp/app_data/imageDir
+            val directory = cw.getDir("imageDir", Context.MODE_PRIVATE)
+            val f = File(directory.absolutePath, "profile.jpg")
+            val b = BitmapFactory.decodeStream(FileInputStream(f))
+            return b
+        } catch (e: FileNotFoundException) {
             e.printStackTrace()
         }
+        return null
+    }
+
+    private fun saveImage(key : String?) : String {
+        val cw = ContextWrapper(this.context.applicationContext)
+        // path to /data/data/yourapp/app_data/imageDir
+        val directory = cw.getDir("imageDir", Context.MODE_PRIVATE)
+        // Create imageDir
+        val mypath = File(directory, "profile.jpg")
+
+        var fos: FileOutputStream? = null
+        try {
+            fos = FileOutputStream(mypath)
+            // Use the compress method on the BitMap object to write image to the OutputStream
+            bitmap?.compress(Bitmap.CompressFormat.PNG, 100, fos)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            try {
+                fos!!.close()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+
+        }
+        return directory.absolutePath
     }
 
 
@@ -91,9 +99,6 @@ class PackShotView(ctx: Context, attrs: AttributeSet?, defStyle: Int) : LinearLa
         }
         saveImage(key)
         newBitmap = getBitmapFromMemCache(url)
-        if(newBitmap == null){
-            Toast.makeText(this.context,"Image not available try connect to the web",Toast.LENGTH_SHORT).show()
-        }
         return newBitmap
     }
     fun addBitmapToMemoryCache(key : String?, bitmap: Bitmap?){
