@@ -1,6 +1,8 @@
 package com.example.pedrofialho.myweatherapp
 
+import android.app.AlarmManager
 import android.app.Application
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
@@ -102,12 +104,12 @@ class WeatherApplication : Application(){
   private fun sendIntent(listId: String) {
         val action = Intent(this, WeatherForecastUpdater::class.java)
                 .putExtra(WeatherForecastUpdater.WEATHER_LIST_ID_EXTRA_KEY, listId)
-        startService(action)
-       /* (getSystemService(ALARM_SERVICE) as AlarmManager).setInexactRepeating(
+
+        (getSystemService(ALARM_SERVICE) as AlarmManager).setInexactRepeating(
                 AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                0, //aqui fica de quanto em quanto tempo o utilizador quer que façamos update a informação
+                0,
                 AlarmManager.INTERVAL_FIFTEEN_MINUTES,
                 PendingIntent.getService(this, 1, action, PendingIntent.FLAG_UPDATE_CURRENT)
-        )*/
+        )
     }
     }
