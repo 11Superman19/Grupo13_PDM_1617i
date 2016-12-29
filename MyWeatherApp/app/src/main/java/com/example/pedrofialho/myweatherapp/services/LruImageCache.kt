@@ -12,7 +12,7 @@ import java.net.URL
 import java.util.*
 
 class LruImageCache : ImageLoader.ImageCache {
-    private var map: LinkedHashMap<String, Bitmap>
+    var map: LinkedHashMap<String, Bitmap> = LinkedHashMap(0, 0.75f, true)
     private var maxSize: Int = 0
     private var bitmap : Bitmap? = null
 
@@ -26,7 +26,6 @@ class LruImageCache : ImageLoader.ImageCache {
             throw IllegalArgumentException("maxSize <= 0")
         }
         this.maxSize=maxSize
-        this.map = LinkedHashMap<String,Bitmap>(0, 0.75f, true)
     }
 
     override fun getBitmap(url: String?): Bitmap? {
@@ -53,7 +52,6 @@ class LruImageCache : ImageLoader.ImageCache {
         synchronized(this) {
             createCount++
             mapValue = map.put(key, createdValue)
-
             if (mapValue != null) {
                 // There was a conflict so undo that last put
                 map.put(key, mapValue as Bitmap)
@@ -126,7 +124,10 @@ class LruImageCache : ImageLoader.ImageCache {
             putCount++
             map.put(url, newBitmap as Bitmap)
         }
+
     }
+
+
     /**
      * For caches that do not override [.sizeOf], this returns the maximum
      * number of entries in the cache. For all other caches, this returns the

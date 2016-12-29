@@ -2,6 +2,7 @@ package com.example.pedrofialho.myweatherapp.presentation.widget
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.util.AttributeSet
 import android.util.Log
 import android.widget.ImageView
@@ -13,6 +14,9 @@ import com.example.pedrofialho.myweatherapp.R
 import com.example.pedrofialho.myweatherapp.WeatherApplication
 import com.example.pedrofialho.myweatherapp.model.WeatherDetails
 import com.example.pedrofialho.myweatherapp.model.WeatherForecast
+import java.io.File
+import java.io.FileOutputStream
+import java.util.*
 
 
 class PackShotView(ctx: Context, attrs: AttributeSet?, defStyle: Int) : LinearLayout(ctx, attrs, defStyle) {
@@ -40,19 +44,53 @@ class PackShotView(ctx: Context, attrs: AttributeSet?, defStyle: Int) : LinearLa
         (findViewById(R.id.weatherTitle) as TextView).text = weatherDetail?.weather!![0].description
             val url = urlBuilder
             Log.v(resources.getString(R.string.app_name), "Displaying image from URL $url")
-        bitmap = getBitmap(url,bitmap)
+        bitmap = getBitmap(url,bitmap,weatherDetail?.weather[0].icon)
         if(bitmap == null){
             (findViewById(R.id.packShotImage) as ImageView).setImageResource(R.drawable.pack_shot_empty)
         }
         else (findViewById(R.id.packShotImage) as ImageView).setImageBitmap(bitmap)
     }
 
-    fun getBitmap(key: String?,bitmap: Bitmap?) : Bitmap?{
-        var newBitmap : Bitmap? = getBitmapFromMemCache(key)
-        if(newBitmap == null){
-            addBitmapToMemoryCache(key,bitmap)
+    private fun getImage(key : String?) : Bitmap? {
+        val root = this.context.filesDir.toString()
+        val myDir = File(root + "/saved_images")
+        val fname = "Image-$key.jpg"
+        val file = File(myDir, fname)
+        return BitmapFactory.decodeFile(file.toString())
+    }
+
+    private fun saveImage(key : String?) {
+        val root = this.context.filesDir.toString()
+        val myDir = File(root + "/saved_images")
+        myDir.mkdirs()
+        val generator = Random()
+        var n = 10000
+        n = generator.nextInt(n)
+        val fname = "Image-$key.jpg"
+        val file = File(myDir, fname)
+        if (file.exists()) file.delete()
+        try {
+            val out = FileOutputStream(file)
+            bitmap?.compress(Bitmap.CompressFormat.JPEG, 90, out)
+            out.flush()
+            out.close()
+
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
-        newBitmap = getBitmapFromMemCache(key)
+    }
+
+
+    fun getBitmap(url: String?, bitmap: Bitmap?,key: String?) : Bitmap?{
+        var newBitmap : Bitmap? = getBitmapFromMemCache(url)
+        if(newBitmap==null){
+            newBitmap = getImage(key)
+        }
+        if(newBitmap == null){
+            addBitmapToMemoryCache(url,bitmap)
+        }
+        saveImage(key)
+        newBitmap = getBitmapFromMemCache(url)
         if(newBitmap == null){
             Toast.makeText(this.context,"Image not available try connect to the web",Toast.LENGTH_SHORT).show()
         }
@@ -73,7 +111,10 @@ class PackShotView(ctx: Context, attrs: AttributeSet?, defStyle: Int) : LinearLa
         (findViewById(R.id.weatherTitle) as TextView).text = weatherForecast.weather[0].description
         val url = urlBuilder
         Log.v(resources.getString(R.string.app_name), "Displaying image from URL $url")
-        bitmap = getBitmap(url,bitmap)
-        (findViewById(R.id.packShotImage) as ImageView).setImageBitmap(bitmap)
+        bitmap = getBitmap(url,bitmap,weatherForecast.weather[0].icon)
+        if(bitmap == null){
+            (findViewById(R.id.packShotImage) as ImageView).setImageResource(R.drawable.pack_shot_empty)
+        }
+        else (findViewById(R.id.packShotImage) as ImageView).setImageBitmap(bitmap)
     }
 }
