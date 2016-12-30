@@ -1,21 +1,12 @@
 package com.example.pedrofialho.myweatherapp.services
 
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.os.AsyncTask
-import android.util.Log
 import com.android.volley.toolbox.ImageLoader
-import java.io.BufferedInputStream
-import java.io.ByteArrayOutputStream
-import java.io.IOException
-import java.net.URL
 import java.util.*
 
 class LruImageCache : ImageLoader.ImageCache {
-    var map: LinkedHashMap<String, Bitmap> = LinkedHashMap(0, 0.75f, true)
+    var map: LinkedHashMap<String, Bitmap> = LinkedHashMap(0, 0.75f, true)//fazer como que esta variavel nao se inicie outra vez
     private var maxSize: Int = 0
-    private var bitmap : Bitmap? = null
-
     private var createCount: Int = 0
     private var putCount : Int = 0
     private var hitCount: Int = 0
@@ -36,7 +27,6 @@ class LruImageCache : ImageLoader.ImageCache {
         if (key == null) {
             throw NullPointerException("key == null")
         }
-
         var mapValue: Bitmap?
         synchronized(this) {
             mapValue = map[key]
@@ -46,83 +36,19 @@ class LruImageCache : ImageLoader.ImageCache {
             }
             missCount++
         }
-        create(key)
-        val createdValue = bitmap ?: return null
-
-        synchronized(this) {
-            createCount++
-            mapValue = map.put(key, createdValue)
-            if (mapValue != null) {
-                // There was a conflict so undo that last put
-                map.put(key, mapValue as Bitmap)
-            }
-        }
-       return createdValue
+        return null
     }
-
-    private fun create(key: String){
-        getBitmapAsync(key)
-    }
-
-    private fun getBitmapAsync(url: String){
-        (object : AsyncTask<String, Unit, Bitmap?>() {
-            override fun doInBackground(vararg params: String?): Bitmap? {
-                Log.v("Pedro", "doInBackground in ${Thread.currentThread().id}")
-                var bis : BufferedInputStream? = null
-                val out = ByteArrayOutputStream()
-                try {
-                    val mUrl = URL(url)
-                    val inP = mUrl.openConnection().inputStream
-                    bis = BufferedInputStream(inP,1024*8)
-                    var len = 0
-                    val buffer = ByteArray(1024)
-                    do {
-                        len = bis.read(buffer)
-                        if(len==-1) break
-                        out.write(buffer, 0, len)
-                    } while (len != -1)
-                    val data = out.toByteArray()
-                    val image = BitmapFactory.decodeByteArray(data,0,data.size)
-                    bitmap = image
-                    return image
-                }catch (ex : IOException){
-                    ex.printStackTrace()
-                    return null
-                }
-                    finally {
-                        out.close()
-                        bis?.close()
-                    }
-            }
-            override fun onPostExecute(result: Bitmap?) {
-                Log.v("Pedro","Sync done")
-                if(result == null){
-                    return
-                }
-                bitmap = result
-            }
-        }).execute().get()
-    }
-
     override fun putBitmap(url: String?, bitmap: Bitmap?) {
         put(url,bitmap)
     }
 
     private fun put(url: String?, bitmap: Bitmap?) {
-        var newBitmap : Bitmap? = null
         if (url == null) {
             throw NullPointerException("url == null")
         }
-        if(bitmap == null){
-            create(url)
-            newBitmap = this.bitmap
-        }
-        if(newBitmap == null){
-            return
-        }
         synchronized(this) {
             putCount++
-            map.put(url, newBitmap as Bitmap)
+            map.put(url, bitmap as Bitmap)
         }
 
     }

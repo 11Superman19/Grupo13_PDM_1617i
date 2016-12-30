@@ -6,7 +6,7 @@
     android:orientation="vertical"
     tools:context=".presentation.WeatherDetailsActivity">
 
-    <ImageView
+    <com.android.volley.toolbox.NetworkImageView
         android:id="@+id/packShotImage"
         android:layout_width="226dp"
         android:layout_height="266dp"

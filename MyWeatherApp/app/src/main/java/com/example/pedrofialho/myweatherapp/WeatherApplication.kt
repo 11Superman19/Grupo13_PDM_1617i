@@ -45,19 +45,13 @@ class WeatherApplication : Application(){
      * @property imageLoader The image loader instance, used to load images from the network
      */
     lateinit var imageLoader: ImageLoader
-
-    /**
-     * @property mMemoryCache the cache for images
-     */
-    lateinit var mMemoryCache : LruImageCache
     /**
      * Initiates the application instance
      */
     override fun onCreate() {
         super.onCreate()
         requestQueue = Volley.newRequestQueue(this)
-        mMemoryCache = LruImageCache(1024*8)
-        imageLoader = ImageLoader(requestQueue, mMemoryCache)
+        imageLoader = ImageLoader(requestQueue, LruImageCache(1024*8))
         val batteryManager = (getSystemService(Context.BATTERY_SERVICE) as BatteryManager)
         val batLevel = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
         val batteryString = getSharedPreferences(PREFS_NAME,0).getString("bateria","")
