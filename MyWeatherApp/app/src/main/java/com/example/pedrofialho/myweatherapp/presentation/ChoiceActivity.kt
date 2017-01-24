@@ -178,7 +178,7 @@ class ChoiceActivity : AppCompatActivity() {
 
     override fun onResume() {
         val settings = getSharedPreferences((application as WeatherApplication).PREFS_NAME, 0)
-        val newCity = settings.getString("option", city)
+        val newCity = settings.getString("city", city)
         city = newCity
         if(animation_forecast!!.isPaused) animation_forecast!!.start()
         if(animation_daily!!.isPaused) animation_daily!!.start()
