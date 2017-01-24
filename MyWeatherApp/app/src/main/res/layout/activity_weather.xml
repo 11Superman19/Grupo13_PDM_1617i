@@ -16,9 +16,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@android:id/list"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="16dp"
-        >
+        android:layout_marginTop="51dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
     </ListView>
+
+    <TextView
+        android:text="Data : Temp. Min - Temp.Max"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView5"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionMode.Title"
+        android:background="@android:color/holo_orange_light" />
 
 </RelativeLayout>
