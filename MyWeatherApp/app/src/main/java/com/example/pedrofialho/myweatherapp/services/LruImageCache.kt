@@ -4,20 +4,17 @@ import android.graphics.Bitmap
 import com.android.volley.toolbox.ImageLoader
 import java.util.*
 
-class LruImageCache : ImageLoader.ImageCache {
-    var map: LinkedHashMap<String, Bitmap> = LinkedHashMap(0, 0.75f, true)//fazer como que esta variavel nao se inicie outra vez
-    private var maxSize: Int = 0
+class LruImageCache(private var maxSize: Int) : ImageLoader.ImageCache {
+    init {
+        if (maxSize <= 0) {
+            throw IllegalArgumentException("maxSize <= 0")
+        }
+    }
+    private val map: LinkedHashMap<String, Bitmap> = LinkedHashMap(0, 0.75f, true)
     private var createCount: Int = 0
     private var putCount : Int = 0
     private var hitCount: Int = 0
     private var missCount: Int = 0
-
-    constructor(maxSize : Int){
-        if (maxSize <= 0) {
-            throw IllegalArgumentException("maxSize <= 0")
-        }
-        this.maxSize=maxSize
-    }
 
     override fun getBitmap(url: String?): Bitmap? {
         return get(url)
