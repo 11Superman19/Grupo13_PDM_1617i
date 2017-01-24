@@ -6,6 +6,8 @@ import android.app.AlertDialog
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.location.Location
+import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.os.AsyncTask
 import android.os.Bundle
@@ -45,11 +47,19 @@ class ChoiceActivity : AppCompatActivity() {
 
     var city : String = "Lisbon"
 
+    lateinit var mLastLocation : Location
+
+    private val PLAY_SERVICES_RESOLUTION_REQUEST = 1000
+
+    // Google client to interact with Google API
+   // private val mGoogleApiClient: GoogleApiClient? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_choice)
 
+        seeIfWeHaveGPSOn()
         setAlarm()
         animation_forecast = ObjectAnimator.ofFloat(findViewById(R.id.imageView11), "rotationY", 0.0f, 360f)
         animation_forecast!!.duration = 3600
@@ -97,6 +107,40 @@ class ChoiceActivity : AppCompatActivity() {
             animation_forecast!!.pause()
             (findViewById(R.id.progressBar2) as ProgressBar).visibility = ProgressBar.INVISIBLE
         }
+    }
+
+    private fun seeIfWeHaveGPSOn() {
+        val manager : LocationManager  = getSystemService( Context.LOCATION_SERVICE ) as LocationManager
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage("Do you want to see the weather for your current Location?")
+                .setCancelable(true)
+                .setPositiveButton("Yes", { dialogInterface, i ->
+                    if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+                        buildAlertMessageNoGps()
+                        //buildConfigUrlForGps()
+                        //ir buscar a info
+                    }else{
+                        //ir buscar a info
+                    }
+                })
+                //nao fazemos nada
+                .setNegativeButton("No", { dialogInterface, i ->
+                })
+    }
+
+
+    fun buildAlertMessageNoGps() {
+        val builder  =  AlertDialog.Builder(this)
+        builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", { dialogInterface, i ->
+                    startActivity(Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+                })
+                .setNegativeButton("No", { dialogInterface, i ->
+                    dialogInterface.cancel()
+                })
+        val alert : AlertDialog = builder.create()
+        alert.show()
     }
 
     private fun setAlarm() {
@@ -207,6 +251,11 @@ class ChoiceActivity : AppCompatActivity() {
         }
         else -> super.onOptionsItemSelected(item)
     }
+
+    private fun buildConfigUrlForGps(lon : Int , lat : Int) : String {
+        return "http://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lon.15&appid=998e2460e9dbe69907b819c7f0e1b77c"
+    }
+
     private fun buildConfigUrlDetails(weatherListID: String): String {
         val baseUrl = resources.getString(R.string.api_base_url)
         val api_key = "${resources.getString(R.string.api_key_name)}=${resources.getString(R.string.api_key_value)}"
