@@ -40,7 +40,7 @@ class GeneralSettingsActivity :AppCompatActivity(), AdapterView.OnItemSelectedLi
     lateinit var arrayList : ArrayList<String>
     lateinit var mEditBoxText : EditText
     lateinit var mFAB : ImageButton
-    var isEdit = false
+    var isEdit = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,10 +71,6 @@ class GeneralSettingsActivity :AppCompatActivity(), AdapterView.OnItemSelectedLi
                 val mgr = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 mgr.hideSoftInputFromWindow(mEditBoxText.windowToken,0)
                 mEditBoxText.text.clear()
-               val settings = getSharedPreferences((application as WeatherApplication).PREFS_NAME,0)
-                val editor = settings.edit()
-                editor.putString("option",text)
-                editor.apply()
                 Toast.makeText(this@GeneralSettingsActivity,text+" was added to the options",Toast.LENGTH_SHORT).show()
                 setAdapter()
                 return@OnEditorActionListener true // consume.
@@ -157,8 +153,7 @@ class GeneralSettingsActivity :AppCompatActivity(), AdapterView.OnItemSelectedLi
     override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
         val settings = getSharedPreferences((application as WeatherApplication).PREFS_NAME,0)
         val editor = settings.edit()
-        editor.putString(parent.getItemAtPosition(position).toString(),"")
+        editor.putString("option",parent.getItemAtPosition(position).toString())
         editor.apply()
-        Toast.makeText(this@GeneralSettingsActivity,"Your new Favorite Location is : "+parent.getItemAtPosition(position).toString(),Toast.LENGTH_SHORT).show()
     }
 }

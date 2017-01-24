@@ -50,11 +50,6 @@ class ChoiceActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_choice)
 
-
-        val settings = getSharedPreferences((application as WeatherApplication).PREFS_NAME, 0)
-        val silent = settings.getString("city", city)
-        city = silent
-
         setAlarm()
         animation_forecast = ObjectAnimator.ofFloat(findViewById(R.id.imageView11), "rotationY", 0.0f, 360f)
         animation_forecast!!.duration = 3600
@@ -182,6 +177,9 @@ class ChoiceActivity : AppCompatActivity() {
     }
 
     override fun onResume() {
+        val settings = getSharedPreferences((application as WeatherApplication).PREFS_NAME, 0)
+        val newCity = settings.getString("option", city)
+        city = newCity
         if(animation_forecast!!.isPaused) animation_forecast!!.start()
         if(animation_daily!!.isPaused) animation_daily!!.start()
         super.onResume()
