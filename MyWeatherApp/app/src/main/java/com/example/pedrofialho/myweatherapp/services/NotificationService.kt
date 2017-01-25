@@ -9,7 +9,6 @@ import android.content.Intent
 import android.os.IBinder
 import android.support.v4.app.NotificationCompat
 import android.util.Log
-import android.widget.Toast
 import com.example.pedrofialho.myweatherapp.model.WeatherDetails
 import com.example.pedrofialho.myweatherapp.presentation.WeatherDetailsActivity
 
@@ -22,7 +21,6 @@ class NotificationService : Service(){
         weather_details = intent.getParcelableExtra("weather_details_extra")
         Log.v("Pedro","Service working")
         showNotification(applicationContext)
-        Toast.makeText(this, "Notification", Toast.LENGTH_LONG).show()
         return Service.START_FLAG_REDELIVERY
     }
     private fun showNotification(context : Context) {
