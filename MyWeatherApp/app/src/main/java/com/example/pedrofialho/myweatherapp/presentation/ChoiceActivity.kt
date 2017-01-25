@@ -12,11 +12,13 @@ import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.os.AsyncTask
 import android.os.Bundle
+import android.os.Handler
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
 import android.widget.ProgressBar
@@ -84,7 +86,6 @@ class ChoiceActivity : AppCompatActivity() {
         }
 
         (findViewById(R.id.daily) as Button).setOnClickListener {
-            (findViewById(R.id.progressBar2) as ProgressBar).visibility = ProgressBar.VISIBLE
             if (!mInfoConn.isConnected){
                 if(!mInfoData.isConnected){
                     startActivity(WeatherDetailsActivity.createIntent(this@ChoiceActivity,(application as WeatherApplication).weatherDetails))
@@ -94,10 +95,8 @@ class ChoiceActivity : AppCompatActivity() {
             }else fetchCityWeatherInfoWithAsyncTask()
             animation_daily!!.pause()
             animation_forecast!!.pause()
-            (findViewById(R.id.progressBar2) as ProgressBar).visibility = ProgressBar.INVISIBLE
         }
         (findViewById(R.id.forecast) as Button).setOnClickListener {
-            (findViewById(R.id.progressBar2) as ProgressBar).visibility = ProgressBar.VISIBLE
             if (!mInfoConn.isConnected){
                 if(!mInfoData.isConnected){
                     startActivity(ForecastActivity.createIntent(this@ChoiceActivity,(application as WeatherApplication).weatherForecast))
@@ -107,7 +106,7 @@ class ChoiceActivity : AppCompatActivity() {
             }else fetchWeatherForecastInfoWithAysncTask()
             animation_daily!!.pause()
             animation_forecast!!.pause()
-            (findViewById(R.id.progressBar2) as ProgressBar).visibility = ProgressBar.INVISIBLE
+
         }
     }
 
@@ -215,10 +214,16 @@ class ChoiceActivity : AppCompatActivity() {
             }
 
             override fun onPostExecute(result: WeatherForecast) {
+                (findViewById(R.id.progressBar2) as ProgressBar).visibility = View.INVISIBLE
                 Log.v("Pedro", "onPostExecute in ${Thread.currentThread().id}")
                 (application as WeatherApplication).weatherForecast = result
                 startActivity((application as WeatherApplication).weatherForecast?.let {
                     ForecastActivity.createIntent(this@ChoiceActivity, it) })
+            }
+
+            override fun onPreExecute() {
+                super.onPreExecute()
+                (findViewById(R.id.progressBar2) as ProgressBar).visibility = View.VISIBLE
             }
         }).execute()
     }
@@ -240,10 +245,18 @@ class ChoiceActivity : AppCompatActivity() {
             }
 
             override fun onPostExecute(result: WeatherDetails?) {
+                (findViewById(R.id.progressBar2) as ProgressBar).visibility = View.INVISIBLE
                 Log.v("Pedro", "onPostExecute in ${Thread.currentThread().id}")
                 (application as WeatherApplication).weatherDetails = result
                 startActivity((application as WeatherApplication).weatherDetails?.let {
                     WeatherDetailsActivity.createIntent(this@ChoiceActivity, it) })
+            }
+
+            override fun onPreExecute() {
+                super.onPreExecute()
+                (findViewById(R.id.progressBar2) as ProgressBar).visibility = View.VISIBLE
+                val mHandler = Handler()
+                mHandler.postDelayed({ }, 2000L)
             }
         }).execute()
     }

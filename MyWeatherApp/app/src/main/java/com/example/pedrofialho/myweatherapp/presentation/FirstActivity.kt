@@ -15,9 +15,6 @@ class FirstActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(layout.activity_first)
-        /*
-        Nao sei onde por o sitio onde lançar a notificação perguntar ao prof
-         */
         val mHandler = Handler()
         mHandler.postDelayed({ startActivity(Intent(this,ChoiceActivity::class.java))}, 2000L)
     }
