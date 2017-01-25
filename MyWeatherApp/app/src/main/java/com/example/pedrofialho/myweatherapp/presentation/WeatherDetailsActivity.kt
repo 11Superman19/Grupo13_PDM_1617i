@@ -50,7 +50,7 @@ class WeatherDetailsActivity : AppCompatActivity() {
         val it = intent
         weather_details = it.getParcelableExtra(EXTRA_DETAILS)
         mToolbar = findViewById(R.id.toolbar) as Toolbar
-        mToolbar.title = getSharedPreferences((application as WeatherApplication).PREFS_NAME,0).getString("city","MyWeatherApp")
+        mToolbar.title = weather_details?.name
 
         val mNotificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         mNotificationManager.cancel(1)

@@ -66,6 +66,7 @@ fun Cursor.toForecastDetail():List<WeatherForecast.List_Weather> {
 private fun toForecastList(cursor: Cursor) : WeatherForecast.List_Weather{
     with(WeatherInfoProvider.Companion) {
         return WeatherForecast.List_Weather(
+                city = null,
                 dt = cursor.getLong(COLUMN_DT_IDX),
                 temp = toTempObject(cursor),
                 pressure = cursor.getFloat(COLUMN_PRESSURE_IDX),

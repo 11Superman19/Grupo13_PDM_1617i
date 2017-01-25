@@ -13,16 +13,45 @@ data class WeatherForecast(
 ) : Parcelable  {
 
     data class List_Weather(
-            val dt : Long,
-            val temp : Temp,
-            val pressure : Float,
-            val humidity : Float,
-            val weather : List<Weather>,
-            val speed : Float,
-            val deg : Float,
-            val clouds : Float,
-            val rain : Float,
-            val snow : Float) : Parcelable{
+            val city: City?,
+            val dt: Long,
+            val temp: Temp,
+            val pressure: Float,
+            val humidity: Float,
+            val weather: List<Weather>,
+            val speed: Float,
+            val deg: Float,
+            val clouds: Float,
+            val rain: Float,
+            val snow: Float) : Parcelable{
+
+        data class City(
+                val name : String,
+                val country : String
+        ) : Parcelable{
+            companion object{
+                @JvmField @Suppress ("unused")
+                val CREATOR = object : Parcelable.Creator<City> {
+                    override fun createFromParcel(source: Parcel) = City(source)
+                    override fun newArray(size: Int): Array<City?> = kotlin.arrayOfNulls(size)
+                }
+            }
+
+            constructor(source: Parcel) : this(
+                   name = source.readString(),
+                    country = source.readString()
+            )
+
+            override fun writeToParcel(dest: Parcel, flags: Int) {
+                dest.apply {
+                    writeString(name)
+                    writeString(country)
+                }
+            }
+
+            override fun describeContents(): Int = 0
+
+        }
 
         /**
          * Temp
@@ -91,6 +120,7 @@ data class WeatherForecast(
         }
 
         constructor(source: Parcel) : this(
+                city = source.readParcelable<City>(City::class.java.classLoader),
                 dt = source.readLong(),
                 temp = source.readParcelable<Temp>(Temp::class.java.classLoader),
                 pressure = source.readFloat(),
@@ -105,6 +135,7 @@ data class WeatherForecast(
 
         override fun writeToParcel(dest: Parcel, flags: Int) {
             dest.apply {
+                writeParcelable(city,flags)
                 writeLong(dt)
                 writeParcelable(temp,flags)
                 writeFloat(pressure)

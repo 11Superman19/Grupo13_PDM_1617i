@@ -1,12 +1,13 @@
 package com.example.pedrofialho.myweatherapp.presentation
 
+import android.Manifest
 import android.animation.ObjectAnimator
 import android.app.AlarmManager
 import android.app.AlertDialog
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.location.Location
+import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.os.AsyncTask
@@ -25,6 +26,7 @@ import com.example.pedrofialho.myweatherapp.WeatherApplication
 import com.example.pedrofialho.myweatherapp.comms.GetRequest
 import com.example.pedrofialho.myweatherapp.model.WeatherDetails
 import com.example.pedrofialho.myweatherapp.model.WeatherForecast
+import com.example.pedrofialho.myweatherapp.services.GPSTracker
 import com.example.pedrofialho.myweatherapp.services.NotificationService
 import java.util.*
 
@@ -47,14 +49,14 @@ class ChoiceActivity : AppCompatActivity() {
 
     var city : String = "Lisbon"
 
-    lateinit var mLastLocation : Location
+    var isGps : Boolean = true
 
-    private val PLAY_SERVICES_RESOLUTION_REQUEST = 1000
+    var latitude : Double = 0.0
 
-    // Google client to interact with Google API
-   // private val mGoogleApiClient: GoogleApiClient? = null
+    var longitude : Double = 0.0
 
-
+    private val INITIAL_PERMS= arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
+    private val INITIAL_REQUEST = 1337
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_choice)
@@ -110,22 +112,49 @@ class ChoiceActivity : AppCompatActivity() {
     }
 
     private fun seeIfWeHaveGPSOn() {
+        var gps : GPSTracker
         val manager : LocationManager  = getSystemService( Context.LOCATION_SERVICE ) as LocationManager
         val builder = AlertDialog.Builder(this)
         builder.setMessage("Do you want to see the weather for your current Location?")
-                .setCancelable(true)
+                .setCancelable(false)
                 .setPositiveButton("Yes", { dialogInterface, i ->
+                    isGps = true
                     if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+                        if (!canAccessLocation()) {
+                            requestPermissions(INITIAL_PERMS, INITIAL_REQUEST)
+                        }
                         buildAlertMessageNoGps()
-                        //buildConfigUrlForGps()
-                        //ir buscar a info
+                        gps = GPSTracker(this@ChoiceActivity)
+                        //check is GPS enabled
+                        if ((gps).canGetLocation){
+                             latitude = gps.getLat()
+                             longitude = gps.getLong()
+                        }
                     }else{
-                        //ir buscar a info
+                        if (!canAccessLocation()) {
+                            requestPermissions(INITIAL_PERMS, INITIAL_REQUEST)
+                        }
+                        gps = GPSTracker(this@ChoiceActivity)
+                        if ((gps).canGetLocation){
+                             latitude = gps.getLat()
+                             longitude = gps.getLong()
+                        }
                     }
                 })
-                //nao fazemos nada
                 .setNegativeButton("No", { dialogInterface, i ->
+                    isGps = false
+                    dialogInterface.cancel()
                 })
+        val alert : AlertDialog = builder.create()
+        alert.show()
+    }
+
+    private fun canAccessLocation(): Boolean {
+        return(hasPermission(Manifest.permission.ACCESS_FINE_LOCATION))
+    }
+
+    private fun hasPermission(perm: String): Boolean {
+        return(PackageManager.PERMISSION_GRANTED==checkSelfPermission(perm))
     }
 
 
@@ -133,10 +162,10 @@ class ChoiceActivity : AppCompatActivity() {
         val builder  =  AlertDialog.Builder(this)
         builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
                 .setCancelable(false)
-                .setPositiveButton("Yes", { dialogInterface, i ->
+                .setPositiveButton("Settings", { dialogInterface, i ->
                     startActivity(Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS))
                 })
-                .setNegativeButton("No", { dialogInterface, i ->
+                .setNegativeButton("Cancel", { dialogInterface, i ->
                     dialogInterface.cancel()
                 })
         val alert : AlertDialog = builder.create()
@@ -170,7 +199,7 @@ class ChoiceActivity : AppCompatActivity() {
             override fun doInBackground(vararg params: String?): WeatherForecast {
                 Log.v("Pedro","doInBackground in ${Thread.currentThread().id}")
                 queue.add(GetRequest<WeatherForecast>(
-                        buildConfigUrlForecast("forecast/daily?q="),
+                        if(!isGps) buildConfigUrlForecast("forecast/daily?q=") else buildConfigUrlForGpsForecast(longitude,latitude),
                         WeatherForecast::class.java,
                         {response -> future.onResponse(response)},
                         { error -> future.onErrorResponse(error)}
@@ -195,7 +224,7 @@ class ChoiceActivity : AppCompatActivity() {
             override fun doInBackground(vararg params: String?): WeatherDetails {
                 Log.v("Pedro","doInBackground in ${Thread.currentThread().id}"+"Weather Details")
                 queue.add(GetRequest<WeatherDetails>(
-                        buildConfigUrlDetails("weather?q="),
+                        if(!isGps) buildConfigUrlDetails("weather?q=") else buildConfigUrlForGpsDetails(longitude,latitude),
                         WeatherDetails::class.java,
                         {response-> future.onResponse(response)},
                         {error -> future.onErrorResponse(error)}
@@ -252,8 +281,14 @@ class ChoiceActivity : AppCompatActivity() {
         else -> super.onOptionsItemSelected(item)
     }
 
-    private fun buildConfigUrlForGps(lon : Int , lat : Int) : String {
-        return "http://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lon.15&appid=998e2460e9dbe69907b819c7f0e1b77c"
+    private fun buildConfigUrlForGpsDetails(lon : Double , lat : Double) : String {
+        Log.v("Showing Info From","http://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lon&appid=998e2460e9dbe69907b819c7f0e1b77c")
+        return "http://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lon&appid=998e2460e9dbe69907b819c7f0e1b77c"
+    }
+
+    private fun buildConfigUrlForGpsForecast(lon : Double, lat: Double) : String{
+        Log.v("Showing Info From","http://api.openweathermap.org/data/2.5/forecast/daily?lat=37.421998333333335&lon=-122.08400000000002&cnt=16&appid=998e2460e9dbe69907b819c7f0e1b77c")
+        return "http://api.openweathermap.org/data/2.5/forecast/daily?lat=$lat&lon=$lon&cnt=16&appid=998e2460e9dbe69907b819c7f0e1b77c"
     }
 
     private fun buildConfigUrlDetails(weatherListID: String): String {

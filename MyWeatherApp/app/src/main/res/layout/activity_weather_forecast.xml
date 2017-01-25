@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_weather_forecast"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,86 +13,84 @@
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
-        android:navigationIcon="@drawable/ic_keyboard_backspace_black_24dp"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@android:color/holo_orange_light"
-        android:title="@string/app_name"
+        android:navigationIcon="@drawable/ic_keyboard_backspace_black_24dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        tools:title="@string/app_name"/>
-
+        android:title="@string/app_name"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
     <com.example.pedrofialho.myweatherapp.presentation.widget.PackShotView
         android:id="@+id/packShot"
         android:layout_width="200dp"
         android:layout_height="280dp"
-        android:layout_below="@+id/toolbar"
+        android:layout_alignBottom="@+id/weather"
         android:layout_alignParentStart="true"
-        android:layout_alignBottom="@+id/weather" />
+        android:layout_below="@+id/toolbar" />
 
 
     <TextView
-        android:text="35ºC"
-        android:textSize="50dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/temp"
-        android:textStyle="bold"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title"
-        android:layout_marginTop="19dp"
-        android:layout_below="@+id/toolbar"
-        android:layout_toEndOf="@+id/packShot" />
-
-    <TextView
-        android:text="Clear"
-        android:textSize="30dp"
-        android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="43dp"
+        android:layout_below="@+id/toolbar"
+        android:layout_marginTop="19dp"
+        android:layout_toEndOf="@+id/packShot"
+        android:text="35ºC"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:textSize="50dp"
+        android:textStyle="bold" />
+
+    <TextView
         android:id="@+id/weather"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/temp"
-        android:layout_toEndOf="@+id/packShot" />
+        android:layout_marginTop="43dp"
+        android:layout_toEndOf="@+id/packShot"
+        android:text="Clear"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="30dp"
+        android:textStyle="bold" />
 
 
     <TextView
-        android:text="@string/day_detail"
-        android:textSize="30sp"
+        android:id="@+id/day"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/day"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:layout_below="@+id/packShot"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_below="@+id/packShot"
+        android:text="@string/day_detail"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="30sp" />
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/day">
+        android:layout_below="@+id/day"
+        android:orientation="vertical">
 
         <Space
             android:layout_width="match_parent"
             android:layout_height="12dp" />
 
         <TextView
-            android:text="@string/pressure_detail"
+            android:id="@+id/pressure"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/pressure" />
+            android:text="@string/pressure_detail" />
 
         <Space
             android:layout_width="match_parent"
             android:layout_height="12dp" />
 
         <TextView
-            android:text="@string/humidity_detail"
+            android:id="@+id/humidity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/humidity" />
+            android:text="@string/humidity_detail" />
 
         <Space
             android:layout_width="match_parent"
@@ -100,57 +98,57 @@
 
 
         <TextView
-            android:text="@string/wind_speed_detail"
+            android:id="@+id/Wind_speed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/Wind_speed" />
+            android:text="@string/wind_speed_detail" />
         <Space
             android:layout_width="match_parent"
             android:layout_height="12dp" />
 
         <TextView
-            android:text="@string/temp_max"
+            android:id="@+id/tempmax"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/tempmax" />
+            android:text="@string/temp_max" />
         <Space
             android:layout_width="match_parent"
             android:layout_height="12dp" />
 
         <TextView
-            android:text="@string/temp_min"
+            android:id="@+id/tempmin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/tempmin" />
+            android:text="@string/temp_min" />
         <Space
             android:layout_width="match_parent"
             android:layout_height="12dp" />
 
         <TextView
-            android:text="@string/clouds_detail"
+            android:id="@+id/clouds"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/clouds" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="12dp" />
-
-        <TextView
-            android:text="@string/rain_detail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/rain" />
+            android:text="@string/clouds_detail" />
 
         <Space
             android:layout_width="match_parent"
             android:layout_height="12dp" />
 
         <TextView
-            android:text="@string/snow_detail"
+            android:id="@+id/rain"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/snow" />
+            android:text="@string/rain_detail" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="12dp" />
+
+        <TextView
+            android:id="@+id/snow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/snow_detail" />
 
     </LinearLayout>
 

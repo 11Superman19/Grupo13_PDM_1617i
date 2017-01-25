@@ -34,8 +34,10 @@ class DetailForecastActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_weather_forecast)
-
+        val it = intent
+        forecast_detail = it.getParcelableExtra<WeatherForecast.List_Weather>("DTO_Details")
         mToolbar = findViewById(R.id.toolbar) as Toolbar
+        mToolbar.title = forecast_detail.city?.name
 
         actionBarId?.let {
             setSupportActionBar(findViewById(it) as Toolbar)
@@ -48,8 +50,7 @@ class DetailForecastActivity : AppCompatActivity() {
             overridePendingTransition(0,R.anim.slide_right)
         }
 
-        val it = intent
-        forecast_detail = it.getParcelableExtra<WeatherForecast.List_Weather>("DTO_Details")
+
 
         (application as WeatherApplication).let {
             (findViewById(R.id.packShot) as PackShotView).setWeatherInfo(forecast_detail, it.imageLoader, buildConfigUrl())

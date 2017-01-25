@@ -13,13 +13,14 @@ import android.util.Log
 open class GPSTracker(context: Context) : Service() , LocationListener{
     private val mContext: Context? = context
 
+
     init {
         getLocation()
     }
 
 
     companion object {
-        lateinit var location : Location // location
+        var location : Location? = null // location
     }
 
 
@@ -69,28 +70,28 @@ open class GPSTracker(context: Context) : Service() , LocationListener{
                             MIN_DISTANCE_CHANGE_FOR_UPDATES, this)
                     Log.d("Network", "Network")
                     if (locationManager != null) {
-                        Companion.location = locationManager!!
+                        location = locationManager!!
                                 .getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
-                        if (Companion.location != null) {
-                            latitude = Companion.location.latitude
-                            longitude = Companion.location.longitude
+                        if (location != null) {
+                            latitude = location?.latitude as Double
+                            longitude = location?.longitude as Double
                         }
                     }
                 }
                 // if GPS Enabled get lat/long using GPS Services
                 if (isGPSEnabled) {
-                    if (Companion.location == null) {
+                    if (location == null) {
                         locationManager?.requestLocationUpdates(
                                 LocationManager.GPS_PROVIDER,
                                 MIN_TIME_BW_UPDATES,
                                 MIN_DISTANCE_CHANGE_FOR_UPDATES, this)
                         Log.d("GPS Enabled", "GPS Enabled")
                         if (locationManager != null) {
-                            Companion.location = locationManager
+                            location = locationManager
                                     ?.getLastKnownLocation(LocationManager.GPS_PROVIDER)!!
                             if (Companion.location != null) {
-                                latitude = Companion.location.latitude
-                                longitude = Companion.location.longitude
+                                latitude = location?.latitude as Double
+                                longitude = location?.longitude as Double
                             }
                         }
                     }
@@ -101,7 +102,48 @@ open class GPSTracker(context: Context) : Service() , LocationListener{
             e.printStackTrace()
         }
 
-        return Companion.location
+        return location
+    }
+
+    /**
+     * Stop using GPS listener
+     * Calling this function will stop using GPS in your app
+     */
+    fun stopUsingGPS() {
+        if (locationManager != null) {
+            locationManager?.removeUpdates(this@GPSTracker)
+        }
+    }
+
+    /**
+     * Function to get latitude
+     */
+    fun getLat(): Double {
+        if (location != null) {
+            latitude = location?.latitude as Double
+        }
+        return latitude
+    }
+
+    /**
+     * Function to get longitude
+     */
+    fun getLong(): Double {
+        if (location != null) {
+            longitude = location?.longitude as Double
+        }
+
+        // return longitude
+        return longitude
+    }
+
+    /**
+     * Function to check GPS/wifi enabled
+     * @return boolean
+     * *
+     */
+    fun canGetLocation(): Boolean {
+        return this.canGetLocation
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
