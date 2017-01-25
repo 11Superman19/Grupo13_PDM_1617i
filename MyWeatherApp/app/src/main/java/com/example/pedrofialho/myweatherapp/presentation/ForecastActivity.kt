@@ -88,7 +88,7 @@ class ForecastActivity : ListActivity(){
             override fun onAnimationEnd(animation: Animation) {
                 val intent = Intent(this@ForecastActivity, DetailForecastActivity::class.java)
                 intent.putExtra("DTO_Details", weather_forecast?.list?.get(itemPosition))
-                if(weather_forecast?.city == null){
+                if(weather_forecast?.city == null || (weather_forecast?.city as WeatherForecast.List_Weather.City).name == "Earth"){
                     val title = getSharedPreferences((application as WeatherApplication).PREFS_NAME,0).getString("city","")
                     intent.putExtra("cityName",title)
                 }else {

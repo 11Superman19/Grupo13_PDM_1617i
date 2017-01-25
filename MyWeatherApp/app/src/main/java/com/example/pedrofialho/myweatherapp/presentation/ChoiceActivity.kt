@@ -118,7 +118,6 @@ class ChoiceActivity : AppCompatActivity() {
         builder.setMessage("Do you want to see the weather for your current Location?")
                 .setCancelable(false)
                 .setPositiveButton("Yes", { dialogInterface, i ->
-                    isGps = true
                     if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
                         if (!canAccessLocation()) {
                             requestPermissions(INITIAL_PERMS, INITIAL_REQUEST)
@@ -127,8 +126,11 @@ class ChoiceActivity : AppCompatActivity() {
                         gps = GPSTracker(this@ChoiceActivity)
                         //check is GPS enabled
                         if ((gps).canGetLocation){
+                            isGps = true
                              latitude = gps.getLat()
                              longitude = gps.getLong()
+                        }else{
+                            isGps = false
                         }
                     }else{
                         if (!canAccessLocation()) {
@@ -136,8 +138,11 @@ class ChoiceActivity : AppCompatActivity() {
                         }
                         gps = GPSTracker(this@ChoiceActivity)
                         if ((gps).canGetLocation){
+                            isGps = true
                              latitude = gps.getLat()
                              longitude = gps.getLong()
+                        }else{
+                            isGps = false
                         }
                     }
                 })
@@ -163,9 +168,11 @@ class ChoiceActivity : AppCompatActivity() {
         builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
                 .setCancelable(false)
                 .setPositiveButton("Settings", { dialogInterface, i ->
+                    isGps = true
                     startActivity(Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS))
                 })
                 .setNegativeButton("Cancel", { dialogInterface, i ->
+                    isGps = false
                     dialogInterface.cancel()
                 })
         val alert : AlertDialog = builder.create()
@@ -287,7 +294,7 @@ class ChoiceActivity : AppCompatActivity() {
     }
 
     private fun buildConfigUrlForGpsForecast(lon : Double, lat: Double) : String{
-        Log.v("Showing Info From","http://api.openweathermap.org/data/2.5/forecast/daily?lat=37.421998333333335&lon=-122.08400000000002&cnt=16&appid=998e2460e9dbe69907b819c7f0e1b77c")
+        Log.v("Showing Info From","http://api.openweathermap.org/data/2.5/forecast/daily?lat=$lat&lon=$lon&cnt=16&appid=998e2460e9dbe69907b819c7f0e1b77c")
         return "http://api.openweathermap.org/data/2.5/forecast/daily?lat=$lat&lon=$lon&cnt=16&appid=998e2460e9dbe69907b819c7f0e1b77c"
     }
 

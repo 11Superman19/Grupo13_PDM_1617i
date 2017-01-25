@@ -43,7 +43,7 @@ open class GPSTracker(context: Context) : Service() , LocationListener{
     private val MIN_TIME_BW_UPDATES = (1000 * 60 * 1).toLong() // 1 minute
 
     // Declaring a Location Manager
-    protected var locationManager: LocationManager? = null
+    lateinit var locationManager: LocationManager
 
     fun getLocation(): Location? {
         try {
@@ -51,12 +51,10 @@ open class GPSTracker(context: Context) : Service() , LocationListener{
                     ?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
             // getting GPS status
-            isGPSEnabled = locationManager
-                    ?.isProviderEnabled(LocationManager.GPS_PROVIDER)!!
+            isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
 
             // getting network status
-            isNetworkEnabled = locationManager
-                    ?.isProviderEnabled(LocationManager.NETWORK_PROVIDER)!!
+            isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
 
             if (!isGPSEnabled && !isNetworkEnabled) {
                 // no network provider is enabled
@@ -64,35 +62,31 @@ open class GPSTracker(context: Context) : Service() , LocationListener{
                 this.canGetLocation = true
                 // First get location from Network Provider
                 if (isNetworkEnabled) {
-                    locationManager?.requestLocationUpdates(
+                    locationManager.requestLocationUpdates(
                             LocationManager.NETWORK_PROVIDER,
                             MIN_TIME_BW_UPDATES,
                             MIN_DISTANCE_CHANGE_FOR_UPDATES, this)
                     Log.d("Network", "Network")
-                    if (locationManager != null) {
-                        location = locationManager!!
+                        location = locationManager
                                 .getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
                         if (location != null) {
                             latitude = location?.latitude as Double
                             longitude = location?.longitude as Double
-                        }
+
                     }
                 }
                 // if GPS Enabled get lat/long using GPS Services
                 if (isGPSEnabled) {
                     if (location == null) {
-                        locationManager?.requestLocationUpdates(
+                        locationManager.requestLocationUpdates(
                                 LocationManager.GPS_PROVIDER,
                                 MIN_TIME_BW_UPDATES,
                                 MIN_DISTANCE_CHANGE_FOR_UPDATES, this)
                         Log.d("GPS Enabled", "GPS Enabled")
-                        if (locationManager != null) {
-                            location = locationManager
-                                    ?.getLastKnownLocation(LocationManager.GPS_PROVIDER)!!
-                            if (Companion.location != null) {
+                            location = getLastKnownLocation()
+                            if (location != null) {
                                 latitude = location?.latitude as Double
                                 longitude = location?.longitude as Double
-                            }
                         }
                     }
                 }
@@ -105,14 +99,27 @@ open class GPSTracker(context: Context) : Service() , LocationListener{
         return location
     }
 
+    private fun getLastKnownLocation(): Location? {
+        val providers = locationManager.getProviders(true)
+        var bestLocation: Location? = null
+        if (providers != null) {
+            for (provider in providers) {
+                val l = locationManager.getLastKnownLocation(provider) ?: continue
+                if (bestLocation == null || l.accuracy < bestLocation.accuracy) {
+                    // Found best last known location: %s", l);
+                    bestLocation = l
+                }
+            }
+        }
+        return bestLocation
+    }
+
     /**
      * Stop using GPS listener
      * Calling this function will stop using GPS in your app
      */
     fun stopUsingGPS() {
-        if (locationManager != null) {
-            locationManager?.removeUpdates(this@GPSTracker)
-        }
+            locationManager.removeUpdates(this@GPSTracker)
     }
 
     /**

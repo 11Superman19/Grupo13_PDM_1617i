@@ -50,7 +50,7 @@ class WeatherDetailsActivity : AppCompatActivity() {
         val it = intent
         weather_details = it.getParcelableExtra(EXTRA_DETAILS)
         mToolbar = findViewById(R.id.toolbar) as Toolbar
-        if(weather_details == null){
+        if(weather_details == null || weather_details?.name == "Earth"){
             readValuesFromDataBase()
             mToolbar.title = getSharedPreferences((application as WeatherApplication).PREFS_NAME,0).getString("city","")
         }
