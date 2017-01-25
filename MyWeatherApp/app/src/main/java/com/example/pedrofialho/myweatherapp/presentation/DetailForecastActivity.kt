@@ -37,7 +37,7 @@ class DetailForecastActivity : AppCompatActivity() {
         val it = intent
         forecast_detail = it.getParcelableExtra<WeatherForecast.List_Weather>("DTO_Details")
         mToolbar = findViewById(R.id.toolbar) as Toolbar
-        mToolbar.title = forecast_detail.city?.name
+        mToolbar.title = it.getStringExtra("cityName")
 
         actionBarId?.let {
             setSupportActionBar(findViewById(it) as Toolbar)

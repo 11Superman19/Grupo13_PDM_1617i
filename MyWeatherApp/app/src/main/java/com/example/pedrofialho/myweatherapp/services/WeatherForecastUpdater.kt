@@ -30,11 +30,9 @@ class WeatherForecastUpdater : Service() {
 
     var city : String = "Lisbon"
 
-    val PREFS_NAME = "MyPrefsFile"
-
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         // Restore preferences
-        val settings = getSharedPreferences(PREFS_NAME, 0)
+        val settings = getSharedPreferences((application as WeatherApplication).PREFS_NAME, 0)
         val silent = settings.getString("city", city)
         city = silent
         val weatherlistId = intent?.let{

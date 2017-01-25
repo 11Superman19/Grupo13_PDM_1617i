@@ -8,12 +8,12 @@ import java.util.*
 
 
 data class WeatherForecast(
-        val cnt : Int,
-        val list : List<List_Weather>
+        val city: List_Weather.City?,
+        val cnt: Int,
+        val list: List<List_Weather>
 ) : Parcelable  {
 
     data class List_Weather(
-            val city: City?,
             val dt: Long,
             val temp: Temp,
             val pressure: Float,
@@ -120,7 +120,6 @@ data class WeatherForecast(
         }
 
         constructor(source: Parcel) : this(
-                city = source.readParcelable<City>(City::class.java.classLoader),
                 dt = source.readLong(),
                 temp = source.readParcelable<Temp>(Temp::class.java.classLoader),
                 pressure = source.readFloat(),
@@ -135,7 +134,6 @@ data class WeatherForecast(
 
         override fun writeToParcel(dest: Parcel, flags: Int) {
             dest.apply {
-                writeParcelable(city,flags)
                 writeLong(dt)
                 writeParcelable(temp,flags)
                 writeFloat(pressure)
@@ -164,12 +162,14 @@ data class WeatherForecast(
     }
 
     constructor(source: Parcel) : this(
+            city = source.readParcelable<List_Weather.City>(List_Weather.City::class.java.classLoader),
             cnt = source.readInt(),
             list = mutableListOf<List_Weather>().apply { source.readTypedList(this, List_Weather.CREATOR) }
     )
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.apply {
+            writeParcelable(city,flags)
             writeInt(cnt)
             writeTypedList(list)
         }

@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import com.example.pedrofialho.myweatherapp.R
 import com.example.pedrofialho.myweatherapp.R.layout
+import com.example.pedrofialho.myweatherapp.WeatherApplication
 import com.example.pedrofialho.myweatherapp.model.WeatherForecast
 import com.example.pedrofialho.myweatherapp.model.content.WeatherInfoProvider
 import com.example.pedrofialho.myweatherapp.model.content.toForecast
@@ -87,6 +88,12 @@ class ForecastActivity : ListActivity(){
             override fun onAnimationEnd(animation: Animation) {
                 val intent = Intent(this@ForecastActivity, DetailForecastActivity::class.java)
                 intent.putExtra("DTO_Details", weather_forecast?.list?.get(itemPosition))
+                if(weather_forecast?.city == null){
+                    val title = getSharedPreferences((application as WeatherApplication).PREFS_NAME,0).getString("city","")
+                    intent.putExtra("cityName",title)
+                }else {
+                    intent.putExtra("cityName", weather_forecast?.city?.name)
+                }
                 startActivityForResult(intent, 1)
                 overridePendingTransition(R.anim.slide_left, R.anim.slide_right)
             }

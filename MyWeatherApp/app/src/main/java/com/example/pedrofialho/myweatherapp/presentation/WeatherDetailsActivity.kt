@@ -50,7 +50,15 @@ class WeatherDetailsActivity : AppCompatActivity() {
         val it = intent
         weather_details = it.getParcelableExtra(EXTRA_DETAILS)
         mToolbar = findViewById(R.id.toolbar) as Toolbar
-        mToolbar.title = weather_details?.name
+        if(weather_details == null){
+            readValuesFromDataBase()
+            mToolbar.title = getSharedPreferences((application as WeatherApplication).PREFS_NAME,0).getString("city","")
+        }
+        else{
+            readValuesFromExtra()
+            mToolbar.title = weather_details?.name
+        }
+
 
         val mNotificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         mNotificationManager.cancel(1)
@@ -63,12 +71,6 @@ class WeatherDetailsActivity : AppCompatActivity() {
 
 
 
-        if(weather_details == null){
-            readValuesFromDataBase()
-        }
-       else{
-            readValuesFromExtra()
-        }
 
         mToolbar.setNavigationOnClickListener {
             finish()
@@ -134,7 +136,8 @@ class WeatherDetailsActivity : AppCompatActivity() {
                 WeatherInfoProvider.COLUMN_RAIN,
                 WeatherInfoProvider.COLUMN_SNOW,
                 WeatherInfoProvider.COLUMN_WIND,
-                WeatherInfoProvider.COLUMN_ICON)
+                WeatherInfoProvider.COLUMN_ICON,
+                WeatherInfoProvider.COLUMN_NAME)
            cursor = contentResolver.query(tableUri, projection, null, null, null)
            cursor.moveToFirst()
            weather_details = toWeatherDetail(cursor = cursor)

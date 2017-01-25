@@ -96,6 +96,7 @@ class WeatherApplication : Application(){
         val action = Intent(this, WeatherForecastUpdater::class.java)
                 .putExtra(WeatherForecastUpdater.WEATHER_LIST_ID_EXTRA_KEY, listId)
 
+      startService(action)
         (getSystemService(ALARM_SERVICE) as AlarmManager).setInexactRepeating(
                 AlarmManager.ELAPSED_REALTIME_WAKEUP,
                 0,

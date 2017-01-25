@@ -40,6 +40,7 @@ class WeatherInfoProvider : ContentProvider(){
 
         //weatherDetails INFO
         const val COLUMN_WIND = "WIND"
+        const val COLUMN_NAME = "NAME"
 
         //weatherForecast INFO
         const val COLUMN_CNT = "CNT"
@@ -60,9 +61,11 @@ class WeatherInfoProvider : ContentProvider(){
         //idx for weatherdetails
         const val COLUMN_WIND_IDX =10
         const val COLUMN_ICON_IDX = 11
+        const val COLUMN_NAME_IDX = 12
         //IDX FOR FORECAST
         const val COLUMN_CNT_IDX = 10
         const val COLUMN_DT_IDX = 12
+        const val COLUMN_CITY_IDX = 13
 
         // Private constants to be used by the implementation
         private const val WEATHER_TABLE_NAME = "Weather"
@@ -75,7 +78,7 @@ class WeatherInfoProvider : ContentProvider(){
     }
 
 
-    private inner class WeatherInfoDbHelper(version : Int = 2, dbName : String = "WEATHER_DB") :
+    private inner class WeatherInfoDbHelper(version : Int = 3, dbName : String = "WEATHER_DB") :
         SQLiteOpenHelper(this@WeatherInfoProvider.context,dbName,null,version){
 
         private fun createDetailsTable(db : SQLiteDatabase?, tableName : String){
@@ -91,7 +94,8 @@ class WeatherInfoProvider : ContentProvider(){
                     "$COLUMN_RAIN INTEGER , " +
                     "$COLUMN_SNOW INTEGER , " +
                     "$COLUMN_WIND FLOAT NOT NULL ," +
-                    "$COLUMN_ICON TEXT NOT NULL )"
+                    "$COLUMN_ICON TEXT NOT NULL ," +
+                    "$COLUMN_NAME TEXT )"
             db?.execSQL(CREATE_CMD)
         }
 
@@ -109,7 +113,7 @@ class WeatherInfoProvider : ContentProvider(){
                     "$COLUMN_SNOW INTEGER , " +
                     "$COLUMN_CNT INTEGER NOT NULL, " +
                     "$COLUMN_ICON TEXT NOT NULL, " +
-                    "$COLUMN_DT LONG NOT NULL )"
+                    "$COLUMN_DT LONG NOT NULL ) "
             db?.execSQL(CREATE_CMD)
         }
 
